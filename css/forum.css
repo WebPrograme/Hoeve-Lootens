@@ -1,0 +1,148 @@
+.register{
+  margin-top: -60px;
+  margin-bottom: 40px;
+  text-align: center;
+  z-index: 80;
+}
+
+@media (min-width: 768px) {
+  .register-container{
+    display: inline-block;
+    vertical-align: middle;
+    line-height: initial;
+    text-align: left;
+    width: 80%;
+    min-width: 320px;
+    max-width: 90% !important;
+    background-color: #FAF8EC;
+    border-radius: 15px;
+  }
+
+  .register-content{
+    width: 90%;
+    margin-left: 5%;
+  }
+}
+
+@media (min-width: 769px) {
+  .register-container{
+    display: inline-block;
+    vertical-align: middle;
+    line-height: initial;
+    text-align: left;
+    width: 60%;
+    min-width: 320px;
+    max-width: 90% !important;
+    background-color: #FAF8EC;
+    border-radius: 15px;
+  }
+
+  .register-content{
+    width: 90%;
+    margin-left: 5%;
+  }
+}
+
+@media (max-width: 767px) {
+  .register-container{
+    display: inline-block;
+    vertical-align: middle;
+    line-height: initial;
+    text-align: left;
+    width: 98%;
+    min-width: 320px;
+    max-width: 98% !important;
+    background-color: #FAF8EC;
+    border-radius: 15px;
+  }
+
+  .register-content{
+    width: 98%;
+    margin-left: 1%;
+  }
+}
+
+.register-header{
+  vertical-align: middle;
+  line-height: initial;
+  text-align: center;
+  padding: 15px 0px;
+  background-color: #4A7D44;
+  color: #FAF8EC;
+  border-radius: 15px 15px 0px 0px;
+  z-index: 300 !important;
+  margin-bottom: 15px;
+}
+
+.register-content{
+  font-family: adobe-clean, sans-serif;
+}
+
+.register-content h3{
+  font-size: 22px;
+  text-decoration: underline;
+}
+
+.register-content span{
+  font-weight: bold;
+}
+
+.register-content li{
+  font-size: 18px;
+  line-height: 25px;
+  margin-bottom: 0.5rem;
+  list-style: outside;
+  margin-left: 5%;
+}
+
+form{  
+  font-family: adobe-clean, sans-serif;
+  padding: 25px 25px 0px 25px;
+}
+
+form label{
+  font-size: 1rem;
+  color: #212529;
+  font-weight: 600;
+  margin: 3px;
+}
+
+form input[type=text], input[type=time]{
+  font-size: 1.3em;
+}
+
+input[type=text], select, input[type=time] {
+  width: 100%;
+  padding: 12px 10px;
+  margin: 8px 0 !important;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: #212529;
+}
+
+/* Style the submit button */
+input[type=submit] {
+  width: 100%;
+  background-color: #FCC000;
+  color: white;
+  padding: 14px 10px;
+  margin: 25px 0;
+  border: none;
+  border-radius: 10px !important;
+  cursor: pointer;
+  font-size: 20px;
+  text-transform: uppercase !important;
+  font-size: 15px !important;
+  font-weight: bold !important;
+}
+
+select{
+  font-size: 0.9rem !important;
+}
+
+/* Add a background color to the submit button on mouse-over */
+input[type=submit]:hover {
+  background-color: #f9a743;
+}
