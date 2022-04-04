@@ -237,6 +237,7 @@ nav a:hover {
   font-family: adobe-clean, sans-serif;
   font-weight: 1100;
   font-size: 36px;
+  word-break: break-all;
 }
 
 .section {
@@ -894,6 +895,45 @@ ul {
 
 .maatschappelijk-img-4{
   background-image: url(images/maatschappelijk4.png);
+  border-bottom-right-radius: 20px;
+  background-position: center;
+}
+
+.meikermis-img-1{
+  background-image: url(images/meikermisPlanning3.png);
+  border-top-left-radius: 20px;
+  background-position: cover;
+}
+
+.meikermis-img-2{
+  background-image: url(images/meikermisPlanning2.png);
+  background-position: cover;
+}
+
+.meikermis-img-3{
+  background-image: url(images/meikermisPlanning.png);
+  background-position: cover;
+}
+
+.back-img-1{
+  background-image: url(images/child.jpeg);
+  border-top-left-radius: 20px;
+  background-position: center;
+}
+
+.back-img-2{
+  background-image: url(images/child2.jpeg);
+  background-position: center;
+  background-size: 350px;
+}
+
+.back-img-3{
+  background-image: url(images/child3.jpeg);
+  background-position: center;
+}
+
+.back-img-4{
+  background-image: url(images/child4.jpeg);
   border-bottom-right-radius: 20px;
   background-position: center;
 }
