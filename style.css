@@ -174,9 +174,8 @@ nav a:hover {
   font-family: PT serif;
   font-weight: bold;
   color: #4A7D44;
-  font-size: 45px;
+  font-size: 2.8rem;
   align-items: center;
-  line-height: 65px;
 }
 
 .homeStart img {
@@ -201,6 +200,11 @@ nav a:hover {
 
 .nieuws {
   margin-top: 25px;
+}
+
+.side-image {
+  max-width: none !important;
+  width: -webkit-fill-available;
 }
 
 .nieuwsH1 {
