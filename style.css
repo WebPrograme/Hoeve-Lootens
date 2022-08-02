@@ -983,6 +983,10 @@ ul {
   .img-max{
     display: none;
   }
+
+  .content-right {
+    margin-left: 0;
+  }
   
   .maatschappelijk-vorm3{
     display: none;
@@ -1015,6 +1019,10 @@ ul {
   
   .img-max{
     display: block;
+  }
+
+  .content-right {
+    margin-left: 50px;
   }
   
   .maatschappelijk-vorm3{
