@@ -1,0 +1,1216 @@
+body {
+  background: #fff;
+  scroll-behavior: smooth;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+nav {
+  padding: 10px 65px;
+  background-color: #4A7D44;
+  display: flex;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 85px;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 99;
+}
+
+nav a:hover {
+  border-bottom: #FAF8EC 2px solid;
+}
+
+.logo {
+  text-transform: uppercase;
+  font-family: "Century Gothic";
+  color: #fff;
+}
+
+.logo img {
+  width: 120px;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+}
+
+.nav-list li {
+  margin-left: 30px;
+}
+
+.nav-list li a {
+  text-decoration: none;
+  font-size: 22px;
+  font-family: PT serif;
+  font-weight: bold;
+  color: #FAF8EC;
+}
+
+.nav-list-active {
+  border-bottom: #FAF8EC 2px solid;
+}
+
+#hamburger-toggle {
+  display: none;
+}
+
+.hamburger {
+  width: 30px;
+  height: 30px;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: absolute;
+  right: 25px;
+}
+
+.hamburger .bar {
+  display: inline-block;
+  width: 30px;
+  height: 2px;
+  background-color: #fff;
+  position: relative;
+  transition: all 0.3s;
+}
+
+.hamburger .bar::before,
+.hamburger .bar::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  transition: all 0.3s;
+}
+
+.hamburger .bar::before {
+  transform: translateY(-10px);
+}
+
+.hamburger .bar::after {
+  transform: translateY(10px);
+}
+
+@media (max-width: 1145px) {
+  .nav-list {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #4A7D44;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+  }
+
+  .nav-list li {
+    margin: 10px 0;
+  }
+
+  .nav-list li a {
+    display: inline-block;
+    font-size: 30px;
+    padding: 15px 20px;
+    transition: all 0.3s;
+  }
+
+  .nav-list li a:hover {
+    background-color: #fff;
+    color: #4A7D44;
+    transform: translateY(-10px);
+  }
+
+  .hamburger {
+    display: flex;
+    z-index: 999;
+  }
+
+  #hamburger-toggle:checked ~ .nav-list {
+    transform: none;
+  }
+
+  #hamburger-toggle:checked ~ .hamburger .bar::before {
+    transform: rotate(45deg);
+  }
+
+  #hamburger-toggle:checked ~ .hamburger .bar {
+    background-color: transparent;
+  }
+
+  #hamburger-toggle:checked ~ .hamburger .bar::after {
+    transform: rotate(-45deg);
+  }
+
+  nav {
+    padding: 20px 35px;
+    max-height: 80px;
+  }
+
+  .home {
+    margin-top: 120px !important;
+  }
+}
+
+.homeStart {
+  margin-top: -100px;
+  justify-content: center;
+  height: auto;
+  background: #FAF8EC;
+}
+
+.homeStart h1 {
+  font-family: PT serif;
+  font-weight: bold;
+  color: #4A7D44;
+  font-size: 2.8rem;
+  align-items: center;
+}
+
+.homeStart img {
+  max-width: 85% !important;
+}
+
+.homeDown {
+  font-size: 50px;
+  width: 20px;
+  justify-content: center;
+  color: #FCC000;
+  display: block;
+  margin-left: calc(50% - 10px);
+}
+
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 10%;
+}
+
+.nieuws {
+  margin-top: 25px;
+}
+
+.side-image {
+  max-width: none !important;
+  width: -webkit-fill-available;
+}
+
+.nieuwsH1 {
+  text-align: center;
+  margin-bottom: -30px;
+  margin-left: calc(50% - 100px);
+}
+
+@media(max-width: 768px) {
+  .homeStart h1 {
+    font-size: 32px !important;
+  }
+}
+
+.nieuwsH1 h1 {
+  text-align: center;
+  color: #101315;
+  font-size: 40px;
+  font-weight: bold;
+  border-bottom: 3px #101315 solid;
+  width: 200px;
+  margin: 55px;
+  margin-left: 0 !important;
+}
+
+.row {
+  display: flex;
+}
+
+.section h3,
+.section h4 {
+  color: #005329;
+  text-align: left;
+  font-family: adobe-clean, sans-serif;
+  font-weight: 1100;
+  font-size: 36px;
+  word-break: break-all;
+}
+
+.section {
+  margin-top: 50px;
+}
+
+.nieuws {
+  font-family: adobe-clean, sans-serif;
+}
+
+.background-welkom {
+  background: #FAF8EC;
+  width: 100%;
+  padding: 0.1px;
+}
+
+@media (min-width: 768px) {
+  .pWel {
+    width: 55vw !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .pWel {
+    width: 100%;
+  }
+
+  .btn-main {
+    width: 100% !important;
+  }
+
+  .btn-main-sec {
+    width: 100% !important;
+  }
+}
+
+.span-nieuw {
+  color: #4A7D44 !important;
+}
+
+section img {
+  z-index: 1 !important;
+  border-radius: 4%;
+}
+
+.element {
+  position: absolute;
+  top: 65%;
+  left: 60% !important;
+  justify-items: end;
+}
+
+.element-start {
+  width: 75%;
+}
+
+.element-right {
+  width: 40%;
+}
+
+.element-right-hire {
+  width: 40%;
+}
+
+@media(min-width: 468px){
+  .element-right img {
+    width: 130px;
+    position: absolute;
+    right: 0;
+    margin-top: -75px;
+  }
+
+  .element-right-hire img {
+    width: 130px;
+    position: absolute;
+    right: 0;
+    margin-top: -75px;
+  }
+}
+
+@media(max-width: 468px){
+  .element-right img {
+    width: 90px !important;
+    position: absolute;
+    right: 0;
+    margin-top: -75px;
+  }
+
+  .element-right-hire img {
+    width: 27% !important;
+    position: absolute;
+    right: 0;
+    margin-top: -50px;
+  }
+}
+
+.element-left {
+  width: 100%;
+}
+
+.element-left-hire {
+  width: 100%;
+}
+
+@media(min-width: 468px){
+  .element-left img {
+    width: 20%;
+    position: absolute;
+    left: 0;
+    margin-top: 110px !important;
+    z-index: 0;
+  }
+
+  .element-left-hire img {
+    width: 20%;
+    position: absolute;
+    left: 0;
+    margin-top: 110px !important;
+    z-index: 0;
+  }
+}
+
+@media(max-width: 468px){
+  .element-left img {
+    width: 25%;
+    position: absolute;
+    left: 0;
+    margin-top: 220px !important;
+    z-index: 0;
+  }
+
+  .element-left-hire img {
+    width: 12% !important;
+    position: absolute;
+    left: 0;
+    margin-top: 140px !important;
+    z-index: 0;
+  }
+}
+
+.nieuws .section {
+  margin: 60px 0px !important;
+}
+
+.row {
+  font-family: adobe-clean, sans-serif;
+}
+
+.content span {
+  font-weight: bold;
+  color: #000;
+}
+
+.background-welkom h1,
+.contact-cards h1,
+.kalender-cards h1 {
+  text-align: center;
+  font-weight: bold;
+  font-size: 45px;
+}
+
+.hr-replace {
+  margin-left: calc(50% - 170px);
+  max-width: 340px;
+  min-width: auto;
+  height: 3px;
+  background: #101315;
+}
+
+.price-list-head-text{
+  margin-top: 3%;
+  width: 600px;
+  max-width: 90%;
+  justify-content: center !important;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: adobe-clean, sans-serif !important;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.price-list{
+  margin-left: 7px;
+}
+
+.hr-replace-price-list {
+  width: calc(100% - 14px);
+  height: 3px;
+  background: #101315;
+  margin-bottom: 10px;
+}
+
+.price-list-sub{
+  padding-bottom: 0 !important;
+  margin-bottom: 2px !important;
+  margin-top: 6px;
+}
+
+.price-list-bold {
+  font-weight: bold;
+  font-size: 21px;
+}
+
+.price-list-bold-p {
+  font-weight: bold;
+  font-size: 24px;
+  margin-top: 0.5rem;
+}
+
+.price-list-flex {
+  width: calc(100% - 14px);
+  display: flex;
+  justify-content: space-between;
+}
+
+.price-list-flex span {
+  position: absolute;
+  right: 10px;
+  font-size: 24px;
+}
+
+.price-flex {
+  width: 100%;
+  display: flex;
+}
+
+.price-flex span {
+  position: absolute;
+  right: 10px;
+  font-size: 18px;
+}
+
+.price-bold {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.price-mobile {
+  width: 50%;
+}
+
+.price-border {
+  border-bottom: gray 2px solid;
+  margin-bottom: 20px;
+}
+
+@media(max-width: 1024px) {
+  .social {
+    display: none;
+  }
+}
+
+.social {
+  position: absolute;
+  top: calc(50% - 70px);
+  z-index: 5;
+}
+
+.social div {
+  background: #4A7D44;
+  border-bottom-right-radius: 12px;
+  border-top-right-radius: 12px;
+  color: #fff;
+  margin-top: 10px;
+  height: 50px;
+  width: 40px;
+  font-size: 26px;
+}
+
+.social i {
+  margin-left: 7.5px;
+  margin-top: 10px;
+}
+
+.social-face i {
+  margin-left: 11px !important;
+}
+
+.contact-flex {
+  display: flex;
+}
+
+.contact-flex span {
+  font-size: 18px;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 50px;
+  justify-content: center;
+}
+
+.cards img {
+  width: 285px;
+  margin-top: 40px;
+}
+
+.contact-card {
+  width: 285px !important;
+  margin: 0px 17px;
+  font-family: adobe-clean, sans-serif;
+}
+
+.contact-cards {
+  margin-bottom: 50px;
+}
+
+.status {
+  color: #005329;
+  font-size: 18px;
+  margin-bottom: 7px;
+}
+
+.geleid {
+  margin-top: 4px;
+  font-size: 17px;
+}
+
+.contact-card span {
+  color: #101315;
+  font-weight: bold;
+}
+
+.contact-card h3 {
+  font-size: 30px;
+  margin-top: 14px;
+  margin-bottom: 0px;
+  font-weight: bold;
+  color: #005329;
+}
+
+.contact-card a {
+  width: 100% !important;
+}
+
+.kalender-card {
+  width: 330px !important;
+  max-width: 98%;
+  margin: 0px 25px;
+  font-family: adobe-clean, sans-serif;
+}
+
+.kalender-cards {
+  margin-bottom: 50px;
+}
+
+.status {
+  color: #005329;
+  font-size: 18px;
+  margin-bottom: 7px;
+}
+
+.contact-card span {
+  color: #101315;
+  font-weight: bold;
+}
+
+.kalender-card h3 {
+  font-size: 30px;
+  margin-top: 14px;
+  margin-bottom: 0px;
+  font-weight: bold;
+  color: #005329;
+}
+
+.kalender-card a {
+  width: 100% !important;
+}
+
+.dagelijksBestuur {
+  text-align: center;
+  font-weight: bold;
+}
+
+.pWel2 .contact-flex p,
+.contact-flex span,
+.p-contact {
+  z-index: 2 !important;
+}
+
+@media(min-width: 1400px) {
+  .contactElement img {
+    width: 75vw !important;
+    position: absolute;
+    top: 1% !important;
+    right: 0px;
+    z-index: 1;
+  }
+}
+
+@media(min-width: 769px) {
+  .contactElement img {
+    width: 95vw;
+    position: absolute;
+    top: 8%;
+    right: 0px;
+    z-index: 1;
+  }
+
+  .contactElement2 img {
+    display: none;
+  }
+
+  .pWel2 a {
+    position: absolute;
+    right: -200px;
+    bottom: -80px;
+  }
+}
+
+@media(max-width: 769px) {
+  .contactElement2 img {
+    height: 40%;
+    position: absolute;
+    top: 230px;
+    right: 0px;
+    z-index: 1;
+  }
+
+  .contactElement img {
+    display: none;
+  }
+
+  .contactElement2-2 {
+    width: 30vw !important;
+    height: auto !important;
+    position: absolute;
+    top: 8%;
+    right: 0px;
+    z-index: 1;
+  }
+
+  .pWel2 a {
+    margin-top: 55px;
+  }
+}
+
+@media(max-width: 768px) {
+  .contactElement2 img {
+    width: 100vw;
+    position: absolute;
+    top: 250px;
+    right: 0px;
+    z-index: 1;
+  }
+
+  .contactElement img {
+    display: none;
+  }
+
+  .contactElement2-2 {
+    width: 20vw !important;
+    position: absolute;
+    top: 8%;
+    right: 0px;
+    z-index: 1;
+  }
+
+  .pWel2 a {
+    margin-top: 55px;
+  }
+}
+
+@media(max-width: 320px) {
+  .contactElement2 img {
+    display: none;
+  }
+
+  .contactElement img {
+    display: none;
+  }
+
+  .contactElement2-2 {
+    display: none;
+  }
+
+  .pWel2 a {
+    margin-top: 55px;
+  }
+}
+
+ul {
+  list-style-type: none;
+}
+
+.kalender {
+  font-family: PT sans-serif;
+  min-width: 50%;
+  width: auto;
+  margin-top: 150px;
+  font-family: 'Play', sans-serif;
+  box-shadow: 0px 3px 6px #0000000D;
+  border-radius: 12px;
+}
+
+/* Month header */
+.month {
+  padding: 70px 25px;
+  width: 100%;
+  background: #F5F5F5;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Month list */
+.month ul {
+  margin: 0;
+  padding: 0;
+}
+
+.month ul li {
+  color: #FCC000;
+  font-size: 27px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Previous button inside month header */
+.month .prev {
+  float: left;
+  padding-top: 10px;
+  color: #FCC000;
+  font-size: 35px;
+}
+
+/* Next button */
+.month .next {
+  float: right;
+  padding-top: 10px;
+  color: #FCC000;
+  font-size: 35px;
+}
+
+/* Weekdays (Mon-Sun) */
+.weekdays {
+  margin: 0;
+  padding: 10px 0;
+  background-color: #FFFFFF;
+}
+
+.weekdays li {
+  display: inline-block;
+  width: 13.6%;
+  color: #4A7D4480;
+  text-align: center;
+  font-size: 20px;
+}
+
+.days-before {
+  color: #4A7D4480;
+  opacity: .7
+}
+
+/* Days (1-31) */
+.days {
+  padding: 15px 0;
+  background: #fff;
+  margin: 0;
+}
+
+.days li {
+  list-style-type: none;
+  display: inline-block;
+  width: 13.6%;
+  text-align: center;
+  margin-bottom: 5px;
+  font-size: 17px;
+  color: #4A7D44;
+}
+
+/* Highlight the "current" day */
+.days li .active {
+  padding: 13px;
+  background: url(images/Kalender_Vormen2.png);
+  color: white !important
+}
+
+#februari,
+#maart,
+#april,
+#mei,
+#juni,
+#juli,
+#augustus,
+#september,
+#oktober,
+#november,
+#december {
+  display: none;
+}
+
+.legende {
+  width: 40%;
+  font-family: adobe-clean, sans-serif;
+  justify-content: center;
+  align-self: center;
+  margin-left: 25px;
+}
+
+.legende h2 {
+  font-weight: bold;
+}
+
+.legende p{
+  margin-bottom: 7px;
+}
+
+.legende-evenement {
+  color: #A4D8DE;
+}
+
+.legende-gereserveerd {
+  color: #EE7357;
+}
+
+.legende-optie {
+  color: #FCC000;
+}
+
+.head-text{
+  margin-top: 3%;
+  width: 600px;
+  max-width: 90%;
+  justify-content: center !important;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: adobe-clean, sans-serif !important;
+  padding-bottom: 100px;
+  text-align: center;
+}
+
+.p-span{
+  font-weight: bold;
+}
+
+.maatschappelijk-img-1{
+  background-image: url(images/maatschappelijk1.png);
+  border-top-left-radius: 20px;
+  background-position: center;
+}
+
+.maatschappelijk-img-2{
+  background-image: url(images/maatschappelijk2.png);
+  background-position: center;
+  background-size: 350px;
+}
+
+.maatschappelijk-img-3{
+  background-image: url(images/maatschappelijk3.png);
+  background-position: center;
+}
+
+.maatschappelijk-img-4{
+  background-image: url(images/maatschappelijk4.png);
+  border-bottom-right-radius: 20px;
+  background-position: center;
+}
+
+.meikermis-img-1{
+  background-image: url(images/meikermisPlanning3.png);
+  border-top-left-radius: 20px;
+  background-position: cover;
+}
+
+.meikermis-img-2{
+  background-image: url(images/meikermisPlanning2.png);
+  background-position: cover;
+}
+
+.meikermis-img-3{
+  background-image: url(images/meikermisPlanning.png);
+  background-position: cover;
+}
+
+.back-img-1{
+  background-image: url(images/child.jpeg);
+  border-top-left-radius: 20px;
+  background-position: center;
+}
+
+.back-img-2{
+  background-image: url(images/child2.jpeg);
+  background-position: center;
+  background-size: 350px;
+}
+
+.back-img-3{
+  background-image: url(images/child3.jpeg);
+  background-position: center;
+}
+
+.back-img-4{
+  background-image: url(images/child4.jpeg);
+  border-bottom-right-radius: 20px;
+  background-position: center;
+}
+
+.img-group{
+  margin-top: -60px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 60px;
+  justify-content: center;
+}
+
+@media(min-width: 768px){
+  .img-group div{
+    height: 250px !important;
+    width: 25%;
+    max-width: 95%;
+    z-index: 1;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+}
+
+@media(max-width: 768px){
+  .img-group div{
+    height: 190px!important;
+    width: 50%;
+    max-width: 95%;
+    z-index: 0;
+  }
+}
+
+
+@media(max-width: 768px){
+  .img-767{
+    display: block;
+    z-index: 0;
+    padding-top: 270px;
+  }
+  .img-max{
+    display: none;
+  }
+
+  .content-right {
+    margin-left: 0;
+  }
+  
+  .maatschappelijk-vorm3{
+    display: none;
+  }
+  
+  .maatschappelijk-vorm3-smart{
+    display: block;
+    position: absolute;
+    width: 12%;
+    z-index: 0 !important;
+    left: 0% !important;
+    top: 120px;
+  }
+  
+  .img-group-vorm{
+    margin-top: -100px !important;
+    width: 21%;
+    position: absolute;
+    right: 0;
+    z-index: 0;
+  }
+}
+
+@media(min-width: 768px){
+  .img-767{
+    display: none;
+    z-index: 0;
+    padding-top: 270px;
+  }
+  
+  .img-max{
+    display: block;
+  }
+
+  .content-right {
+    margin-left: 50px;
+  }
+  
+  .maatschappelijk-vorm3{
+    display: block;
+    position: absolute;
+    width: 13%;
+    left: 7% !important;
+    top: 120px;
+  }
+  
+  .maatschappelijk-vorm3-smart{
+    display: none
+  }
+  
+  .img-group-vorm{
+    margin-top: -100px !important;
+    width: 14%;
+    position: absolute;
+    right: 0;
+    z-index: 0;
+  }
+}
+
+@media(min-width: 1024px)  {
+  .pricelist-pc{
+   display: block;
+  }
+
+  .pricelist-small{
+    display: none;
+  }
+}
+
+@media(max-width: 1024px)  {
+  .pricelist-small{
+    margin-left: 2.5%;
+    display: block;
+    width: 95% !important;
+  }
+
+  .pricelist-pc{
+    display: none !important;
+  }
+}
+
+.steun-list li{
+  font-size: 18px;
+  margin-left: 20px;
+}
+
+.price-split{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.alert-browser{
+  position: fixed;
+  min-height: 40px;
+  width: 100%;
+  z-index: 100;
+  background-color: #EE7357;
+  color: #FAF8EC;
+  text-align: center;
+  padding-top: 7px;
+  margin-top: 47px;
+  display: none;
+}
+
+.alert-browser h2{
+  font-size: 1.3rem !important;
+  font-family: adobe-clean, sans-serif;
+}
+
+@media(max-width: 1024px){
+  .alert-browser{
+    margin-top: 82px;
+  }  
+}
+
+@media(max-width: 768px){
+  .alert-browser{
+    margin-top: 100px;
+  }  
+}
+
+@media(max-width: 415px){
+  .alert-browser{
+    margin-top: 135px;
+  }  
+}
+
+.alert-browser-orange{
+  min-height: 40px;
+  width: 100%;
+  z-index: 99;
+  background-color: #FCC000;
+  color: #FAF8EC;
+  text-align: center;
+  padding-top: 7px;
+  display: block;
+}
+
+.alert-browser-orange h2{
+  font-size: 1.3rem !important;
+  font-family: adobe-clean, sans-serif;
+}
+
+.hightlight-text{
+  color: #EE7357;
+}
+
+.underConstructionContainer{
+  text-align: center;
+}
+
+.underConstruction{
+  width: 20rem;
+  padding-top: 14rem;
+}
+
+.underConstructionContainer h1{
+  font-family: adobe-clean, sans-serif;
+  padding: 25px 0 15px 0;
+}
+
+.footer-img img {
+  width: 98.5vw;
+}
+
+footer {
+  width: 100%;
+  background: #4A7D44 !important;
+  color: #fff;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  text-align: left !important;
+  justify-content: space-between;
+  padding-bottom: 3px !important;
+  padding-top: 20px !important;
+  bottom: 0px;
+}
+
+footer p {
+  margin-bottom: 8px !important;
+  font-size: 1rem;
+}
+
+.footer-first {
+  display: flex;
+  margin-left: 4%;
+  margin-bottom: 20px;
+  width: 500px;
+  justify-content: space-between
+}
+
+.footer-adres,
+.footer-bank {
+  min-width: 138px
+}
+
+.footer-social {
+  margin-right: 10% !important;
+  margin-left: 4%;
+}
+
+footer i {
+  color: #fff;
+  font-size: 1.7rem;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.footer-bold {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+footer p {
+  font-weight: 450;
+}
+
+.footer-acteur {
+  width: 100%;
+  text-align: center;
+  background: #005329;
+  padding: 3px;
+  padding-bottom: 1px;
+  padding-top: 15px;
+  color: #fff;
+}
