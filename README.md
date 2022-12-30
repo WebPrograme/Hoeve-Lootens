@@ -94,7 +94,9 @@ Naast de volgende uitleg om artikelen toe tevoegen kunt u in theorie alle tekst 
 
         Voeg onder uw laatste tekst de volgende code:
 
-        `<a class="btn btn-main btn-main-sm" href="BUTTON LINK" role="button">BUTTON TEKST</a>`
+        ```
+        <a class="btn btn-main btn-main-sm" href="BUTTON LINK" role="button">BUTTON TEKST</a>
+        ```
 
         Zoals het voorbeeld hieronder:
         ```
