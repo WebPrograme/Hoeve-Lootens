@@ -105,7 +105,7 @@ let kalenderEventsContent = {};
 let boomgaardcafeEvents = [];
 
 async function getCalendar() {    
-    const response = await fetch('https://www.googleapis.com/calendar/v3/calendars/planning.hoevelootens@gmail.com/events?key=AIzaSyA4R3_Qmo2k4LyMtXs86xTkHtx9tIM8VoA', {
+    const response = await fetch('https://www.googleapis.com/calendar/v3/calendars/planning.hoevelootens@gmail.com/events?key##########################', {
         method: 'GET',
     });
     return response.json();
