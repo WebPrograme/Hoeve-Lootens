@@ -28,6 +28,19 @@
 			browser is chrome
 		</h2>
 	</div>
+
+    <div class="cookie">
+        <div class="txt">
+           <p class="">
+              Door deze website te gebruik,<br>
+              accepteert u de <a href="#" data-bs-toggle="modal" data-bs-target="#cookiesModal">Cookies.</a>
+           </p>
+        </div>
+        <div class="accept-div">
+           <a class="btn btn-main btn-main-sm" onclick="localStorage.setItem('cookiesAgree', 'true'); document.querySelector('.cookie').style.display = 'none';">Accept</a>
+        </div>
+    </div>
+
 	<nav>
 		<h1 class="logo"><img src="images/HoeveLootens_Logo_Wit.png" /></h1>
 		<input type="checkbox" id="hamburger-toggle" />
@@ -113,7 +126,7 @@
 					</div>
 					<div class="col-md-6 align-self-center text-center text-md-left">
 						<div class="block content">
-							<h3 class="font-weight-bold mb-4 font-size-60" style="word-break: inherit;">
+							<h3 class="font-weight-bold mb-4 font-size-60">
 								Vacature communicatiemedewerker
 							</h3>
 							<p>
@@ -156,13 +169,14 @@
 				<section style="margin: 20px 0px !important" class="section homeText">
 					<div class="container">
 						<div class="row">
-							<div style="width: 20% !important"></div>
+							<div class="col-md-6 text-center mb-5 mb-md-0">
+								<img class="side-image" src="images/Boomgaardcafé.jpg" alt="Boomgaardcafé">
+							</div>
 							<div class="col-md-6 align-self-center text-center text-md-left">
-								<div class="block pWel">
 									<h3 class="font-weight-bold mb-4 font-size-60">
 										Welkom op de Hoeve!
 									</h3>
-									<p class="mb-4">
+									<p>
 										Sinds juni 2019 waait er een nieuwe wind
 										door de vzw Hoeve
 										Lootens. Met veel engagement heeft een
@@ -189,7 +203,6 @@
 									<a class="btn btn-main btn-main-sm" href="html/contact.html" role="button">Neem
 										contact met ons
 										op!</a>
-								</div>
 							</div>
 						</div>
 					</div>
@@ -314,7 +327,7 @@
 		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<!-- endinject -->
 
-	<script>
+	<!--<script>
 		$.toast({
 			heading: "Vacature communicatiemedewerker",
 			text: 'Bekijk de nieuwe openstaande vacature in "Nieuws".',
@@ -323,8 +336,9 @@
 			loaderBg: "#9EC600",
 			position: "bottom-center",
 		});
-	</script>
+	</script>-->
 	<script src="script.js"></script>
+	<script src="js/analyse.js" type="module"></script>
 </body>
 
 </html>
