@@ -29,7 +29,7 @@ function uploadFile(data) {
     })
     const storageRef = ref(storage, 'shop.json');
     uploadBytes(storageRef, blob).then((snapshot) => {
-        console.log('Uploaded file!');
+        console.log('Updated file!');
     });
 }
 
@@ -60,6 +60,20 @@ function showSuccess(UserCode) {
     document.querySelector('.btn-shop-close').setAttribute('style', 'display: block !important');
 }
 
+function downloadData() {
+    // Download data
+    getDownloadURL(ref(storage, 'database.json')).then((url) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url);
+        xhr.send();
+        xhr.onload = function (event) {
+            data = JSON.parse(xhr.response);
+        };
+    }).catch((error) => {
+        console.log(error);
+    });
+}
+
 // Download file
 getDownloadURL(ref(storage, 'shop.json')).then((url) => {
     const xhr = new XMLHttpRequest();
@@ -69,24 +83,25 @@ getDownloadURL(ref(storage, 'shop.json')).then((url) => {
         data = JSON.parse(xhr.response);
 
         var cards = document.querySelector('.cards');
+        var cardHTML = '';
 
         for (var i = 0; i < data.length; i++) {
             if (data[i]['Available Places'] > 0 && data[i]['Available']) {
-                var card = document.createElement('div');
-                card.classList.add('shop-card');
-                card.innerHTML = `
-                    <img src="../images/` + data[i]['Image'] + `">
-                    <div class="shop-card-header">
-                        <h3>` + data[i]['Event Name'] + `</h3>
-                        <h3>€` + data[i]['Price'] + `</h3>
+                cardHTML += `
+                    <div class="shop-card">
+                        <img src="../images/` + data[i]['Image'] + `">
+                        <div class="shop-card-header">
+                            <h3>` + data[i]['Event Name'] + `</h3>
+                            <h3>€` + data[i]['Price'] + `</h3>
+                        </div>
+                        <p class="status">` + data[i]['Date'] + `</p>
+                        <a class="btn btn-main btn-main-sm btn-shop-add" data-value="` + data[i]['Event Name'] + `">Schrijf in</a>
                     </div>
-                    <p class="status">` + data[i]['Date'] + `</p>
-                    <a class="btn btn-main btn-main-sm btn-shop-add" data-value="` + data[i]['Event Name'] + `">Schrijf in</a>
                 `;
-
-                cards.appendChild(card);
             }
         }
+
+        cards.innerHTML = cardHTML;
 
         document.querySelectorAll('.btn-shop-add').forEach((btn) => {
             btn.addEventListener('click', (e) => {
@@ -107,48 +122,45 @@ getDownloadURL(ref(storage, 'shop.json')).then((url) => {
                 $('#shopBuyModal').modal('show');
             });
         });
-
-        document.querySelector('.btn-shop-confirm').addEventListener('click', function () {
-            var form = document.querySelector('.form-shop');
-            var EventName = document.querySelector('.btn-shop-confirm').getAttribute('data-value');
-            var BtnAdd = document.querySelector('.btn-shop-confirm');
-            var FirstName = form.querySelector('[title="firstname"]').value;
-            var LastName = form.querySelector('[title="lastname"]').value;
-            var Email = form.querySelector('[title="email"]').value;
-            var Phone = form.querySelector('[title="phone"]').value;
-            var Amount = form.querySelector('[title="amount"]').value;
-
-            BtnAdd.innerHTML = 'Bezig met inschrijven...';
-
-            if (FirstName == "" || LastName == "" || Email == "" || Phone == "" || Amount == "") {
-                BtnAdd.innerHTML = 'Vul alle velden in!';
-                BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
-                return;
-            }
-
-            var UserCode = FirstName[0] + LastName[0] + getRandomIntInclusive(data, 1000, 9999);
-
-            for (var i = 0; i < data.length; i++) {
-                if (data[i]['Event Name'] == EventName) {
-                    data[i]['Available Places'] = data[i]['Available Places'] - Amount;
-                    
-                    data[i]['Participants'].push({
-                        'First Name': FirstName,
-                        'Last Name': LastName,
-                        'Email': Email,
-                        'Phone': Phone,
-                        'Amount': Amount,
-                        'UserCode': UserCode
-                    });
-
-                    uploadFile(data);
-                    showSuccess(UserCode);
-                }
-            }
-        });
     };
 }).catch((error) => {
     console.log(error);
+});
+
+document.querySelector('.btn-shop-confirm').addEventListener('click', function () {
+    downloadData();
+    
+    var form = document.querySelector('.form-shop');
+    var EventName = document.querySelector('.btn-shop-confirm').getAttribute('data-value');
+    var BtnAdd = document.querySelector('.btn-shop-confirm');
+    var FirstName = form.querySelector('[title="firstname"]').value;
+    var LastName = form.querySelector('[title="lastname"]').value;
+    var Email = form.querySelector('[title="email"]').value;
+    var Phone = form.querySelector('[title="phone"]').value;
+    var Amount = form.querySelector('[title="amount"]').value;
+    BtnAdd.innerHTML = 'Bezig met inschrijven...';
+    if (FirstName == "" || LastName == "" || Email == "" || Phone == "" || Amount == "") {
+        BtnAdd.innerHTML = 'Vul alle velden in!';
+        BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
+        return;
+    }
+    var UserCode = FirstName[0] + LastName[0] + getRandomIntInclusive(data, 1000, 9999);
+    for (var i = 0; i < data.length; i++) {
+        if (data[i]['Event Name'] == EventName) {
+            data[i]['Available Places'] = data[i]['Available Places'] - Amount;
+            
+            data[i]['Participants'].push({
+                'First Name': FirstName,
+                'Last Name': LastName,
+                'Email': Email,
+                'Phone': Phone,
+                'Amount': Amount,
+                'UserCode': UserCode
+            });
+            uploadFile(data);
+            showSuccess(UserCode);
+        }
+    }
 });
 
 document.querySelector('.btn-submit-email').addEventListener('click', function () {
@@ -220,7 +232,3 @@ document.querySelector('.btn-shop-close').addEventListener('click', function () 
     document.querySelector('.btn-shop-confirm').setAttribute('style', 'display: block !important');
     document.querySelector('.btn-shop-close').setAttribute('style', 'display: none !important');
 });
-
-window.onload = function () {
-    document.querySelector('.loader').style.display = 'none';
-}

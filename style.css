@@ -24,7 +24,6 @@ nav {
 
 nav a:hover {
     border-bottom: #FAF8EC 2px solid;
-    transition: all 0.001s;
 }
 
 .logo {
@@ -52,6 +51,7 @@ nav a:hover {
     font-family: PT serif;
     font-weight: bold;
     color: #FAF8EC;
+    transition: none !important;
 }
 
 .nav-list-active {
@@ -100,7 +100,7 @@ nav a:hover {
     transform: translateY(10px);
 }
 
-@media (max-width: 1345px) {
+@media (max-width: 1365px) {
     .nav-list {
         position: fixed;
         top: 0;
@@ -236,7 +236,8 @@ nav a:hover {
 }
 
 .section h3,
-.section h4 {
+.section h4,
+.modal-title {
     color: #005329;
     text-align: left;
     font-family: adobe-clean, sans-serif;
@@ -581,7 +582,12 @@ section img {
     width: 100% !important;
 }
 
-.kalender-card {
+.shop-card img {
+    width: 100% !important;
+}
+
+.kalender-card,
+.shop-card {
     width: 330px !important;
     max-width: 98%;
     margin: 0px 25px;
@@ -603,7 +609,16 @@ section img {
     font-weight: bold;
 }
 
-.kalender-card h3 {
+.shop-card-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.shop-card-header h3:last-of-type {
+    color: #4A7D44;
+}
+
+.kalender-card h3, .shop-card h3 {
     font-size: 30px;
     margin-top: 14px;
     margin-bottom: 0px;
@@ -611,7 +626,7 @@ section img {
     color: #005329;
 }
 
-.kalender-card a {
+.kalender-card a, .shop-card a {
     width: 100% !important;
 }
 

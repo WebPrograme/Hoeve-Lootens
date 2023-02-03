@@ -1,6 +1,5 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-analytics.js";
 import { getStorage, ref, uploadBytes, getDownloadURL, updateMetadata   } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-storage.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -16,7 +15,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const storage = getStorage(app);
 let data = [];
 console.log("Firebase is geladen");
@@ -58,19 +56,23 @@ function showSuccess(UserCode) {
     document.querySelector('.form-success').style.display = 'block';
 }
 
-// Download file
-getDownloadURL(ref(storage, 'database.json')).then((url) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', url);
-    xhr.send();
-    xhr.onload = function (event) {
-        data = JSON.parse(xhr.response);
-    };
-}).catch((error) => {
-    console.log(error);
-});
+function downloadData() {
+    // Download data
+    getDownloadURL(ref(storage, 'database.json')).then((url) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url);
+        xhr.send();
+        xhr.onload = function (event) {
+            data = JSON.parse(xhr.response);
+        };
+    }).catch((error) => {
+        console.log(error);
+    });
+}
 
 document.querySelector('.btn-submit').addEventListener('click', function () {
+    downloadData();
+
     var BtnSubmit = document.querySelector('.btn-submit');
     BtnSubmit.innerHTML = 'Verzenden...';
 
@@ -160,10 +162,10 @@ document.querySelector('.btn-close-email').addEventListener('click', function ()
     document.querySelector('.form-check-code').querySelector('[title="email"]').style.display = 'block';
 });
 
-document.querySelectorAll('.form-signup .form-control').forEach(function (element) {
+document.querySelectorAll('.form-signup .form-control[type=number]').forEach(function (element) {
     element.addEventListener('change', function () {
         var total = 0;
-        var inputFields = document.querySelectorAll('.form-signup .form-control');
+        var inputFields = document.querySelectorAll('.form-signup .form-control[type=number]');
         
         for (var i = 0; i < inputFields.length; i++) {
             if (inputFields[i].value != '') {

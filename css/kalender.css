@@ -170,13 +170,17 @@
     color: hsl(200, 20%, 90%);
 }
 
-.kalender-card-skeleton {
+.kalender-card-skeleton, .shop-card-skeleton {
     background-color: hsl(200, 20%, 90%);
     border-radius: 4px;
     width: 330px;
     max-width: 98%;
     height: 250px;
     margin: 25px;
+}
+
+.shop-card-skeleton {
+    height: 350px;
 }
 
 .modal *:not(input), .modal-header, .modal-body, .modal-footer {
