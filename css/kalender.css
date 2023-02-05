@@ -1,3 +1,8 @@
+* {
+    scroll-behavior: smooth;
+}
+
+/* KALENDER */
 .kalender-container {
     display: flex;
     flex-direction: row;
@@ -16,6 +21,7 @@
     border-radius: 12px;
 }
 
+/* KALENDER LEGEND */
 .kalender-legend {
     display: inline-block;
     align-self: flex-end;
@@ -48,6 +54,7 @@
     color: #A4D8DE;
 }
 
+/* KALENDER HEADER */
 .kalender-header {
     background-color: #F5F5F5;
     display: flex;
@@ -67,6 +74,7 @@
 }
 
 .kalender-header-name {
+    cursor: pointer;
     display: none;
 }
 
@@ -77,6 +85,7 @@
     cursor: pointer;
 }
 
+/* KALENDER BODY */
 .kalender-background {
     background-color: #F5F5F5;
 }
@@ -112,12 +121,14 @@
     padding-bottom: 15px;
 }
 
+/* KALENDER DAY */
 .kalender-day {
     text-align: center;
     color: #4A7D44;
 }
 
 .kalender-day p {
+    cursor: default;
     font-size: 1.3rem;
     font-weight: bold;
     color: #4A7D44;
@@ -125,6 +136,7 @@
     padding-top: .3rem;
 }
 
+/* KALENDER ACTIVE DAY */
 .kalender-active {
     background-repeat: no-repeat;
     background-size: contain;
@@ -149,6 +161,11 @@
     background-image: url('../images/kalender_cafe2.png');
 }
 
+.kalender-prev-month-day p, .kalender-next-month-day p {
+    color: #4A7D4480;
+}
+
+/* KALENDER/SHOP SKELETON */
 .skeleton-header-name {
     background-color: hsl(200, 20%, 90%);
     color: hsl(200, 20%, 90%) !important;
@@ -183,6 +200,7 @@
     height: 350px;
 }
 
+/* MODAL */
 .modal *:not(input), .modal-header, .modal-body, .modal-footer {
     font-family: adobe-clean, sans-serif;
     border: none !important;
@@ -216,6 +234,8 @@
     width: 100%;
     border-radius: 4px !important;
 }
+
+/* KALENDER INFO */
 .kalender-info {
     margin-bottom: 20px;
 }
@@ -237,17 +257,18 @@
     border-radius: 4px;
 }
 
-.kalender-info .col-8 div{
+.kalender-info .col-8 div {
     display: flex;
     justify-content: space-between;
 }
 
+/* TOOLTIP */
 .kalender-tooltip {
     position: relative;
 }
 
 .kalender-tooltip .kalender-top {
-    top: -20px;
+    top: -10px;
     left: 50%;
     transform: translate(-50%, -100%);
     padding: 3px 8px;
@@ -259,36 +280,15 @@
     display: none;
 }
 
-.kalender-tooltip .kalender-top i {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -8px;
-    width: 16px;
-    height: 8px;
-    overflow: hidden;
-}
-
 .kalender-tooltip .kalender-top p {
     font-size: 18px;
     margin: 0;
     padding: 0;
 }
 
-.kalender-tooltip .kalender-top i::after {
-    content: '';
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    left: 50%;
-    transform: translate(-50%,-50%) rotate(45deg);
-}
-
-@media (min-width: 771px) {
-    .kalender-tooltip .kalender-top.kalender-tooltip-show {
-        display: block;
-        opacity: 1;
-    }
+.kalender-tooltip .kalender-top.kalender-tooltip-show {
+    display: block;
+    opacity: 1;
 }
 
 .kalender-tooltip-event .kalender-top, .kalender-tooltip-event .kalender-top i::after {
@@ -306,11 +306,24 @@
     box-shadow: 0 1px 8px rgba(106, 181, 97, .5);
 }
 
+.kalender-input-month {
+    visibility: hidden;
+    position: absolute;
+    width: 0;
+    left: 50%;
+}
+
+/* KALENDER CARDS */
+.kalender-card .status {
+    cursor: pointer;
+}
+
 .kalender-boomgaardcafe-dates {
-    background-color: #4A7D44;
+    background-color: #EE7357;
     color: #fff;
     padding: 4px 10px;
     border-radius: 4px;
+    cursor: pointer;
 }
 
 .kalender-boomgaardcafe-dates:first-of-type {

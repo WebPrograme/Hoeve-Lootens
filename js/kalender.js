@@ -1,21 +1,3 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { getStorage, ref, uploadBytes, getDownloadURL, updateMetadata   } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-storage.js";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyA4R3_Qmo2k4LyMtXs86xTkHtx9tIM8VoA",
-    authDomain: "hoeve-lootens-497f9.firebaseapp.com",
-    projectId: "hoeve-lootens-497f9",
-    storageBucket: "hoeve-lootens-497f9.appspot.com",
-    messagingSenderId: "175696391830",
-    appId: "1:175696391830:web:6e836280bf7b23259a1cb7",
-    measurementId: "G-6LXS0WL2CT"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
-
 const d = new Date();
 const kalender = document.querySelector(".kalender-content");
 const kalenderHeader = document.querySelector(".kalender-header-name");
@@ -128,6 +110,7 @@ function updateKalender(month) {
     } else {
         kalenderPrevMonth.style.color = "#FCC000";
         kalenderPrevMonth.setAttribute("data-month", Object.keys(kalenderData)[index - 1])
+        kalenderPrevMonth.style.cursor = "pointer";
     }
 
     if (index == 11) {
@@ -136,6 +119,7 @@ function updateKalender(month) {
     } else {
         kalenderNextMonth.style.color = "#FCC000";
         kalenderNextMonth.setAttribute("data-month", Object.keys(kalenderData)[index + 1])
+        kalenderNextMonth.style.cursor = "pointer";
     }
 
     for (let i = 0; i < startWeekDay - 1; i++) {
@@ -219,25 +203,27 @@ function showEvents() {
         }
     }
     
-    var daysInMonth = [];
-    var lastMonth = boomgaardcafeEvents[0].Month;
-    for (let i = 0; i < boomgaardcafeEvents.length; i++) {
-        if (lastMonth == boomgaardcafeEvents[i].Month) {
-            daysInMonth.push(boomgaardcafeEvents[i].Day);
-        } else {            
-            boomgaardcafeCardsContent += "<p class='kalender-boomgaardcafe-dates'>" + daysInMonth.join(' / ') + " " + kalenderMonthsDutch[kalenderMonths.indexOf(lastMonth)].charAt(0).toUpperCase() + kalenderMonthsDutch[kalenderMonths.indexOf(lastMonth)].slice(1) + "</p>"
-            daysInMonth = [boomgaardcafeEvents[i].Day];
-        }
-        lastMonth = boomgaardcafeEvents[i].Month;
+    if (boomgaardcafeEvents.length > 0) {
+        var daysInMonth = [];
+        var lastMonth = boomgaardcafeEvents[0].Month;
+        for (let i = 0; i < boomgaardcafeEvents.length; i++) {
+            if (lastMonth == boomgaardcafeEvents[i].Month) {
+                daysInMonth.push(boomgaardcafeEvents[i].Day);
+            } else {            
+                boomgaardcafeCardsContent += "<p class='kalender-boomgaardcafe-dates' date-month='" + kalenderMonths[kalenderMonths.indexOf(lastMonth)] + "'>" + daysInMonth.join(' / ') + " " + kalenderMonthsDutch[kalenderMonths.indexOf(lastMonth)].charAt(0).toUpperCase() + kalenderMonthsDutch[kalenderMonths.indexOf(lastMonth)].slice(1) + "</p>"
+                daysInMonth = [boomgaardcafeEvents[i].Day];
+            }
+            lastMonth = boomgaardcafeEvents[i].Month;
 
-        if (boomgaardcafeEvents[i+1] == undefined) {
-            boomgaardcafeCardsContent += "<p class='kalender-boomgaardcafe-dates'>" + daysInMonth.join(' / ') + " " + kalenderMonthsDutch[kalenderMonths.indexOf(lastMonth)].charAt(0).toUpperCase() + kalenderMonthsDutch[kalenderMonths.indexOf(lastMonth)].slice(1) + "</p>"
+            if (boomgaardcafeEvents[i+1] == undefined) {
+                boomgaardcafeCardsContent += "<p class='kalender-boomgaardcafe-dates' date-month='" + kalenderMonths[kalenderMonths.indexOf(lastMonth)] + "'>" + daysInMonth.join(' / ') + " " + kalenderMonthsDutch[kalenderMonths.indexOf(lastMonth)].charAt(0).toUpperCase() + kalenderMonthsDutch[kalenderMonths.indexOf(lastMonth)].slice(1) + "</p>"
+            }
+            var description = boomgaardcafeEvents['Description']
         }
-        var description = boomgaardcafeEvents['Description']
+
+
+        kalenderCardsContent += "<div class='kalender-card'><h3>Boomgaardcafé</h3><div class='card-content'><p class='email'>" + description + "</p>" + boomgaardcafeCardsContent + "</div></div>"
     }
-
-    
-    kalenderCardsContent += "<div class='kalender-card'><h3>Boomgaardcafé</h3><div class='card-content'><p class='email'>" + description + "</p>" + boomgaardcafeCardsContent + "</div></div>"
 
     for (let i = 0; i < Object.keys(kalenderEventsContent).length; i++) {
         let event = kalenderEventsContent[Object.keys(kalenderEventsContent)[i]];
@@ -256,7 +242,7 @@ function showEvents() {
             eventDate = startDay + ' ' + kalenderMonthsDutchShort[Object.keys(kalenderData).indexOf(startMonth)] + ' - ' + endDay + ' ' + kalenderMonthsDutchShort[Object.keys(kalenderData).indexOf(endMonth)] + ' 2023';
         }
 
-        kalenderCardsContent += '<div class="kalender-card"><h3>' + eventTitle + '</h3><p class="status">' + eventDate + '</p><p class="email">' + eventDescription + '</p></div>';
+        kalenderCardsContent += '<div class="kalender-card"><h3>' + eventTitle + '</h3><p class="status" data-month="' + startMonth + '">' + eventDate + '</p><p class="email">' + eventDescription + '</p></div>';
     }
 
     if (Object.keys(kalenderEventsContent).length == 0) {
@@ -269,6 +255,30 @@ function showEvents() {
     }
 
     kalenderCards.style.marginTop = "20px";
+
+    document.querySelectorAll('.kalender-boomgaardcafe-dates').forEach((element) => {
+        element.addEventListener('click', function() {
+            let month = element.getAttribute('date-month');
+            
+            kalender.innerHTML = "";
+            updateKalender(month);
+            tooltip();
+
+            scrollTo(0, 0);
+        })
+    });
+
+    document.querySelectorAll('.status').forEach((element) => {
+        element.addEventListener('click', function() {
+            let month = element.getAttribute('data-month');
+            
+            kalender.innerHTML = "";
+            updateKalender(month);
+            tooltip();
+
+            scrollTo(0, 0);
+        })
+    });
 }
 
 function parseEvents(events) {
@@ -328,7 +338,7 @@ function parseEvents(events) {
                     "Title": title
                 }
 
-                if (description != '') {
+                if (description != '' && type == 'boomgaardcafe') {
                     boomgaardcafeEvents['Description'] = description;
                 }
 
@@ -361,7 +371,7 @@ function parseEvents(events) {
                     }
                 }
 
-                if (description != '') {
+                if (description != '' && type == 'boomgaardcafe') {
                     boomgaardcafeEvents['Description'] = description;
                 }
             
@@ -409,9 +419,42 @@ function parseEvents(events) {
     }
 }
 
+function tooltip() {
+    var tooltips = document.querySelectorAll(".kalender-tooltip");
+    tooltips.forEach(function(tooltip, index){
+        tooltip.addEventListener("mouseover", position_tooltip); // On hover, launch the function below
+    })
+
+    tooltips.forEach(function(tooltip, index){
+        tooltip.addEventListener("mouseout", function(){
+            this.childNodes[1].classList.remove("kalender-tooltip-show");
+        });
+    });
+}
+
+function position_tooltip(){
+    // Get .ktooltiptext sibling
+    var tooltip = this.childNodes[1];
+    
+    // Get calculated ktooltip coordinates and size
+    var tooltip_rect = this.getBoundingClientRect();
+    var tooltip_width = tooltip_rect.width;
+    var tooltip_pos_right = tooltip_rect.right;
+    var tooltip_pos_y = tooltip_rect.y;
+    
+    if (tooltip_pos_right + tooltip_width > window.innerWidth) {
+        tooltip.style.left = '0px';
+    }
+
+    if (tooltip_pos_y < 0) {
+        tooltip.style.top = '0px';
+    }
+
+    tooltip.classList.add("kalender-tooltip-show");
+}
+
 getCalendar().then(calendar => {
     const allEvents = calendar.items || [];
-    console.log(allEvents)
     let events = [];
 
     for (let i = 0; i < allEvents.length; i++) {
@@ -439,57 +482,29 @@ kalenderPrevMonth.addEventListener("click", function() {
     kalender.innerHTML = "";
     updateKalender(this.getAttribute("data-month"));
 
-    var tooltips = document.querySelectorAll(".kalender-tooltip");
-    tooltips.forEach(function(tooltip, index){
-        tooltip.addEventListener("mouseover", position_tooltip); // On hover, launch the function below
-    })
-
-    tooltips.forEach(function(tooltip, index){
-        tooltip.addEventListener("mouseout", function(){
-            this.childNodes[1].classList.remove("kalender-tooltip-show");
-        });
-    });
+    tooltip();
 });
 
 kalenderNextMonth.addEventListener("click", function() {
     kalender.innerHTML = "";
     updateKalender(this.getAttribute("data-month"));
 
-    var tooltips = document.querySelectorAll(".kalender-tooltip");
-    tooltips.forEach(function(tooltip, index){
-        tooltip.addEventListener("mouseover", position_tooltip); // On hover, launch the function below
-    })
-
-    tooltips.forEach(function(tooltip, index){
-        tooltip.addEventListener("mouseout", function(){
-            this.childNodes[1].classList.remove("kalender-tooltip-show");
-        });
-    });
+    tooltip();
 });
 
-function position_tooltip(){
-    // Get .ktooltiptext sibling
-    var tooltip = this.childNodes[1];
-    
-    // Get calculated ktooltip coordinates and size
-    var tooltip_rect = this.getBoundingClientRect();
+kalenderHeader.addEventListener("click", function() {
+    var inputMonth = document.querySelector(".kalender-input-month");
+    inputMonth.showPicker();
 
-    var tipX = tooltip_rect.width / 2; // 5px on the right of the ktooltip
-    var tipY = -5;                     // 40px on the top of the ktooltip
-    // Position tooltip
-    tooltip.style.top = tipY + 'px';
-    tooltip.style.left = tipX + 'px';
+    inputMonth.addEventListener("change", function() {
+        if (inputMonth.value != "") {
+            var monthIndex = inputMonth.value.split('-')[1];
+            var month = Object.keys(kalenderEvents)[monthIndex-1];
+            
+            kalender.innerHTML = "";
+            updateKalender(month);
 
-    // Get calculated tooltip coordinates and size
-    var tooltip_rect = tooltip.getBoundingClientRect();
-    // Corrections if out of window
-    if ((tooltip_rect.x + tooltip_rect.width) > window.innerWidth) // Out on the right
-        tipX = -tooltip_rect.width - 5;  // Simulate a "right: tipX" position
-    if (tooltip_rect.y < 0)            // Out on the top
-        tipY = tipY - tooltip_rect.y;    // Align on the top
-
-    // Apply corrected position
-    tooltip.style.top = tipY + 'px';
-    tooltip.style.left = tipX + 'px';
-    tooltip.classList.add("kalender-tooltip-show");
-}
+            tooltip();
+        }
+    });
+});
