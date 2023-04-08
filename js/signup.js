@@ -1,51 +1,47 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { getStorage, ref, uploadBytes, getDownloadURL, updateMetadata   } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-storage.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-const firebaseConfig = {
-    apiKey: "AIzaSyA4R3_Qmo2k4LyMtXs86xTkHtx9tIM8VoA",
-    authDomain: "hoeve-lootens-497f9.firebaseapp.com",
-    projectId: "hoeve-lootens-497f9",
-    storageBucket: "hoeve-lootens-497f9.appspot.com",
-    messagingSenderId: "175696391830",
-    appId: "1:175696391830:web:6e836280bf7b23259a1cb7",
-    measurementId: "G-6LXS0WL2CT"
-};
+function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    
+    return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
+}
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
-let data = [];
-console.log("Firebase is geladen");
-
-function uploadFile(data) {
-    // Upload a blob or file		
-    var myJSON = JSON.stringify(data);
-    var blob = new Blob([myJSON], {
-        type: "application/json"
-    })
-    const storageRef = ref(storage, 'database.json');
-    uploadBytes(storageRef, blob).then((snapshot) => {
-        console.log('Uploaded file!');
+function getRequest(target) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://hoeve-lootens-email.onrender.com/api/' + target, true);
+        xhr.send();
+        xhr.onload = function () {
+            resolve(this.response);
+        }
     });
 }
 
-function getRandomIntInclusive(data, min, max) {
-    var UserCodes = [];
-    for (var i = 0; i < data.length; i++) {
-        UserCodes.push(data[i].UserCode);
-    }
-    
-    min = Math.ceil(min);
-    max = Math.floor(max);
-
-    while (true) {
-        var random = Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
-        if (!UserCodes.includes(random)) {
-            return random;
+function postRequest(target, data) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://hoeve-lootens-email.onrender.com/api/' + target, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(data));
+        xhr.onload = function () {
+            resolve(this.response);
         }
-    }
+    });
+}
+
+function createPayment(UserCode, Amount) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://hoeve-lootens-email.onrender.com/api/payconiq', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+            "Amount": Amount,
+            "Ref": UserCode
+        }));
+        xhr.onload = function () {
+            let data = JSON.parse(this.response);
+            resolve(data);
+        }
+    });
 }
 
 function showSuccess(UserCode) {
@@ -54,67 +50,81 @@ function showSuccess(UserCode) {
     document.querySelector('.signup-subheader').style.display = 'none';
     document.querySelector('.UserCodeResult').style.display = 'block';
     document.querySelector('.form-success').style.display = 'block';
+    
+    window.scrollTo(0, 0);
 }
 
-function downloadData() {
-    // Download data
-    getDownloadURL(ref(storage, 'database.json')).then((url) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', url);
-        xhr.send();
-        xhr.onload = function (event) {
-            data = JSON.parse(xhr.response);
-        };
-    }).catch((error) => {
-        console.log(error);
-    });
-}
-
-document.querySelector('.btn-submit').addEventListener('click', function () {
-    downloadData();
-
+document.querySelector('.btn-submit').addEventListener('click', async function () {
     var BtnSubmit = document.querySelector('.btn-submit');
     BtnSubmit.innerHTML = 'Verzenden...';
-
+    
     const form = document.querySelector('.form-signup')
     var FirstName = form.querySelector('[title="firstname"]').value;
     var LastName = form.querySelector('[title="lastname"]').value;
     var Email = form.querySelector('[title="email"]').value;
     var Phone = form.querySelector('[title="phone"]').value;
     var Address = form.querySelector('[title="address"]').value;
-    var AdultMeat = form.querySelector('[title="adultMeat"]').value || 0;
-    var AdultFish = form.querySelector('[title="adultFish"]').value || 0;
-    var AdultVegetarian = form.querySelector('[title="adultVegan"]').value || 0;
-    var ChildMeat = form.querySelector('[title="childMeat"]').value || 0;
-    var ChildVegetarian = form.querySelector('[title="childVegan"]').value || 0;
+    var FoodInputs = form.querySelectorAll('.signup-food');
+    var FoodPrices = []
+    var FoodValues = {};
+    var Amount = 0;
+    
+    for (var i = 0; i < FoodInputs.length; i++) {
+        FoodPrices.push(parseInt(FoodInputs[i].getAttribute('data-price')));
+    }
 
+    for (var i = 0; i < FoodInputs.length; i++) {
+        FoodValues[FoodInputs[i].getAttribute('title')] = parseInt(FoodInputs[i].value) || 0;
+        Amount += (parseInt(FoodInputs[i].value) * FoodPrices[i]) || 0;
+    }
+    
     if (FirstName == '' || LastName == '' || Email == '' || Phone == '' || Address == '') {
         BtnSubmit.innerHTML = 'Vul alle velden in!';
         BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
         return;
     }
+    
+    var UserCode = FirstName[0] + LastName[0] + getRandomIntInclusive(10000, 99999);
+    var data = {'First Name': FirstName, 'Last Name': LastName, 'Email': Email, 'Phone': Phone, 'Address': Address, 'UserCode': UserCode};
 
-    var UserCode = FirstName[0] + LastName[0] + getRandomIntInclusive(data, 1000, 9999);
+    for (var key in FoodValues) {
+        data[key] = FoodValues[key];
+    }
 
-    data.push({
-        'Voornaam': FirstName,
-        'Achternaam': LastName,
-        'UserCode': UserCode,
-        'Email': Email,
-        'Telefoonnummer': Phone,
-        'Adres': Address,
-        'Volwassenen vlees': AdultMeat,
-        'Volwassenen vis': AdultFish,
-        'Volwassenen vegetarisch': AdultVegetarian,
-        'Kinderen vlees': ChildMeat,
-        'Kinderen vegetarisch': ChildVegetarian
+    data['Amount'] = Amount;
+
+    postRequest('signup', data)
+    .then((response) => {
+        if (response == 'success') {
+            showSuccess(UserCode);
+        } else {
+            BtnSubmit.innerHTML = 'Er is iets fout gegaan!';
+            BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
+        }
     });
 
-    uploadFile(data);
-    showSuccess(UserCode);
+
+    document.querySelector('.payconiq-img img').addEventListener('click', async function () {
+        document.querySelector('.payconiq-price').innerHTML = '€' + Amount;
+
+        let links = await createPayment(UserCode, Amount);
+        let qrcodeImg = document.querySelector('.payconiq-qrcode');
+        let phoneLink = document.querySelector('.payconiq-link');
+
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            window.open(links['deeplink'], '_blank');
+        }
+        
+        qrcodeImg.src = links['qr'];
+        phoneLink.href = links['deeplink'];
+
+        setTimeout(function () {
+            console.log('test');
+        }, 1200000);
+    });
 });
 
-document.querySelector('.btn-submit-email').addEventListener('click', function () {
+document.querySelector('.btn-submit-email').addEventListener('click', async function () {
     var BtnSubmit = document.querySelector('.btn-submit-email');
     var BtnClose = document.querySelector('.btn-close-email');
     var EmailInput = document.querySelector('.form-check-code').querySelector('[title="email"]');
@@ -127,21 +137,10 @@ document.querySelector('.btn-submit-email').addEventListener('click', function (
         BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
         return;
     }
-
-    getDownloadURL(ref(storage, 'shop.json')).then((url) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', url);
-        xhr.send();
-        xhr.onload = function (event) {
-            data = JSON.parse(xhr.response);
-        }
-    }).catch((error) => {
-        console.log(error);
-    });
-
-    for (var i = 0; i < data.length; i++) {
-        if (data[i].Email == Email) {
-            UserCodeElement.innerHTML = data[i].UserCode;
+    
+    getRequest('signup/users?email=' + Email).then((response) => {
+        if (response != 'User not found!' && response != '{}') {
+            UserCodeElement.innerHTML = response;
 
             EmailInput.setAttribute('style', 'display: none !important;');
             UserCodeElement.setAttribute('style', 'display: block !important;');
@@ -149,10 +148,53 @@ document.querySelector('.btn-submit-email').addEventListener('click', function (
             BtnClose.setAttribute('style', 'display: block !important;');
             return;
         }
-    }
     
-    BtnSubmit.innerHTML = 'Email niet gevonden!';
-    BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
+        BtnSubmit.innerHTML = 'Email niet gevonden!';
+        BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
+    });
+});
+
+document.querySelector('.btn-submit-email-code').addEventListener('click', async function () {
+    const formEmail = document.querySelector('.form-email-to-code');
+    var BtnSubmit = document.querySelector('.btn-submit-email-code');
+    var Email = formEmail.querySelector('[title="email"]').value;
+    var UserCode;
+
+    if (Email == '') {
+        BtnSubmit.innerHTML = 'Vul alle velden in!';
+        BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
+        return;
+    }
+
+    getRequest('signup/users?email=' + Email).then((response) => {
+        if (response != 'User not found!' && response != '{}') {
+            UserCode = response;
+            
+            postRequest('signup/get', {'UserCode': UserCode}).then(async (response) => {
+                if (response != 'User not found!' && response != '{}') {
+                    response = JSON.parse(response);
+
+                    let links = await createPayment(UserCode, response['Amount']);
+                    let qrcodeImg = document.querySelector('.payconiq-qrcode');
+                    let phoneLink = document.querySelector('.payconiq-link');
+            
+                    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+                        window.open(links['deeplink'], '_blank');
+                    }
+                    
+                    qrcodeImg.src = links['qr'];
+                    phoneLink.href = links['deeplink'];
+
+                    document.querySelector('.btn-close-email-code').click();
+                    return;
+                }
+            });
+            return;
+        }
+    
+        BtnSubmit.innerHTML = 'Email niet gevonden!';
+        BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
+    });
 });
 
 document.querySelector('.btn-close-email').addEventListener('click', function () {
@@ -163,7 +205,7 @@ document.querySelector('.btn-close-email').addEventListener('click', function ()
 });
 
 document.querySelectorAll('.form-signup .form-control[type=number]').forEach(function (element) {
-    element.addEventListener('change', function () {
+    function updateValue() {
         var total = 0;
         var inputFields = document.querySelectorAll('.form-signup .form-control[type=number]');
         
@@ -174,5 +216,8 @@ document.querySelectorAll('.form-signup .form-control[type=number]').forEach(fun
         }
 
         document.querySelector('.form-total').innerHTML = '€' + total;
-    });
+    }
+
+    element.addEventListener('change', updateValue);
+    element.addEventListener('keyup', updateValue);
 });

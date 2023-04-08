@@ -184,12 +184,12 @@ input[type=tel] {
     color: #212529;
 }
 
-.btn-submit, .btn-submit-email, .btn-close-email, .btn-shop-confirm, .btn-shop-close, .btn-modal-footer {
+.btn-submit, .btn-submit-email, .btn-close-email, .btn-shop-confirm, .btn-shop-close, .btn-modal-footer, .btn-submit-email-code {
     width: 100%;
     border-radius: 4px !important;
 }
 
-.btn-close-email, .btn-shop-close {
+.btn-close-email, .btn-shop-close, .btn-close-email-code {
     display: none !important;
 }
 
@@ -307,4 +307,75 @@ input[type=tel] {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.payconiq-img img {
+    width: 200px;
+    border-radius: 0;
+    cursor: pointer;
+}
+
+.payconiq-modal-img img {
+    width: 150px;
+    border-radius: 0;
+}
+
+.payconiq-modal .modal-dialog {
+    position: relative;
+}
+
+.payconiq-modal .btn-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: #fff !important;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    text-shadow: 0 1px 0 #fff;
+    opacity: 1;
+    z-index: 999;
+    cursor: pointer;
+}
+
+.payconiq-modal .modal-content {
+    text-align: center;
+    background-color: #FF4785;
+    color: #fff;
+    border-radius: 15px;
+    padding: 3rem 1rem 10px 1rem;
+}
+
+.payconiq-modal .modal-content .modal-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.payconiq-modal .modal-content .modal-body h3 {
+    font-weight: 600;
+}
+
+.payconiq-modal .modal-content .modal-body .payconiq-link {
+    margin-top: 1rem;
+    color: #fff;
+    font-size: 1rem;
+    text-decoration: underline;
+}
+
+.payconiq-qrcode {
+    display: flex;
+    margin: auto;
+    max-width: 200px;
+}
+
+
+.btn-row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.btn-row .btn {
+    flex: 1;
 }

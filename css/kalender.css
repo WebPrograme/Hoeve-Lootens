@@ -2,7 +2,6 @@
     scroll-behavior: smooth;
 }
 
-/* KALENDER */
 .kalender-container {
     display: flex;
     flex-direction: row;
@@ -21,7 +20,6 @@
     border-radius: 12px;
 }
 
-/* KALENDER LEGEND */
 .kalender-legend {
     display: inline-block;
     align-self: flex-end;
@@ -54,7 +52,6 @@
     color: #A4D8DE;
 }
 
-/* KALENDER HEADER */
 .kalender-header {
     background-color: #F5F5F5;
     display: flex;
@@ -85,7 +82,6 @@
     cursor: pointer;
 }
 
-/* KALENDER BODY */
 .kalender-background {
     background-color: #F5F5F5;
 }
@@ -121,7 +117,6 @@
     padding-bottom: 15px;
 }
 
-/* KALENDER DAY */
 .kalender-day {
     text-align: center;
     color: #4A7D44;
@@ -136,7 +131,6 @@
     padding-top: .3rem;
 }
 
-/* KALENDER ACTIVE DAY */
 .kalender-active {
     background-repeat: no-repeat;
     background-size: contain;
@@ -165,7 +159,6 @@
     color: #4A7D4480;
 }
 
-/* KALENDER/SHOP SKELETON */
 .skeleton-header-name {
     background-color: hsl(200, 20%, 90%);
     color: hsl(200, 20%, 90%) !important;
@@ -200,7 +193,6 @@
     height: 350px;
 }
 
-/* MODAL */
 .modal *:not(input), .modal-header, .modal-body, .modal-footer {
     font-family: adobe-clean, sans-serif;
     border: none !important;
@@ -235,7 +227,6 @@
     border-radius: 4px !important;
 }
 
-/* KALENDER INFO */
 .kalender-info {
     margin-bottom: 20px;
 }
@@ -262,7 +253,6 @@
     justify-content: space-between;
 }
 
-/* TOOLTIP */
 .kalender-tooltip {
     position: relative;
 }
@@ -313,7 +303,6 @@
     left: 50%;
 }
 
-/* KALENDER CARDS */
 .kalender-card .status {
     cursor: pointer;
 }
