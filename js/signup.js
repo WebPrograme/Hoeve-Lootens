@@ -157,7 +157,7 @@ document.querySelector('.btn-submit-email').addEventListener('click', async func
 document.querySelector('.btn-submit-email-code').addEventListener('click', async function () {
     const formEmail = document.querySelector('.form-email-to-code');
     var BtnSubmit = document.querySelector('.btn-submit-email-code');
-    var Email = formEmail.querySelector('[title="email"]').value;
+    var Email = formEmail.querySelector('[title="email"]').value.trim().toLowerCase();
     var UserCode;
 
     if (Email == '') {
