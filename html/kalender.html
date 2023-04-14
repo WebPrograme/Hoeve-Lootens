@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <meta name="discription" content="De kalender van Hoeve Lootens">
-    <title>Hoeve Lootens</title>
+    <title>Hoeve Lootens - Kalender</title>
 	<link rel="icon" href="../images/page image transparent.png" />
     <link href="../style.css" rel="stylesheet" type="text/css" />
     <link href="../css/standaard.css" rel="stylesheet" type="text/css" />
@@ -18,6 +18,18 @@
 </head>
 
 <body>
+    <div class="cookie">
+        <div class="txt">
+           <p class="">
+              Door deze website te gebruik,<br>
+              accepteert u de Cookies.</a>
+           </p>
+        </div>
+        <div class="accept-div">
+           <a class="btn btn-main btn-main-sm" onclick="localStorage.setItem('cookiesAgree', 'true'); document.querySelector('.cookie').style.display = 'none';">Accept</a>
+        </div>
+    </div>
+    
     <nav>
         <h1 class="logo"><img src="../images/HoeveLootens_Logo_Wit.png"></h1>
         <input type="checkbox" id="hamburger-toggle">
@@ -244,9 +256,8 @@
     <div class="footer-acteur">
         <p>Deze website is gemaakt door Yarne Gooris.</p>
     </div>
-    <script src="../script.js"></script>
     <script src="../js/kalender.js" type="module"></script>
-    <!--  JQuery  -->
+	<script src="../js/analyse.js" type="module"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </body>

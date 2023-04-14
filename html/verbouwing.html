@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <meta name="discription" content="De maatschappelijke projecten van Hoeve Lootens">
-    <title>Hoeve Lootens</title>
+    <title>Hoeve Lootens - Verbouwing</title>
 	<link rel="icon" href="../images/page image transparent.png" />
     <link href="../style.css" rel="stylesheet" type="text/css" />
     <link href="../css/standaard.css" rel="stylesheet" type="text/css" />
@@ -16,6 +16,18 @@
 </head>
 
 <body>
+    <div class="cookie">
+        <div class="txt">
+           <p class="">
+              Door deze website te gebruik,<br>
+              accepteert u de Cookies.</a>
+           </p>
+        </div>
+        <div class="accept-div">
+           <a class="btn btn-main btn-main-sm" onclick="localStorage.setItem('cookiesAgree', 'true'); document.querySelector('.cookie').style.display = 'none';">Accept</a>
+        </div>
+    </div>
+    
     <nav>
         <h1 class="logo"><img src="../images/HoeveLootens_Logo_Wit.png"></h1>
         <input type="checkbox" id="hamburger-toggle">
@@ -94,11 +106,12 @@
     <div class="footer-acteur">
         <p>Deze website is gemaakt door Yarne Gooris.</p>
     </div>
+
     <script src="https://kit.fontawesome.com/62dc937956.js" crossorigin="anonymous"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
     <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.7.2/angular-translate.js'></script>
-    <script src="../script.js"></script>
+	<script src="../js/analyse.js" type="module"></script>
 </body>
 
 </html>
