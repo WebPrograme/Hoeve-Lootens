@@ -174,6 +174,12 @@ document.querySelector('.btn-submit-email-code').addEventListener('click', async
                 if (response != 'User not found!' && response != '{}') {
                     response = JSON.parse(response);
 
+                    if (response['Pay'] !== undefined) {
+                        BtnSubmit.innerHTML = 'U heeft al betaald!';
+                        BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
+                        return;
+                    }
+
                     let links = await createPayment(UserCode, response['Amount']);
                     let qrcodeImg = document.querySelector('.payconiq-qrcode');
                     let phoneLink = document.querySelector('.payconiq-link');
