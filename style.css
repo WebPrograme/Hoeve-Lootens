@@ -1231,3 +1231,13 @@ footer p {
     padding-top: 15px;
     color: #fff;
 }
+
+.footer-acteur a {
+    color: #85c9e8;
+    text-decoration: underline;
+}
+
+.footer-acteur a:hover {
+    color: #85c9e8;
+    text-decoration: underline;
+}
