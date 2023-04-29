@@ -54,14 +54,9 @@ function showSuccess(UserCode) {
     window.scrollTo(0, 0);
 }
 
-const xhr = new XMLHttpRequest();
-xhr.open('GET', 'http://localhost:8081/api/signup/count', true);
-xhr.send();
-xhr.onload = function () {
-    if (this.status == 200) {
-        document.querySelector('.signup-count').innerHTML = 200 - (parseInt(this.response) + 20) + ' plaatsen over';
-    }
-}
+getRequest('signup/count').then((response) => {
+    document.querySelector('.signup-count').innerHTML = 200 - (parseInt(response) + 20) + ' plaatsen over';
+});
 
 document.querySelector('.btn-submit').addEventListener('click', async function () {
     var BtnSubmit = document.querySelector('.btn-submit');
