@@ -63,7 +63,7 @@ function checkCount() {
 }
 
 checkCount().then((response) => {
-    if (response >= 175) {
+    if (response >= 214) {
         document.querySelector('.signup-count').innerHTML = 'Volzet!';
         document.querySelector('.btn-submit').innerHTML = 'Volzet!';
         document.querySelector('.btn-submit').setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
@@ -74,7 +74,7 @@ checkCount().then((response) => {
 
 document.querySelector('.btn-submit').addEventListener('click', async function () {
     checkCount().then((response) => {
-        if (response >= 175) {
+        if (response >= 214) {
             document.querySelector('.signup-count').innerHTML = 'Volzet!';
             document.querySelector('.btn-submit').innerHTML = 'Volzet!';
             document.querySelector('.btn-submit').setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
