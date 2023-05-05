@@ -8,10 +8,10 @@ function getRandomIntInclusive(min, max) {
 function getRequest(target) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://hoeve-lootens-email.onrender.com/api/' + target, true);
+        xhr.open('GET', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
         xhr.send();
         xhr.onload = function () {
-            resolve(this.response);
+            resolve(this);
         }
     });
 }
@@ -19,11 +19,23 @@ function getRequest(target) {
 function postRequest(target, data) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://hoeve-lootens-email.onrender.com/api/' + target, true);
+        xhr.open('POST', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(data));
         xhr.onload = function () {
-            resolve(this.response);
+            resolve(this);
+        }
+    });
+}
+
+function putRequest(target, data) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('PUT', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(data));
+        xhr.onload = function () {
+            resolve(this);
         }
     });
 }
@@ -54,202 +66,233 @@ function showSuccess(UserCode) {
     window.scrollTo(0, 0);
 }
 
-function checkCount() {
-    return new Promise((resolve, reject) => {
-        getRequest('signup/count').then((response) => {
-            resolve(response);
+postRequest('init', {Target: 'Events'}).then((res) => {
+    if (res.status == 200) {
+        let events = JSON.parse(res.response);
+        let data = [];
+        let eventName;
+
+        Object.keys(events).forEach(function (key) {
+            if (events[key]['Type'] == 'Food') {
+                data = events[key];
+                eventName = key;
+                return;
+            }
         });
-    });
-}
 
-checkCount().then((response) => {
-    if (response >= 214) {
-        document.querySelector('.signup-count').innerHTML = 'Volzet!';
-        document.querySelector('.btn-submit').innerHTML = 'Volzet!';
-        document.querySelector('.btn-submit').setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
-    } else {
-        document.querySelector('.signup-count').innerHTML = 200 - (parseInt(response) + 25) + ' plaatsen over';
-    }
-});
+        if (data.length == 0) {
+            return;
+        }
 
-document.querySelector('.btn-submit').addEventListener('click', async function () {
-    checkCount().then((response) => {
-        if (response >= 214) {
+        if (data['Available Places'] == 0) {
             document.querySelector('.signup-count').innerHTML = 'Volzet!';
             document.querySelector('.btn-submit').innerHTML = 'Volzet!';
             document.querySelector('.btn-submit').setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
         } else {
-            var BtnSubmit = document.querySelector('.btn-submit');
-            BtnSubmit.innerHTML = 'Verzenden...';
-            
-            const form = document.querySelector('.form-signup')
-            var FirstName = form.querySelector('[title="firstname"]').value;
-            var LastName = form.querySelector('[title="lastname"]').value;
-            var Email = form.querySelector('[title="email"]').value;
-            var Phone = form.querySelector('[title="phone"]').value;
-            var Address = form.querySelector('[title="address"]').value;
-            var FoodInputs = form.querySelectorAll('.signup-food');
-            var FoodPrices = []
-            var FoodValues = {};
-            var Amount = 0;
-            
-            for (var i = 0; i < FoodInputs.length; i++) {
-                FoodPrices.push(parseInt(FoodInputs[i].getAttribute('data-price')));
-            }
+            document.querySelector('.signup-count').innerHTML = data['Available Places'] + ' Plaatsen Over';
+        }
 
-            for (var i = 0; i < FoodInputs.length; i++) {
-                FoodValues[FoodInputs[i].getAttribute('title')] = parseInt(FoodInputs[i].value) || 0;
-                Amount += (parseInt(FoodInputs[i].value) * FoodPrices[i]) || 0;
-            }
+        document.querySelector('.signup-header').innerHTML = data['Name'];
+        document.querySelector('.signup-description').innerHTML = data['Description'];
+        document.querySelector('.btn-submit').setAttribute('data-name', data['Name']);
+
+        Object.keys(data['Options']).forEach(function (key) {
+            let option = document.createElement('p');
+            option.innerHTML = '<span>' + key + '</span> <span class="label-discription">€' + data['Options'][key] + '</span>';
+
+            let input = document.createElement('input');
+            input.setAttribute('type', 'number');
+            input.setAttribute('data-price', data['Options'][key]);
+            input.setAttribute('title', key);
+            input.setAttribute('placeholder', 'Aantal personen');
+            input.setAttribute('min', '0');
+            input.classList.add('form-control', 'signup-input');
             
-            if (FirstName == '' || LastName == '' || Email == '' || Phone == '' || Address == '') {
+            document.querySelector('.form-signup').insertBefore(option, document.querySelector('.form-signup').querySelector('.form-footer'));
+            document.querySelector('.form-signup').insertBefore(input, document.querySelector('.form-signup').querySelector('.form-footer'));
+        });
+
+        document.querySelector('.btn-submit').addEventListener('click', async function (e) {
+            postRequest('init', {Target: 'Events'}).then((res) => {
+                if (res.status == 200) {
+                    let places = JSON.parse(res.response)[e.target.getAttribute('data-name')]['Available Places'];
+
+                    if (places == 0) {
+                        document.querySelector('.signup-count').innerHTML = 'Volzet!';
+                        document.querySelector('.btn-submit').innerHTML = 'Volzet!';
+                        document.querySelector('.btn-submit').setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
+                    } else {
+                        var BtnSubmit = document.querySelector('.btn-submit');
+                        BtnSubmit.innerHTML = 'Verzenden...';
+                        
+                        const form = document.querySelector('.form-signup')
+                        var FirstName = form.querySelector('[title="firstname"]').value;
+                        var LastName = form.querySelector('[title="lastname"]').value;
+                        var Email = form.querySelector('[title="email"]').value;
+                        var Phone = form.querySelector('[title="phone"]').value;
+                        var Address = form.querySelector('[title="address"]').value;
+                        var FoodInputs = form.querySelectorAll('.signup-input');
+                        var FoodPrices = []
+                        var FoodValues = {};
+                        var Amount = 0;
+                        
+                        for (var i = 0; i < FoodInputs.length; i++) {
+                            FoodPrices.push(parseInt(FoodInputs[i].getAttribute('data-price')));
+                        }
+
+                        for (var i = 0; i < FoodInputs.length; i++) {
+                            FoodValues[FoodInputs[i].getAttribute('title')] = parseInt(FoodInputs[i].value) || 0;
+                            Amount += (parseInt(FoodInputs[i].value) * FoodPrices[i]) || 0;
+                        }
+                        
+                        if (FirstName == '' || LastName == '' || Email == '' || Phone == '' || Address == '') {
+                            BtnSubmit.innerHTML = 'Vul alle velden in!';
+                            BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
+                            return;
+                        }
+                        
+                        var UserCode = FirstName[0] + LastName[0] + getRandomIntInclusive(10000, 99999);
+                        UserCode = UserCode.toUpperCase();
+                        var data = {'FirstName': FirstName, 'LastName': LastName, 'Email': Email, 'Phone': Phone, 'Address': Address, 'UserCode': UserCode};
+
+                        for (var key in FoodValues) {
+                            data[key] = FoodValues[key];
+                        }
+
+                        data['Amount'] = Amount;
+
+                        putRequest('set', {Data: data, Event: e.target.getAttribute('data-name')})
+                        .then((response) => {
+                            if (response.response == 'success') {
+                                showSuccess(UserCode);
+                            } else {
+                                BtnSubmit.innerHTML = 'Er is iets fout gegaan!';
+                                BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
+                            }
+                        });
+
+
+                        document.querySelector('.payconiq-img img').addEventListener('click', async function () {
+                            document.querySelector('.payconiq-price').innerHTML = '€' + Amount;
+
+                            let links = await createPayment(UserCode, Amount);
+                            let qrcodeImg = document.querySelector('.payconiq-qrcode');
+                            let phoneLink = document.querySelector('.payconiq-link');
+
+                            if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+                                window.open(links['deeplink'], '_blank');
+                            }
+                            
+                            qrcodeImg.src = links['qr'];
+                            phoneLink.href = links['deeplink'];
+                        });
+                    }
+                }
+            });
+        });
+
+        document.querySelector('.btn-submit-email').addEventListener('click', async function () {
+            var BtnSubmit = document.querySelector('.btn-submit-email');
+            var BtnClose = document.querySelector('.btn-close-email');
+            var EmailInput = document.querySelector('.form-check-code').querySelector('[title="email"]');
+            var UserCodeElement = document.querySelector('.UserCode');
+            const formEmail = document.querySelector('.form-check-code');
+            var Email = formEmail.querySelector('[title="email"]').value;
+
+            if (Email == '') {
                 BtnSubmit.innerHTML = 'Vul alle velden in!';
                 BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
                 return;
             }
             
-            var UserCode = FirstName[0] + LastName[0] + getRandomIntInclusive(10000, 99999);
-            var data = {'First Name': FirstName, 'Last Name': LastName, 'Email': Email, 'Phone': Phone, 'Address': Address, 'UserCode': UserCode};
+            getRequest('get/email?email=' + Email + '&event=' + eventName).then((response) => {
+                if (response.response != 'User not found!' && response.response != '{}') {
+                    UserCodeElement.innerHTML = response.response;
 
-            for (var key in FoodValues) {
-                data[key] = FoodValues[key];
-            }
-
-            data['Amount'] = Amount;
-
-            postRequest('signup', data)
-            .then((response) => {
-                if (response == 'success') {
-                    showSuccess(UserCode);
-                } else {
-                    BtnSubmit.innerHTML = 'Er is iets fout gegaan!';
-                    BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
-                }
-            });
-
-
-            document.querySelector('.payconiq-img img').addEventListener('click', async function () {
-                document.querySelector('.payconiq-price').innerHTML = '€' + Amount;
-
-                let links = await createPayment(UserCode, Amount);
-                let qrcodeImg = document.querySelector('.payconiq-qrcode');
-                let phoneLink = document.querySelector('.payconiq-link');
-
-                if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-                    window.open(links['deeplink'], '_blank');
-                }
-                
-                qrcodeImg.src = links['qr'];
-                phoneLink.href = links['deeplink'];
-
-                setTimeout(function () {
-                    console.log('test');
-                }, 1200000);
-            });
-        }
-    });
-});
-
-document.querySelector('.btn-submit-email').addEventListener('click', async function () {
-    var BtnSubmit = document.querySelector('.btn-submit-email');
-    var BtnClose = document.querySelector('.btn-close-email');
-    var EmailInput = document.querySelector('.form-check-code').querySelector('[title="email"]');
-    var UserCodeElement = document.querySelector('.UserCode');
-    const formEmail = document.querySelector('.form-check-code');
-    var Email = formEmail.querySelector('[title="email"]').value;
-
-    if (Email == '') {
-        BtnSubmit.innerHTML = 'Vul alle velden in!';
-        BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
-        return;
-    }
-    
-    getRequest('signup/users?email=' + Email).then((response) => {
-        if (response != 'User not found!' && response != '{}') {
-            UserCodeElement.innerHTML = response;
-
-            EmailInput.setAttribute('style', 'display: none !important;');
-            UserCodeElement.setAttribute('style', 'display: block !important;');
-            BtnSubmit.setAttribute('style', 'display: none !important;');
-            BtnClose.setAttribute('style', 'display: block !important;');
-            return;
-        }
-    
-        BtnSubmit.innerHTML = 'Email niet gevonden!';
-        BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
-    });
-});
-
-document.querySelector('.btn-submit-email-code').addEventListener('click', async function () {
-    const formEmail = document.querySelector('.form-email-to-code');
-    var BtnSubmit = document.querySelector('.btn-submit-email-code');
-    var Email = formEmail.querySelector('[title="email"]').value.trim().toLowerCase();
-    var UserCode;
-
-    if (Email == '') {
-        BtnSubmit.innerHTML = 'Vul alle velden in!';
-        BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
-        return;
-    }
-
-    getRequest('signup/users?email=' + Email).then((response) => {
-        if (response != 'User not found!' && response != '{}') {
-            UserCode = response;
-            
-            postRequest('signup/get', {'UserCode': UserCode}).then(async (response) => {
-                if (response != 'User not found!' && response != '{}') {
-                    response = JSON.parse(response);
-
-                    if (response['Pay'] !== undefined) {
-                        BtnSubmit.innerHTML = 'U heeft al betaald!';
-                        BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
-                        return;
-                    }
-
-                    let links = await createPayment(UserCode, response['Amount']);
-                    let qrcodeImg = document.querySelector('.payconiq-qrcode');
-                    let phoneLink = document.querySelector('.payconiq-link');
-            
-                    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-                        window.open(links['deeplink'], '_blank');
-                    }
-                    
-                    qrcodeImg.src = links['qr'];
-                    phoneLink.href = links['deeplink'];
-
-                    document.querySelector('.btn-close-email-code').click();
+                    EmailInput.setAttribute('style', 'display: none !important;');
+                    UserCodeElement.setAttribute('style', 'display: block !important;');
+                    BtnSubmit.setAttribute('style', 'display: none !important;');
+                    BtnClose.setAttribute('style', 'display: block !important;');
                     return;
                 }
+            
+                BtnSubmit.innerHTML = 'Email niet gevonden!';
+                BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
             });
-            return;
-        }
-    
-        BtnSubmit.innerHTML = 'Email niet gevonden!';
-        BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
-    });
-});
+        });
 
-document.querySelector('.btn-close-email').addEventListener('click', function () {
-    document.querySelector('.UserCode').style.display = 'none';
-    document.querySelector('.btn-close-email').style.display = 'none';
-    document.querySelector('.btn-submit-email').style.display = 'block';
-    document.querySelector('.form-check-code').querySelector('[title="email"]').style.display = 'block';
-});
+        document.querySelector('.btn-submit-email-code').addEventListener('click', async function () {
+            const formEmail = document.querySelector('.form-email-to-code');
+            var BtnSubmit = document.querySelector('.btn-submit-email-code');
+            var Email = formEmail.querySelector('[title="email"]').value.trim().toLowerCase();
+            var UserCode;
 
-document.querySelectorAll('.form-signup .form-control[type=number]').forEach(function (element) {
-    function updateValue() {
-        var total = 0;
-        var inputFields = document.querySelectorAll('.form-signup .form-control[type=number]');
-        
-        for (var i = 0; i < inputFields.length; i++) {
-            if (inputFields[i].value != '') {
-                total += parseFloat(inputFields[i].getAttribute('data-price')) * parseFloat(inputFields[i].value);
+            if (Email == '') {
+                BtnSubmit.innerHTML = 'Vul alle velden in!';
+                BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
+                return;
             }
-        }
 
-        document.querySelector('.form-total').innerHTML = '€' + total;
+            getRequest('get/email?email=' + Email + '&event=' + eventName).then((response) => {
+                if (response != 'User not found!' && response != '{}') {
+                    UserCode = response;
+                    
+                    postRequest('get/usercode', {'UserCode': UserCode}).then(async (response) => {
+                        if (response.response != 'User not found!' && response.response != '{}') {
+                            response = JSON.parse(response.response);
+
+                            if (response['Pay'] !== undefined) {
+                                BtnSubmit.innerHTML = 'U heeft al betaald!';
+                                BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
+                                return;
+                            }
+
+                            let links = await createPayment(UserCode, response['Amount']);
+                            let qrcodeImg = document.querySelector('.payconiq-qrcode');
+                            let phoneLink = document.querySelector('.payconiq-link');
+                    
+                            if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+                                window.open(links['deeplink'], '_blank');
+                            }
+                            
+                            qrcodeImg.src = links['qr'];
+                            phoneLink.href = links['deeplink'];
+
+                            document.querySelector('.btn-close-email-code').click();
+                            return;
+                        }
+                    });
+                    return;
+                }
+            
+                BtnSubmit.innerHTML = 'Email niet gevonden!';
+                BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
+            });
+        });
+
+        document.querySelector('.btn-close-email').addEventListener('click', function () {
+            document.querySelector('.UserCode').style.display = 'none';
+            document.querySelector('.btn-close-email').style.display = 'none';
+            document.querySelector('.btn-submit-email').style.display = 'block';
+            document.querySelector('.form-check-code').querySelector('[title="email"]').style.display = 'block';
+        });
+
+        document.querySelectorAll('.form-signup .form-control[type=number]').forEach(function (element) {
+            function updateValue() {
+                var total = 0;
+                var inputFields = document.querySelectorAll('.form-signup .form-control[type=number]');
+                
+                for (var i = 0; i < inputFields.length; i++) {
+                    if (inputFields[i].value != '') {
+                        total += parseFloat(inputFields[i].getAttribute('data-price')) * parseFloat(inputFields[i].value);
+                    }
+                }
+
+                document.querySelector('.form-total').innerHTML = '€' + total;
+            }
+
+            element.addEventListener('change', updateValue);
+            element.addEventListener('keyup', updateValue);
+        });
     }
-
-    element.addEventListener('change', updateValue);
-    element.addEventListener('keyup', updateValue);
 });

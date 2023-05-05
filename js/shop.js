@@ -30,10 +30,10 @@ function showSuccess(UserCode) {
 function getRequest(target) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://hoeve-lootens-email.onrender.com/api/' + target, true);
+        xhr.open('GET', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
         xhr.send();
         xhr.onload = function () {
-            resolve(this.response);
+            resolve(this);
         }
     });
 }
@@ -41,182 +41,206 @@ function getRequest(target) {
 function postRequest(target, data) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://hoeve-lootens-email.onrender.com/api/' + target, true);
+        xhr.open('POST', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(data));
         xhr.onload = function () {
-            resolve(this.response);
+            resolve(this);
         }
     });
 }
 
-getRequest('events/init').then((res) => {
-    data = JSON.parse(res);
-    
-    var cards = document.querySelector('.cards');
-
-    for (var i in data) {
-        if (data[i]['Available Places'] > 0 && data[i]['Available']) {
-            var card = document.createElement('div');
-            card.classList.add('shop-card');
-            card.innerHTML = `
-                <img src="../images/` + data[i]['Image'] + `">
-                <div class="shop-card-header">
-                    <h3>` + i + `</h3>
-                    <h3>€` + data[i]['Price'] + `</h3>
-                </div>
-                <p class="status">` + data[i]['Date'] + `</p>
-                <a class="btn btn-main btn-main-sm btn-shop-add" data-value="` + i + `">Schrijf in</a>
-            `;
-
-            cards.appendChild(card);
+function putRequest(target, data) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('PUT', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(data));
+        xhr.onload = function () {
+            resolve(this);
         }
-    }
+    });
+}
 
-    document.querySelectorAll('.btn-shop-add').forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const EventName = e.target.getAttribute('data-value');
+postRequest('init', {Target: 'Events'}).then((res) => {
+    if (res.status == 200) {
+        data = JSON.parse(res.response);
+        let shop = document.querySelector('.shop-container');
 
-            for (var i in data) {
-                if (i == EventName) {
-                    var modal = document.querySelector('#shopBuyModal');
-                    document.querySelector('.choosen-item-name').innerHTML = i;
-                    document.querySelector('.choosen-item-price').innerHTML = "€" + data[i]['Price'];
-                    document.querySelector('.choosen-item-date').innerHTML = data[i]['Date'];
-                    document.querySelector('.form-shop [title="amount"]').setAttribute('max', data[i]['Available Places'])
-                    document.querySelector('.btn-shop-confirm').setAttribute('data-value', i)
+        Object.keys(data).forEach(function (key) {
+            if (data[key]['Available Places'] > 0) {
+                var card = document.createElement('div');
+
+                if (data[key]['Type'] == 'Activity' || data[key]['Type'] == 'QR') {
+                    card.innerHTML = `
+                        <img src="` + data[key]['Image'] + `">
+                        <div class="shop-card-header">
+                            <h3>` + key + `</h3>
+                            <h3>€` + data[key]['Price'] + `</h3>
+                        </div>
+                        <p class="status">` + data[key]['Date'] + `</p>
+                        <a class="btn btn-primary btn-primary-sm btn-shop-add" data-value="` + key + `" data-target-modal="modal-signup">Schrijf in</a>
+                    `;
+                } else if (data[key]['Type'] == 'Food') {
+                    card.innerHTML = `
+                        <h3>` + key + `</h3>
+                        <a class="btn btn-secondary btn-secondary-sm btn-shop-food" href="/pages/form.html">Schrijf in</a>
+                    `;
                 }
+                
+                card.classList.add('shop-card');
+                shop.appendChild(card);
             }
-
-            $('#shopBuyModal').modal('show');
         });
-    });
-});
 
-document.querySelector('.btn-shop-confirm').addEventListener('click', async function () {    
-    var form = document.querySelector('.form-shop');
-    var EventName = document.querySelector('.btn-shop-confirm').getAttribute('data-value');
-    var BtnAdd = document.querySelector('.btn-shop-confirm');
-    var FirstName = form.querySelector('[title="firstname"]').value;
-    var LastName = form.querySelector('[title="lastname"]').value;
-    var Email = form.querySelector('[title="email"]').value;
-    var Phone = form.querySelector('[title="phone"]').value;
-    var Amount = form.querySelector('[title="amount"]').value;
-    var Address = form.querySelector('[title="address"]').value;
+        document.querySelectorAll('.btn-shop-add').forEach((el) => {
+            el.addEventListener('click', (e) => {
+                let target = e.target.getAttribute('data-target-modal');
+                let modal = document.getElementById(target);
+                let closeTrough = modal.getAttribute('close-trough') || null;
 
-    BtnAdd.innerHTML = 'Bezig met inschrijven...';
-
-    if (FirstName == "" || LastName == "" || Email == "" || Phone == "" || Amount == "") {
-        BtnAdd.innerHTML = 'Vul alle velden in!';
-        BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
-        return;
-    }
-
-    var UserCode = FirstName[0] + LastName[0] + getRandomIntInclusive(data, 1000, 9999);
-
-    postRequest('events/set', {
-        'First Name': FirstName,
-        'Last Name': LastName,
-        'Email': Email,
-        'Phone': Phone,
-        'Address': Address,
-        'Amount': Amount,
-        'Scannedtimes': 0,
-        'Event': EventName,
-        'UserCode': UserCode
-    }).then((res) => {
-        if (res == 'User already exists!') {
-            BtnAdd.innerHTML = 'Er is al iemand ingeschreven met deze code!';
-            BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
-            return;
-        } else if (res == 'User added!') {
-            showSuccess(UserCode);
-
-            BtnAdd.innerHTML = 'Inschrijven';
-        }
-    });
-});
-
-document.querySelector('.btn-submit-email').addEventListener('click', async function () {
-    var form = document.querySelector('.form-check-code');
-    var BtnSubmit = document.querySelector('.btn-submit-email');
-    var EventsElement = document.querySelector('.UserEventsResults');
-    var Email = form.querySelector('[title="email"]').value;
-    var SignedUpEvents = [];
-    var SignedUpCodes = [];
-
-    if (Email == '') {
-        BtnSubmit.innerHTML = 'Vul alle velden in!';
-        BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
-        return;
-    }
-    
-    BtnSubmit.innerHTML = 'Bezig met zoeken...';
-
-    getRequest('events/init').then((res) => {
-        data = JSON.parse(res);
-
-        for (var i in data) {
-            for (var j in data[i]['Participants']) {
-                if (data[i]['Participants'][j]['Email'] == Email) {
-                    SignedUpEvents.push(i);
-                    SignedUpCodes.push(j);
-                    break;
-                }
-            }
-        }
+                modal.querySelector('.modal-title').innerHTML = e.target.getAttribute('data-value');
+                modal.querySelector('.shop-image').setAttribute('src', data[e.target.getAttribute('data-value')]['Image']);
+                modal.querySelector('.shop-price').innerHTML = '€' + data[e.target.getAttribute('data-value')]['Price'] + '/pp';
+                modal.querySelector('.shop-title').innerHTML = e.target.getAttribute('data-value');
+                modal.querySelector('.shop-date').innerHTML = data[e.target.getAttribute('data-value')]['Date'];
+                modal.querySelector('.shop-description').innerHTML = data[e.target.getAttribute('data-value')]['Description'];
+                modal.querySelector('.shop-input[name="Personen"]').setAttribute('max', data[e.target.getAttribute('data-value')]['Available Places']);
+                modal.querySelector('.shop-input[name="Personen"]').setAttribute('data-value', e.target.getAttribute('data-value'));
+                modal.querySelector('.btn-shop-submit').setAttribute('data-value', e.target.getAttribute('data-value'));
         
-        if (SignedUpEvents.length == 0) {
-            BtnSubmit.innerHTML = 'Geen inschrijvingen gevonden!';
-            BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
-            return;
-        }
+                modal.querySelector('.shop-input[name="Personen"]').addEventListener('keyup', (e) => {
+                    modal.querySelector('.shop-total').innerHTML = '€' + (e.target.value * data[e.target.getAttribute('data-value')]['Price']);
+                });
 
-        var html = '';
+                modal.classList.add('modal-open');
 
-        for (var i = 0; i < SignedUpEvents.length; i++) {
-            if (i == SignedUpEvents.length - 1) {
-                html += SignedUpEvents[i] + ' (' + SignedUpCodes[i] + ')';
-                break;
+                e.stopPropagation();
+                if (closeTrough !== null) {
+                    modal.classList.add('close-trough');
+        
+                    document.addEventListener('click', (event) => {
+                        const withinBoundaries = event.composedPath().includes(document.querySelector('.modal-content'));
+        
+                        if (!withinBoundaries) {
+                            modal.classList.remove('modal-open');
+                        } else {
+                            return;
+                        }
+                    });
+                }
+            });
+        });
+        
+        document.querySelectorAll('.modal-close').forEach((el) => {
+            el.addEventListener('click', (e) => {
+                let modal = e.target.closest('.modal');
+        
+                modal.classList.remove('modal-open');
+            });
+        });
+    }
+});
+
+document.querySelector('.btn-shop-submit').addEventListener('click', async function () {
+    postRequest('init', {Target: 'Events'}).then((res) => {
+        if (res.status == 200) {
+            let dataEvent = JSON.parse(res.response)[document.querySelector('.btn-shop-submit').getAttribute('data-value')];
+            
+            var form = document.querySelector('.shop-form');
+            var EventName = document.querySelector('.btn-shop-submit').getAttribute('data-value');
+            var BtnAdd = document.querySelector('.btn-shop-submit');
+            var FirstName = form.querySelector('[name="Voornaam"]').value;
+            var LastName = form.querySelector('[name="Achternaam"]').value;
+            var Email = form.querySelector('[name="Email"]').value;
+            var Phone = form.querySelector('[name="Telefoonnummer"]').value;
+            var Amount = form.querySelector('[name="Personen"]').value;
+            var Address = form.querySelector('[name="Adres"]').value;
+
+            BtnAdd.innerHTML = 'Bezig met inschrijven...';
+
+            if (dataEvent['Available Places'] <= 0) {
+                BtnAdd.innerHTML = 'Geen plaatsen meer beschikbaar!';
+                BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
+                return;
             }
-            html += SignedUpEvents[i] + ' (' + SignedUpCodes[i] + ')' + ', ';
+
+            if (FirstName == "" || LastName == "" || Email == "" || Phone == "" || Amount == "") {
+                BtnAdd.innerHTML = 'Vul alle velden in!';
+                BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
+                return;
+            }
+
+            var data = {
+                'FirstName': FirstName,
+                'LastName': LastName,
+                'Email': Email,
+                'Phone': Phone,
+                'Quantity': Amount,
+                'Address': Address,
+                'Amount': dataEvent['Price'] * Amount,
+            };
+
+            var UserCode = FirstName[0] + LastName[0] + getRandomIntInclusive(data, 1000, 9999);
+            UserCode = UserCode.toUpperCase();
+            data['UserCode'] = UserCode;
+
+            putRequest('set', {Event: EventName, Data: data}).then((res) => {
+                if (res.status === 200) {
+                    document.querySelector('.shop-form').style.display = 'none';
+                    document.querySelector('.shop-info').style.display = 'none';
+                    document.querySelector('.btn-shop-submit').style.display = 'none';
+                    document.querySelector('.shop-success-methods').style.display = 'block';
+
+                    document.querySelectorAll('.btn-shop-method').forEach((el) => {
+                        el.addEventListener('click', (e) => {
+                            let method = e.target.getAttribute('data-method');
+
+                            document.querySelector('.shop-success-methods').style.display = 'none';
+                            document.querySelector('.shop-success-' + method).style.display = 'block';
+
+                            if (method == 'overschrijving') {
+                                document.querySelector('.shop-success-overschrijving-price').innerHTML = '€' + dataEvent['Price'] * Amount;
+                                document.querySelector('.shop-success-overschrijving-code').innerHTML = UserCode;
+                            } else if (method == 'payconiq') {
+                                postRequest('payconiq', {Amount: dataEvent['Price'] * Amount, UserCode: UserCode, Event: EventName}).then((res) => {
+                                    if (res.status == 200) {
+                                        let links = JSON.parse(res.response);
+                                        let qrcodeImg = document.querySelector('.shop-success-payconiq-qr');
+                                        let phoneLink = document.querySelector('.shop-success-payconiq-mobile');
+                                
+                                        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+                                            window.open(links['deeplink'], '_blank');
+                                        }
+                                        
+                                        qrcodeImg.src = links['qr'];
+                                        phoneLink.href = links['deeplink'];
+
+                                        var start = Date.now();
+                                        setInterval(function() {
+                                            var delta = Date.now() - start;
+                                            var seconds = Math.floor(delta / 1000);
+                                            var minutes = Math.floor(seconds / 60);
+                                            seconds = seconds % 60;
+                                            minutes = minutes % 60;
+                                            document.querySelector('.shop-success-payconiq-timer').innerHTML = 14 - minutes + ':' + (60 - seconds);
+
+                                            if (minutes == 14 && seconds == 59) {
+                                                document.querySelector('.shop-success-payconiq-timer').innerHTML = 'De tijd is verstreken!';
+                                                document.querySelector('.shop-success-payconiq-timer').style.color = 'red';
+                                                clearInterval();
+                                            }
+                                        }, 1000);
+                                    }
+                                });
+                            }
+                        });
+                    });
+                } else {
+                    BtnAdd.innerHTML = 'Er is iets misgegaan!';
+                    BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
+                }
+            });
         }
-
-        document.querySelector('.form-check-code').setAttribute('style', 'display: none !important;')
-        document.querySelector('.UserEvents').setAttribute('style', 'display: block !important;')
-        document.querySelector('.btn-close-email').setAttribute('style', 'display: block !important;')
-        BtnSubmit.setAttribute('style', 'display: none !important;')
-
-        EventsElement.innerHTML = html;
     });
 });
-
-document.querySelector('.btn-shop-close').addEventListener('click', function () {
-    document.querySelector('.form-shop').style.display = 'block';
-    document.querySelector('.choosen-item').style.display = 'flex';
-    document.querySelector('.UserCodeResult').style.display = 'none';
-    document.querySelector('.form-success').style.display = 'none';
-    document.querySelector('.btn-shop-confirm').setAttribute('style', 'display: block !important');
-    document.querySelector('.btn-shop-close').setAttribute('style', 'display: none !important');
-});
-
-$('#shopBuyModal').on("hidden.bs.modal", function () {
-    var BtnAdd = document.querySelector('.btn-shop-confirm');
-    BtnAdd.innerHTML = 'Inschrijven';
-
-    document.querySelectorAll('.form-shop input').forEach(function (input) {
-        input.value = '';
-    });
-    
-    document.querySelector('.form-shop').style.display = 'block';
-    document.querySelector('.choosen-item').style.display = 'flex';
-    document.querySelector('.UserCodeResult').style.display = 'none';
-    document.querySelector('.form-success').style.display = 'none';
-    document.querySelector('.btn-shop-confirm').setAttribute('style', 'display: block !important');
-    document.querySelector('.btn-shop-close').setAttribute('style', 'display: none !important');
-});
-
-window.onload = function () {
-    document.querySelector('.loader').style.display = 'none';
-}

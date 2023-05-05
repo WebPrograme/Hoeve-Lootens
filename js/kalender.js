@@ -222,7 +222,7 @@ function showEvents() {
         }
 
 
-        kalenderCardsContent += "<div class='kalender-card'><h3>Boomgaardcafé</h3><div class='card-content'><p class='email'>" + description + "</p>" + boomgaardcafeCardsContent + "</div></div>"
+        kalenderCardsContent += "<div class='kalender-card'><h3>Boomgaardcafé</h3><div class='card-content'><p class='highlight-text'>" + description + "</p>" + boomgaardcafeCardsContent + "</div></div>"
     }
 
     for (let i = 0; i < Object.keys(kalenderEventsContent).length; i++) {
@@ -242,11 +242,11 @@ function showEvents() {
             eventDate = startDay + ' ' + kalenderMonthsDutchShort[Object.keys(kalenderData).indexOf(startMonth)] + ' - ' + endDay + ' ' + kalenderMonthsDutchShort[Object.keys(kalenderData).indexOf(endMonth)] + ' 2023';
         }
 
-        kalenderCardsContent += '<div class="kalender-card"><h3>' + eventTitle + '</h3><p class="status" data-month="' + startMonth + '">' + eventDate + '</p><p class="email">' + eventDescription + '</p></div>';
+        kalenderCardsContent += '<div class="kalender-card"><h3>' + eventTitle + '</h3><p class="status" data-month="' + startMonth + '">' + eventDate + '</p><p class="highlight-text">' + eventDescription + '</p></div>';
     }
 
     if (Object.keys(kalenderEventsContent).length == 0) {
-        kalenderCards.innerHTML = '<h4 class="email">Geen evenementen gevonden</h4>';
+        kalenderCards.innerHTML = '<h4 class="highlight-text">Geen evenementen gevonden</h4>';
     } else {
         document.querySelectorAll('.kalender-card-skeleton').forEach((element) => {
             element.style.display = "none";

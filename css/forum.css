@@ -118,7 +118,7 @@
 }
 
 form {
-    font-family: adobe-clean, sans-serif;
+    font-family: adobe-clean, sans-serif !important;
 }
 
 form input:focus {
@@ -143,6 +143,7 @@ form .row input[type=number] {
 form p {
     margin-bottom: 0;
     margin-top: 5px;
+    width: auto;
 }
 
 form p:first-of-type {
@@ -165,7 +166,7 @@ input[type=time],
 input[type=number],
 input[type=email],
 input[type=tel] {
-    font-size: 1.3em;
+    font-size: 1rem;
 }
 
 input[type=text],
@@ -184,7 +185,7 @@ input[type=tel] {
     color: #212529;
 }
 
-.btn-submit, .btn-submit-email, .btn-close-email, .btn-shop-confirm, .btn-shop-close, .btn-modal-footer, .btn-submit-email-code {
+.btn-submit, .btn-shop-submit, .btn-close-email, .btn-shop-confirm, .btn-shop-close, .btn-modal-footer, .btn-submit-email-code, .btn-submit-email {
     width: 100%;
     border-radius: 4px !important;
 }
@@ -338,6 +339,11 @@ input[type=tel] {
     cursor: pointer;
 }
 
+.payconiq-modal .btn-close i {
+    font-size: 1.5rem;
+    color: #fff;
+}
+
 .payconiq-modal .modal-content {
     text-align: center;
     background-color: #FF4785;
@@ -378,4 +384,14 @@ input[type=tel] {
 
 .btn-row .btn {
     flex: 1;
+}
+
+.signup-subheader {
+    margin: 0 !important;
+}
+
+.signup-count {
+    margin-bottom: 1rem;
+    color: #4A7D44;
+    font-size: 1.5rem;
 }

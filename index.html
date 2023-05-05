@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width" />
@@ -8,10 +7,8 @@
 	<meta name="discription"
 		content="Hoeve Lootens, waar Wondelgem het verleden wil koesteren en de toekomst zal verzekeren" />
 	<title>Hoeve Lootens</title>
-	<link href="style.css" rel="stylesheet" type="text/css" />
-	<link href="css/standaard.css" rel="stylesheet" type="text/css" />
-	<link href="plugins/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css" />
-	<link rel="icon" href="images/page image transparent.png" />
+	<link href="plugins/yarn.css" rel="stylesheet" type="text/css" />
+	<link href="css/style.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-
 		50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css"
@@ -21,27 +18,7 @@
 		integrity="sha512-wJgJNTBBkLit7ymC6vvzM1EcSWeM9mmOu+1USHaRBbHkm6W9EgM0HY27+UtUaprntaYQJF75rc8gjxllKs5OIQ=="
 		crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-
-<body>
-	<div class="alert-browser">
-		<h2>
-			Je browser ondersteunt niet alle functies van onze website, de beste
-			browser is chrome
-		</h2>
-	</div>
-
-    <div class="cookie">
-        <div class="txt">
-           <p class="">
-              Door deze website te gebruik,<br>
-              accepteert u de Cookies.</a>
-           </p>
-        </div>
-        <div class="accept-div">
-           <a class="btn btn-main btn-main-sm" onclick="localStorage.setItem('cookiesAgree', 'true'); document.querySelector('.cookie').style.display = 'none';">Accept</a>
-        </div>
-    </div>
-
+<body>    
 	<nav>
 		<h1 class="logo"><img src="images/HoeveLootens_Logo_Wit.png" /></h1>
 		<input type="checkbox" id="hamburger-toggle" />
@@ -50,14 +27,12 @@
 		</label>
 		<ul class="nav-list">
 			<li><a class="nav-list-active" href="index.html">Home</a></li>
-			<li><a href="html/verbouwing.html">Verbouwingen</a></li>
-			<li><a href="html/kalender.html">Kalender</a></li>
-			<li><a href="html/reserveren.html">Reserveren</a></li>
-			<li>
-				<a href="html/maatschappelijk.html">Maatschappelijke projecten</a>
-			</li>
-			<li><a href="html/geschiedenis.html">Geschiedenis</a></li>
-			<li><a href="html/contact.html">Contact</a></li>
+			<li><a href="pages/verbouwing.html">Verbouwingen</a></li>
+			<li><a href="pages/kalender.html">Kalender</a></li>
+			<li><a href="pages/reserveren.html">Reserveren</a></li>
+			<li><a href="pages/maatschappelijk.html" class="nav-link-projects">Maatschappelijke Projecten</a></li>
+			<li><a href="pages/geschiedenis.html">Geschiedenis</a></li>
+			<li><a href="pages/contact.html">Contact</a></li>
 		</ul>
 	</nav>
 
@@ -70,207 +45,108 @@
 		</a>
 	</div>
 
-	<div class="homeStart">
-		<div class="flex">
-			<section class="feature-list section bottom home">
-				<div class="container">
-					<div class="row">
-						<div class="col-md-6 order-md-1 order-2 align-self-center text-center text-md-left">
-							<div class="content" style="display: flex">
-								<h1>"</h1>
-								<h1>
-									Hoeve Lootens, waar Wondelgem het verleden wil
-									koesteren en
-									de toekomst zal verzekeren"
-								</h1>
-							</div>
-						</div>
-						<div class="col-md-6 order-md-2 order-1 text-center mb-5 mb-lg-0">
-							<img style="margin-left: 0px; max-width: 100% !important"
-								class="img-fluid inline-photo show-on-scroll" src="images/Hoeve%20in%20vorm.png"
-								alt="" />
-							<div class="element">
-								<img class="element-start" src="images/Elementen1_Geel.png" />
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-		</div>
-		<i class="fas fa-chevron-down homeDown"></i>
-	</div>
+    <div class="cookie">
+        <div class="cookie-txt">
+           <p>
+              Door deze website te gebruik,<br>
+              accepteert u de Cookies.</a>
+           </p>
+        </div>
+        <div class="accept-div">
+           <a class="btn btn-primary btn-primary-sm" onclick="localStorage.setItem('cookiesAgree', 'true'); document.querySelector('.cookie').style.display = 'none';">Accept</a>
+        </div>
+    </div>
 
-	<div class="nieuws">
-		<div class="nieuwsH1">
-			<h1>Nieuws</h1>
-		</div>
-  
-		<div class="element-left-hire">
-		  <img style="width: 140px" src="../images/Contact_Vormen3%20-%20kopie.png">
-		</div>
+    <main>
+        <div class="hero justify-center flex column">
+            <div class="row container justify-center align-center">
+                <div class="col-6 ">
+                    <div class="content row flex-nowrap">
+                        <h1>
+                            "
+                        </h1>
+                        <h1>
+                            Hoeve Lootens, waar Wondelgem het verleden wil
+                            koesteren en
+                            de toekomst zal verzekeren"
+                        </h1>
+                    </div>
+                </div>
+                <div class="col-6 text-center">
+                    <img class="hero-image" src="images/hero_image.png"alt="" />
+                    <div class="element">
+                        <img class="element-start" src="images/Elementen1_Geel.png" />
+                    </div>
+                </div>
+            </div>
+        
+            <i class="fas fa-chevron-down hero-icon"></i>
+        </div>
 
-		<section class="section slideUp bottom">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-6 text-center mb-5 mb-md-0">
-						<img class="side-image" src="images/activiteiten.png" alt="Boomgaardcafé">
-					</div>
-					<div class="col-md-6 align-self-center text-center text-md-left">
-						<div class="block content">
-							<h3 class="font-weight-bold mb-4 font-size-60">
-								Meikermis 2023
-							</h3>
-							<p>We zijn blij om opnieuw de Meikermis te organiseren @Hoeve Lootens op 6 & 7 mei!</p>
-							<p>We voorzien activiteiten voor groot en klein. Klik hieronder om het volledige programma te bekijken en vergeet niet in te schrijven voor het kermismenu op zondag.</p>
-						
-							<a class="btn btn-main btn-main-sm" href="html/form.html" role="button">Schrijf je hier in!</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
+        <div class="header">
+            <h1>Nieuws</h1>
+        </div>
 
-		<div class="nieuwsH1">
-			<h1>Foto's</h1>
-		</div>
+        <div class="element-left-hire">
+            <img style="width: 140px" src="../images/Contact_Vormen3%20-%20kopie.png">
+        </div>
 
-		<div class="img-group" style="margin-top: 0;">
-			<div class="back-img-1"></div>
-			<div class="back-img-2"></div>
-			<div class="back-img-3"></div>
-			<div class="back-img-4"></div>
-		</div>
+        <section class="container m-auto">
+            <div class="row">
+                <div class="col-6">
+                    <img src="images/activiteiten.png" alt="">
+                </div>
+                <div class="col-6">
+                    <h3 class="section-header">Meikermis 2023</h3>
+                    <p>Een uitgebreid gamma trappistenbieren (verschillende soorten op vat) en aangepaste Paterskazen, versnaperingen... Ten voordele van lokale projecten en verdere ondersteuning van reeds bestaande projecten voor kansarme kinderen en -jongeren. Openingsuren: vrijdag en zaterdag: van 19 uur tot 24 uur en zondag: van 16u tot 20u</p>
+        
+                    <a class="btn btn-primary btn-primary-sm" href="pages/form.html">Schrijf je hier in!</a>
+                </div>
+            </div>
+        </section>
 
-		<div class="element-right">
-			<img src="images/Elementen2_Blauw_Groen.png">
-		</div>
-		<div class="background-welkom">
-			<div class="homeTextCenter">
-				<section style="margin: 20px 0px !important" class="section homeText">
-					<div class="container">
-						<div class="row">
-							<div class="col-md-6 text-center mb-5 mb-md-0">
-								<img class="side-image" src="images/Boomgaardcafé.jpg" alt="Boomgaardcafé">
-							</div>
-							<div class="col-md-6 align-self-center text-center text-md-left">
-									<h3 class="font-weight-bold mb-4 font-size-60">
-										Welkom op de Hoeve!
-									</h3>
-									<p>
-										Sinds juni 2019 waait er een nieuwe wind
-										door de vzw Hoeve
-										Lootens. Met veel engagement heeft een
-										jongere generatie
-										de bestuursfakkel overgenomen. Samen met
-										de vele
-										medewerkers zullen we de komende tijd
-										concreet werk maken
-										van de verdere ontwikkeling van onze
-										vzw.
-									</p>
-									<p>
-										Zeker is dat we onze activiteiten willen
-										toespitsen op de
-										waarden eenvoud en respect, met een open
-										geest en zorg
-										voor educatie van voornamelijk jongeren.
-										De Hoeve Lootens
-										blijft een unieke locatie waar jong en
-										oud, nu en in de
-										toekomst, zich steeds welkom kunnen
-										voelen.
-									</p>
-									<a class="btn btn-main btn-main-sm" href="html/contact.html" role="button">Neem
-										contact met ons
-										op!</a>
-							</div>
-						</div>
-					</div>
-				</section>
-			</div>
-		</div>
-  
-		<div class="element-left-hire">
-		  <img style="width: 140px" src="../images/Reserveren_Vormen2.png">
-		</div>
+        <div class="element-right">
+            <img src="images/Elementen2_Blauw_Groen.png">
+        </div>
 
-		<section class="section slideUp bottom" style="display: none">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-6 text-center mb-5 mb-md-0">
-						<img class="side-image" src="images/Boomgaardcafé.jpg" alt="Boomgaardcafé">
-					</div>
-					<div class="col-md-6 align-self-center text-center text-md-left">
-						<div class="block">
-							<h3 class="font-weight-bold mb-4 font-size-60">
-								Boomgaardcafé
-							</h3>
-							<p class="mb-4">
-								Yes! We kunnen en mogen onze poort opnieuw openen voor
-								jullie.
-							</p>
-							<p>
-								Welkom terug op onze Boomgaardcafé. Wij openen onze bar
-								deze
-								zomer op volgende dagen: 12/06 - 26/06 - 10/07 - 24/07 -
-								7/08
-								- 28/08. Noteer ze alvast in jullie agenda.
-							</p>
-							<a class="btn btn-main btn-main-sm"
-								href="https://www.facebook.com/events/3035298960084354/?active_tab=about"
-								role="button">Meer Info</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<div class="background-welkom">
-			<section class="feature-list section bottom">
-				<div class="container">
-					<div class="row">
-						<div class="col-md-6 order-md-1 order-2 align-self-center text-center text-md-left">
-							<div class="content">
-								<h4 class="subheading font-weight-bold mb-10">
-									<span class="span-nieuw">Nieuw!</span> Reserveer
-									De Hoeve
-								</h4>
-								<p>
-									U kunt de hoeve reserveren voor een
-									privé-evenement. Dit
-									kunt u aanvragen aan de hand van onderstaande
-									knop. U kunt
-									dan gebruik maken van de boomgaard en de
-									wagenberg
-									(sanitair, tapinstallatie, ijskasten, glazen,
-									borden,
-									bestek, vaatwas, …).
-								</p>
-								<p>
-									U hebt ook de mogelijkheid om, met goedkeuring
-									van de vzw,
-									tenten te plaatsen. Men kan ook, op aanvraag, de
-									dag voor en
-									na het event reserveren voor het klaarzetten
-									en/of opruimen
-									van het terrein. Hieronder meer informatie over
-									de prijs en
-									de waarborg.
-								</p>
-								<a class="btn btn-main btn-main-sm" href="../html/werkgroepen.html#dagelijks"
-									role="button">Reserveer De Hoeve</a>
-							</div>
-						</div>
-						<div class="col-md-6 order-md-2 order-1 text-center mb-5 mb-lg-0">
-							<img class="img-fluid inline-photo show-on-scroll side-image" src="images/reserveer.png"
-								alt="">
-						</div>
-					</div>
-				</div>
-			</section>
-		</div>
-	</div>
-	<footer style="z-index: 2">
+        <div class="highlight">
+            <section class="container m-auto">
+                <div class="row">
+                    <div class="col-6">
+                        <img src="images/Boomgaardcafé.jpg" alt="">
+                    </div>
+                    <div class="col-6">
+                        <h3 class="section-header">Welkom op de Hoeve!</h3>
+                        <p>Sinds juni 2019 waait er een nieuwe wind door de vzw Hoeve Lootens. Met veel engagement heeft een jongere generatie de bestuursfakkel overgenomen. Samen met de vele medewerkers zullen we de komende tijd concreet werk maken van de verdere ontwikkeling van onze vzw.</p>
+                        <p>Zeker is dat we onze activiteiten willen toespitsen op de waarden eenvoud en respect, met een open geest en zorg voor educatie van voornamelijk jongeren. De Hoeve Lootens blijft een unieke locatie waar jong en oud, nu en in de toekomst, zich steeds welkom kunnen voelen.</p>
+        
+                        <a class="btn btn-primary btn-primary-sm" href="pages/contact.html">Neem contact met ons op!</a>
+                    </div>
+                </div>
+            </section>
+          
+            <div class="element-left-hire">
+                <img style="width: 140px" src="../images/Reserveren_Vormen2.png">
+            </div>
+        
+            <section class="container m-auto">
+                <div class="row">
+                    <div class="col-6">
+                        <h3 class="section-header"><span>Nieuw!</span> Reserveer De Hoeve</h3>
+                        <p>U kunt de hoeve reserveren voor een privé-evenement. Dit kunt u aanvragen aan de hand van onderstaande knop. U kunt dan gebruik maken van de boomgaard en de wagenberg (sanitair, tapinstallatie, ijskasten, glazen, borden, bestek, vaatwas, …).</p>
+                        <p>U hebt ook de mogelijkheid om, met goedkeuring van de vzw, tenten te plaatsen. Men kan ook, op aanvraag, de dag voor en na het event reserveren voor het klaarzetten en/of opruimen van het terrein. Hieronder meer informatie over de prijs en de waarborg.</p>
+        
+                        <a class="btn btn-primary btn-primary-sm" href="pages/reserveer.html">Reserveer de hoeve</a>
+                    </div>
+                    <div class="col-6">
+                        <img src="images/reserveer.png" alt="">
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+	<footer>
 		<div class="footer-first">
 			<div class="footer-adres">
 				<p class="footer-bold">Hoeve Lootens VZW</p>
@@ -294,19 +170,11 @@
 		</div>
 	</footer>
 	<div class="footer-acteur">
-		<p>Deze website is gemaakt door <a href="https://yarnegooris.netlify.app" target="_blank">Yarne Gooris</a>.</p>
+		<p>Deze website is gemaakt door Yarne Gooris.</p>
 	</div>
 
-	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"
-		integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw=="
-		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js"
-		integrity="sha512-Y+cHVeYzi7pamIOGBwYHrynWWTKImI9G78i53+azDb1uPmU1Dz9/r2BLxGXWgOC7FhwAGsy3/9YpNYaoBy7Kzg=="
-		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-	<script src="script.js"></script>
-	<script src="js/analyse.js" type="module"></script>
+    <script src="plugins/yarn.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/analyse.js" type="module"></script>
 </body>
-
 </html>
