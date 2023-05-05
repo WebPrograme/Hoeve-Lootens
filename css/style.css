@@ -1355,6 +1355,7 @@ footer p {
 
 .kalender-card a, .shop-card a {
     width: 100% !important;
+    display: block;
 }
 
 .cards {

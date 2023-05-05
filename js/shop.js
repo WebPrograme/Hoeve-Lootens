@@ -71,7 +71,7 @@ postRequest('init', {Target: 'Events'}).then((res) => {
             if (data[key]['Available Places'] > 0) {
                 var card = document.createElement('div');
 
-                if (data[key]['Type'] == 'Activity' || data[key]['Type'] == 'QR') {
+                if (data[key]['Type'] == 'Activity' || data[key]['Type'] == 'QR' || data[key]['Type'] == 'NOQR') {
                     card.innerHTML = `
                         <img src="` + data[key]['Image'] + `">
                         <div class="shop-card-header">
@@ -90,6 +90,23 @@ postRequest('init', {Target: 'Events'}).then((res) => {
                 
                 card.classList.add('shop-card');
                 shop.appendChild(card);
+            } else {
+                if (data[key]['Type'] == 'Activity' || data[key]['Type'] == 'QR' || data[key]['Type'] == 'NOQR') {
+                    var card = document.createElement('div');
+
+                    card.innerHTML = `
+                        <img src="` + data[key]['Image'] + `">
+                        <div class="shop-card-header">
+                            <h3>` + key + `</h3>
+                            <h3>€` + data[key]['Price'] + `</h3>
+                        </div>
+                        <p class="status">` + data[key]['Date'] + `</p>
+                        <a class="btn btn-secondary btn-secondary-sm btn-shop-add">Volzet!</a>
+                    `;
+                
+                    card.classList.add('shop-card');
+                    shop.appendChild(card);
+                }
             }
         });
 
@@ -101,7 +118,7 @@ postRequest('init', {Target: 'Events'}).then((res) => {
 
                 modal.querySelector('.modal-title').innerHTML = e.target.getAttribute('data-value');
                 modal.querySelector('.shop-image').setAttribute('src', data[e.target.getAttribute('data-value')]['Image']);
-                modal.querySelector('.shop-price').innerHTML = '€' + data[e.target.getAttribute('data-value')]['Price'] + '/pp';
+                modal.querySelector('.shop-price').innerHTML = data[e.target.getAttribute('data-value')]['Type'] == 'QR' ? '€' + data[e.target.getAttribute('data-value')]['Price'] + '/pp' : '€' + data[e.target.getAttribute('data-value')]['Price'];
                 modal.querySelector('.shop-title').innerHTML = e.target.getAttribute('data-value');
                 modal.querySelector('.shop-date').innerHTML = data[e.target.getAttribute('data-value')]['Date'];
                 modal.querySelector('.shop-description').innerHTML = data[e.target.getAttribute('data-value')]['Description'];
@@ -109,9 +126,38 @@ postRequest('init', {Target: 'Events'}).then((res) => {
                 modal.querySelector('.shop-input[name="Personen"]').setAttribute('data-value', e.target.getAttribute('data-value'));
                 modal.querySelector('.btn-shop-submit').setAttribute('data-value', e.target.getAttribute('data-value'));
         
-                modal.querySelector('.shop-input[name="Personen"]').addEventListener('keyup', (e) => {
-                    modal.querySelector('.shop-total').innerHTML = '€' + (e.target.value * data[e.target.getAttribute('data-value')]['Price']);
-                });
+                if (data[e.target.getAttribute('data-value')]['Type'] == 'NOQR') {
+                    modal.querySelector('.shop-input[name="Personen"]').parentElement.remove();
+
+                    modal.querySelector('.shop-total').innerHTML = '€' + data[e.target.getAttribute('data-value')]['Price'];
+
+                    Object.keys(data[e.target.getAttribute('data-value')]['Options']).forEach(function (key) {
+                        let label = document.createElement('label');
+                        label.classList.add('label');
+                        label.innerHTML = key;
+                        label.setAttribute('for', key);
+
+                        let input = document.createElement('input');
+                        input.classList.add('shop-input', 'input');
+                        
+                        if (typeof data[e.target.getAttribute('data-value')]['Options'][key] === 'string') {
+                            input.setAttribute('type', 'text');
+                        } else if (typeof data[e.target.getAttribute('data-value')]['Options'][key] === 'number') {
+                            input.setAttribute('type', 'number');
+                        }
+
+                        input.setAttribute('name', key);
+                        input.setAttribute('id', key);
+                        input.setAttribute('placeholder', key);
+
+                        modal.querySelector('.shop-form-options').appendChild(label);
+                        modal.querySelector('.shop-form-options').appendChild(input);
+                    });
+                } else {
+                    modal.querySelector('.shop-input[name="Personen"]').addEventListener('keyup', (e) => {
+                        modal.querySelector('.shop-total').innerHTML = '€' + (e.target.value * data[e.target.getAttribute('data-value')]['Price']);
+                    });
+                }
 
                 modal.classList.add('modal-open');
 
@@ -154,12 +200,48 @@ document.querySelector('.btn-shop-submit').addEventListener('click', async funct
             var LastName = form.querySelector('[name="Achternaam"]').value;
             var Email = form.querySelector('[name="Email"]').value;
             var Phone = form.querySelector('[name="Telefoonnummer"]').value;
-            var Amount = form.querySelector('[name="Personen"]').value;
             var Address = form.querySelector('[name="Adres"]').value;
+
+            if (dataEvent['Type'] == 'NOQR') {
+                var Amount = 1;
+                var Options = {};
+
+                Object.keys(dataEvent['Options']).forEach(function (key) {
+                    Options[key] = form.querySelector('[name="' + key + '"]').value;
+                });
+
+                if (Object.values(Options).includes('')) {
+                    BtnAdd.innerHTML = 'Vul alle velden in!';
+                    BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
+                }
+
+                var data = {
+                    'FirstName': FirstName,
+                    'LastName': LastName,
+                    'Email': Email,
+                    'Phone': Phone,
+                    'Amount': dataEvent['Price'],
+                    'Address': Address,
+                    'Options': Options,
+                    'Event': EventName
+                };
+            } else {
+                var Amount = form.querySelector('[name="Personen"]').value;
+
+                var data = {
+                    'FirstName': FirstName,
+                    'LastName': LastName,
+                    'Email': Email,
+                    'Phone': Phone,
+                    'Quantity': Amount,
+                    'Address': Address,
+                    'Amount': dataEvent['Price'] * Amount,
+                };
+            }
 
             BtnAdd.innerHTML = 'Bezig met inschrijven...';
 
-            if (dataEvent['Available Places'] <= 0) {
+            if (dataEvent['Available Places'] < Amount || dataEvent['Available Places'] == 0) {
                 BtnAdd.innerHTML = 'Geen plaatsen meer beschikbaar!';
                 BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
                 return;
@@ -170,16 +252,6 @@ document.querySelector('.btn-shop-submit').addEventListener('click', async funct
                 BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
                 return;
             }
-
-            var data = {
-                'FirstName': FirstName,
-                'LastName': LastName,
-                'Email': Email,
-                'Phone': Phone,
-                'Quantity': Amount,
-                'Address': Address,
-                'Amount': dataEvent['Price'] * Amount,
-            };
 
             var UserCode = FirstName[0] + LastName[0] + getRandomIntInclusive(data, 1000, 9999);
             UserCode = UserCode.toUpperCase();
