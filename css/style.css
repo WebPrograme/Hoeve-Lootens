@@ -761,8 +761,9 @@ footer {
     color: #fff;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    padding: 20px 0 3px 0;
+    justify-content: space-around;
+    gap: 1.5rem;
+    padding: 20px 1rem 20px 1rem;
 }
 
 footer p {
@@ -778,20 +779,14 @@ footer p {
 
 .footer-first {
     display: flex;
-    margin-left: 4%;
     margin-bottom: 20px;
     width: 500px;
-    justify-content: space-between
+    justify-content: space-between;
 }
 
 .footer-adres,
 .footer-bank {
     min-width: 138px
-}
-
-.footer-social {
-    margin-right: 10% !important;
-    margin-left: 4%;
 }
 
 footer i {
@@ -816,6 +811,11 @@ footer p {
     text-align: center;
     width: 100%;
     padding: 15px 0 1px 0;
+}
+
+.footer-acteur a {
+    color: #7cb0ff;
+    text-decoration: underline;
 }
 
 /* TIMELINE */

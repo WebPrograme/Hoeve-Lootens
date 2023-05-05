@@ -8,6 +8,10 @@ function updateMobileNav() {
     }
 }
 
-let mediaQuery = window.matchMedia('(max-width: 400px)');
+let mediaQuery = window.matchMedia('(max-width: 450px)');
 updateMobileNav();
 window.addEventListener('resize', updateMobileNav);
+
+document.querySelector('.logo img').addEventListener('click', function() {
+    window.location.href = '/index.html';
+});
