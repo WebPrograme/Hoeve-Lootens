@@ -181,6 +181,10 @@ nav a:hover {
         padding: 20px 35px;
         max-height: 80px;
     }
+
+    body:has(#hamburger-toggle:checked) {
+        overflow: hidden;
+    }
 }
 
 @media(max-width: 1024px) {
@@ -392,19 +396,18 @@ nav a:hover {
 }
 
 .cookie{
-    display: none;
+    display: flex;
     justify-content: space-between;
     font-family: adobe-clean, sans-serif;
     box-shadow: 0px 0px 20px 11px rgb(0 0 0 / 10%);
 	width: 420px;
-    height: 72px;
     max-width: 90%;
     background-color: #fff;
-    position: fixed;
-    bottom: 88px;
     border-radius: .35rem;
+    position: fixed;
 	left: 5%;
     right: 5%;
+    bottom: 5%;
 	padding: 10px 20px;
     z-index: 1000;
 }
@@ -423,11 +426,12 @@ nav a:hover {
     margin: 0rem;
 }
 
-.accept-div{
+.accept-div {
     height: min-content;
     display: flex;
     margin-top: auto;
     margin-bottom: auto;
+    flex: 1 1 150px;
 }
 
 .cookie .accept {
@@ -1055,6 +1059,7 @@ footer p {
     margin: 0 0 0 0 !important;
     padding: 0 0 0 0 !important;
     height: min-content;
+    text-align: center;
 }
 
 .kalender-header-name {
