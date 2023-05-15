@@ -1,5 +1,8 @@
+// FILE IN PROGRESS - NOT READY FOR PRODUCTION
+
 let data = [];
 
+// Create User Code
 function getRandomIntInclusive(data, min, max) {
     var UserCodes = [];
     for (var i = 0; i < data.length; i++) {
@@ -17,16 +20,7 @@ function getRandomIntInclusive(data, min, max) {
     }
 }
 
-function showSuccess(UserCode) {
-    document.querySelector('.UserCodeResult').innerHTML = UserCode;
-    document.querySelector('.form-shop').style.display = 'none';
-    document.querySelector('.choosen-item').style.display = 'none';
-    document.querySelector('.UserCodeResult').style.display = 'block';
-    document.querySelector('.form-success').style.display = 'block';
-    document.querySelector('.btn-shop-confirm').setAttribute('style', 'display: none !important');
-    document.querySelector('.btn-shop-close').setAttribute('style', 'display: block !important');
-}
-
+// GET Request
 function getRequest(target) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -38,6 +32,7 @@ function getRequest(target) {
     });
 }
 
+// POST Request
 function postRequest(target, data) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -50,6 +45,7 @@ function postRequest(target, data) {
     });
 }
 
+// PUT Request
 function putRequest(target, data) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -62,13 +58,16 @@ function putRequest(target, data) {
     });
 }
 
+// Get All Events
 postRequest('init', {Target: 'Events'}).then((res) => {
     if (res.status == 200) {
         data = JSON.parse(res.response);
         let shop = document.querySelector('.shop-container');
 
+        // Create Event Cards
         Object.keys(data).forEach(function (key) {
             if (data[key]['Available Places'] > 0) {
+                // Create Card
                 var card = document.createElement('div');
 
                 if (data[key]['Type'] == 'Activity' || data[key]['Type'] == 'QR' || data[key]['Type'] == 'NOQR') {
@@ -81,7 +80,7 @@ postRequest('init', {Target: 'Events'}).then((res) => {
                         <p class="status">` + data[key]['Date'] + `</p>
                         <a class="btn btn-primary btn-primary-sm btn-shop-add" data-value="` + key + `" data-target-modal="modal-signup">Schrijf in</a>
                     `;
-                } else if (data[key]['Type'] == 'Food') {
+                } else if (data[key]['Type'] == 'Food') { // Unique for Food
                     card.innerHTML = `
                         <h3>` + key + `</h3>
                         <a class="btn btn-secondary btn-secondary-sm btn-shop-food" href="/pages/form.html">Schrijf in</a>
@@ -91,6 +90,7 @@ postRequest('init', {Target: 'Events'}).then((res) => {
                 card.classList.add('shop-card');
                 shop.appendChild(card);
             } else {
+                // Create Card (Sold Out)
                 if (data[key]['Type'] == 'Activity' || data[key]['Type'] == 'QR' || data[key]['Type'] == 'NOQR') {
                     var card = document.createElement('div');
 
@@ -110,8 +110,10 @@ postRequest('init', {Target: 'Events'}).then((res) => {
             }
         });
 
+        // Show Signup Modal
         document.querySelectorAll('.btn-shop-add').forEach((el) => {
             el.addEventListener('click', (e) => {
+                // Change Modal Content Based on Event
                 let target = e.target.getAttribute('data-target-modal');
                 let modal = document.getElementById(target);
                 let closeTrough = modal.getAttribute('close-trough') || null;
@@ -127,6 +129,7 @@ postRequest('init', {Target: 'Events'}).then((res) => {
                 modal.querySelector('.btn-shop-submit').setAttribute('data-value', e.target.getAttribute('data-value'));
         
                 if (data[e.target.getAttribute('data-value')]['Type'] == 'NOQR') {
+                    // Show Custom Options for NOQR
                     modal.querySelector('.shop-input[name="Personen"]').parentElement.remove();
 
                     modal.querySelector('.shop-total').innerHTML = '€' + data[e.target.getAttribute('data-value')]['Price'];
@@ -163,6 +166,7 @@ postRequest('init', {Target: 'Events'}).then((res) => {
 
                 e.stopPropagation();
                 if (closeTrough !== null) {
+                    // Close Modal When Clicked Outside
                     modal.classList.add('close-trough');
         
                     document.addEventListener('click', (event) => {
@@ -178,6 +182,7 @@ postRequest('init', {Target: 'Events'}).then((res) => {
             });
         });
         
+        // Close Modal
         document.querySelectorAll('.modal-close').forEach((el) => {
             el.addEventListener('click', (e) => {
                 let modal = e.target.closest('.modal');
@@ -188,11 +193,14 @@ postRequest('init', {Target: 'Events'}).then((res) => {
     }
 });
 
+// Submit Form
 document.querySelector('.btn-shop-submit').addEventListener('click', async function () {
+    // Get Event Data To Check If Event Is Still Available
     postRequest('init', {Target: 'Events'}).then((res) => {
         if (res.status == 200) {
             let dataEvent = JSON.parse(res.response)[document.querySelector('.btn-shop-submit').getAttribute('data-value')];
             
+            // Get Form Data
             var form = document.querySelector('.shop-form');
             var EventName = document.querySelector('.btn-shop-submit').getAttribute('data-value');
             var BtnAdd = document.querySelector('.btn-shop-submit');
@@ -203,6 +211,7 @@ document.querySelector('.btn-shop-submit').addEventListener('click', async funct
             var Address = form.querySelector('[name="Adres"]').value;
 
             if (dataEvent['Type'] == 'NOQR') {
+                // Get Unique Options For Type NOQR
                 var Amount = 1;
                 var Options = {};
 
@@ -215,6 +224,7 @@ document.querySelector('.btn-shop-submit').addEventListener('click', async funct
                     BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
                 }
 
+                // Create Data Object From Values
                 var data = {
                     'FirstName': FirstName,
                     'LastName': LastName,
@@ -226,6 +236,7 @@ document.querySelector('.btn-shop-submit').addEventListener('click', async funct
                     'Event': EventName
                 };
             } else {
+                // Create Data Object From Values
                 var Amount = form.querySelector('[name="Personen"]').value;
 
                 var data = {
@@ -241,22 +252,26 @@ document.querySelector('.btn-shop-submit').addEventListener('click', async funct
 
             BtnAdd.innerHTML = 'Bezig met inschrijven...';
 
+            // Check If Event Is Still Available
             if (dataEvent['Available Places'] < Amount || dataEvent['Available Places'] == 0) {
                 BtnAdd.innerHTML = 'Geen plaatsen meer beschikbaar!';
                 BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
                 return;
             }
 
+            // Check If All Fields Are Filled In
             if (FirstName == "" || LastName == "" || Email == "" || Phone == "" || Amount == "") {
                 BtnAdd.innerHTML = 'Vul alle velden in!';
                 BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
                 return;
             }
 
+            // Create User Code
             var UserCode = FirstName[0] + LastName[0] + getRandomIntInclusive(data, 1000, 9999);
             UserCode = UserCode.toUpperCase();
             data['UserCode'] = UserCode;
 
+            // Add User To Database
             putRequest('set', {Event: EventName, Data: data}).then((res) => {
                 if (res.status === 200) {
                     document.querySelector('.shop-form').style.display = 'none';
@@ -264,6 +279,7 @@ document.querySelector('.btn-shop-submit').addEventListener('click', async funct
                     document.querySelector('.btn-shop-submit').style.display = 'none';
                     document.querySelector('.shop-success-methods').style.display = 'block';
 
+                    // Get Choosed Payment Method
                     document.querySelectorAll('.btn-shop-method').forEach((el) => {
                         el.addEventListener('click', (e) => {
                             let method = e.target.getAttribute('data-method');
@@ -272,15 +288,18 @@ document.querySelector('.btn-shop-submit').addEventListener('click', async funct
                             document.querySelector('.shop-success-' + method).style.display = 'block';
 
                             if (method == 'overschrijving') {
+                                // Show Info For Overschrijving
                                 document.querySelector('.shop-success-overschrijving-price').innerHTML = '€' + dataEvent['Price'] * Amount;
                                 document.querySelector('.shop-success-overschrijving-code').innerHTML = UserCode;
                             } else if (method == 'payconiq') {
+                                // Create Payconiq QR Code
                                 postRequest('payconiq', {Amount: dataEvent['Price'] * Amount, UserCode: UserCode, Event: EventName}).then((res) => {
                                     if (res.status == 200) {
                                         let links = JSON.parse(res.response);
                                         let qrcodeImg = document.querySelector('.shop-success-payconiq-qr');
                                         let phoneLink = document.querySelector('.shop-success-payconiq-mobile');
                                 
+                                        // Open Payconiq App On Mobile
                                         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
                                             window.open(links['deeplink'], '_blank');
                                         }
@@ -288,6 +307,7 @@ document.querySelector('.btn-shop-submit').addEventListener('click', async funct
                                         qrcodeImg.src = links['qr'];
                                         phoneLink.href = links['deeplink'];
 
+                                        // Start Timer (15 Minutes)
                                         var start = Date.now();
                                         setInterval(function() {
                                             var delta = Date.now() - start;

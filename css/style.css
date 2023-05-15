@@ -594,7 +594,7 @@ main.highlight {
     font-family: PT serif;
 }
 
-.top-page:not(:has(.kalender)) h1, .top-page-contact h1 {
+.top-page:not(:has(.calendar)) h1, .top-page-contact h1 {
     font-size: 45px;
     font-weight: bold;
     text-align: center;
@@ -990,7 +990,7 @@ footer p {
 
 /* KALENDER */
 
-.kalender-container {
+.calendar-container {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -1002,46 +1002,46 @@ footer p {
     margin: 0 auto 0 auto !important;
 }
 
-.kalender {
+.calendar {
     padding: 0 0 0 0 !important;
     margin-top: 120px;
     border-radius: 12px;
 }
 
-.kalender-legend {
+.calendar-legend {
     display: inline-block;
     align-self: flex-end;
     padding-top: 20px;
     margin-left: 10px;
 }
 
-.kalender-legend h1 {
+.calendar-legend h1 {
     color: #000;
     font-family: PT serif;
     font-size: 2rem;
 }
 
-.kalender-legend p {
+.calendar-legend p {
     margin-bottom: .5rem;
 }
 
-.kalender-legend p:nth-last-of-type(1) {
+.calendar-legend p:nth-last-of-type(1) {
     color: #FCC000;
 }
 
-.kalender-legend p:nth-last-of-type(2) {
+.calendar-legend p:nth-last-of-type(2) {
     color: #EE7357;
 }
 
-.kalender-legend p:nth-last-of-type(3) {
+.calendar-legend p:nth-last-of-type(3) {
     color: #6ab561;
 }
 
-.kalender-legend p:nth-last-of-type(4) {
+.calendar-legend p:nth-last-of-type(4) {
     color: #A4D8DE;
 }
 
-.kalender-header {
+.calendar-header {
     font-family: PT serif;
     background-color: #F5F5F5;
     display: flex;
@@ -1053,7 +1053,7 @@ footer p {
     border-radius: 12px 12px 0 0;
 }
 
-.kalender-header h1 {
+.calendar-header h1 {
     font-size: 2.5rem;
     color: #FCC000;
     margin: 0 0 0 0 !important;
@@ -1062,23 +1062,23 @@ footer p {
     text-align: center;
 }
 
-.kalender-header-name {
+.calendar-header-name {
     cursor: pointer;
     display: none;
 }
 
-.kalender-header i {
+.calendar-header i {
     padding: 9px;
     font-size: 2.8rem;
     color: #FCC000;
     cursor: pointer;
 }
 
-.kalender-background {
+.calendar-background {
     background-color: #F5F5F5;
 }
 
-.kalender-lint {
+.calendar-lint {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     text-align: center;
@@ -1087,7 +1087,7 @@ footer p {
     height: 100%;
 }
 
-.kalender-lint h3 {
+.calendar-lint h3 {
     font-size: 1.5rem;
     font-weight: bold;
     color: #4A7D4480;
@@ -1095,13 +1095,13 @@ footer p {
     height: min-content;
 }
 
-.kalender-body {
+.calendar-body {
     background-color: #FFFFFF;
     border-radius: 12px;
     box-shadow: 0px 3px 6px #0000000d;
 }
 
-.kalender-content {
+.calendar-content {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     row-gap: 23px;
@@ -1109,12 +1109,12 @@ footer p {
     padding-bottom: 15px;
 }
 
-.kalender-day {
+.calendar-day {
     text-align: center;
     color: #4A7D44;
 }
 
-.kalender-day p {
+.calendar-day p {
     cursor: default;
     font-size: 1.3rem;
     font-weight: bold;
@@ -1124,7 +1124,7 @@ footer p {
     width: auto;
 }
 
-.kalender-active {
+.calendar-active {
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -1132,23 +1132,23 @@ footer p {
     background-position-y: top;
 }
 
-.kalender-option {
-    background-image: url('../images/kalender_option.png');
+.calendar-option {
+    background-image: url('../images/calendar_option.png');
 }
 
-.kalender-event {
-    background-image: url('../images/kalender_event.png');
+.calendar-event {
+    background-image: url('../images/calendar_event.png');
 }
 
-.kalender-res {
-    background-image: url('../images/kalender_res.png');
+.calendar-res {
+    background-image: url('../images/calendar_res.png');
 }
 
-.kalender-boomgaardcafe {
-    background-image: url('../images/kalender_cafe2.png');
+.calendar-boomgaardcafe {
+    background-image: url('../images/calendar_cafe2.png');
 }
 
-.kalender-prev-month-day p, .kalender-next-month-day p {
+.calendar-prev-month-day p, .calendar-next-month-day p {
     color: #4A7D4480;
 }
 
@@ -1160,7 +1160,7 @@ footer p {
     height: 30px;
 }
 
-.kalender-day.skeleton-day {
+.calendar-day.skeleton-day {
     background-color: hsl(200, 20%, 90%);
     border-radius: 4px;
     width: 35%;
@@ -1169,11 +1169,11 @@ footer p {
     margin: auto;
 }
 
-.kalender-day.skeleton-day p {
+.calendar-day.skeleton-day p {
     color: hsl(200, 20%, 90%);
 }
 
-.kalender-card-skeleton, .shop-card-skeleton {
+.calendar-card-skeleton, .shop-card-skeleton {
     background-color: hsl(200, 20%, 90%);
     border-radius: 4px;
     width: 330px;
@@ -1225,11 +1225,11 @@ footer p {
     border-radius: 4px !important;
 }
 
-.kalender-info {
+.calendar-info {
     margin-bottom: 20px;
 }
 
-.kalender-info .kalender-info-name, .kalender-info .kalender-info-price {
+.calendar-info .calendar-info-name, .calendar-info .calendar-info-price {
     font-size: 24px;
     margin-top: 14px;
     margin-bottom: 0px;
@@ -1237,25 +1237,25 @@ footer p {
     color: #005329;
 }
 
-.kalender-info .kalender-info-type {
+.calendar-info .calendar-info-type {
     color: #4A7D44;
 }
 
-.kalender-info img {
+.calendar-info img {
     width: 100%;
     border-radius: 4px;
 }
 
-.kalender-info .col-8 div {
+.calendar-info .col-8 div {
     display: flex;
     justify-content: space-between;
 }
 
-.kalender-tooltip {
+.calendar-tooltip {
     position: relative;
 }
 
-.kalender-tooltip .kalender-top {
+.calendar-tooltip .calendar-top {
     top: -10px;
     left: 50%;
     transform: translate(-50%, -100%);
@@ -1268,45 +1268,45 @@ footer p {
     display: none;
 }
 
-.kalender-tooltip .kalender-top p {
+.calendar-tooltip .calendar-top p {
     font-size: 18px;
     margin: 0;
     padding: 0;
     word-break: keep-all;
 }
 
-.kalender-tooltip .kalender-top.kalender-tooltip-show {
+.calendar-tooltip .calendar-top.calendar-tooltip-show {
     display: block;
     opacity: 1;
 }
 
-.kalender-tooltip-event .kalender-top, .kalender-tooltip-event .kalender-top i::after {
+.calendar-tooltip-event .calendar-top, .calendar-tooltip-event .calendar-top i::after {
     background-color: #A4D8DE;
     box-shadow: 0 1px 8px rgba(164, 216, 222, .5);
 }
 
-.kalender-tooltip-res .kalender-top, .kalender-tooltip-res .kalender-top i::after {
+.calendar-tooltip-res .calendar-top, .calendar-tooltip-res .calendar-top i::after {
     background-color: #EE7357;
     box-shadow: 0 1px 8px rgba(74, 125, 68, 0.5);
 }
 
-.kalender-tooltip-boomgaardcafe .kalender-top, .kalender-tooltip-boomgaardcafe .kalender-top i::after {
+.calendar-tooltip-boomgaardcafe .calendar-top, .calendar-tooltip-boomgaardcafe .calendar-top i::after {
     background-color: #6ab561;
     box-shadow: 0 1px 8px rgba(106, 181, 97, .5);
 }
 
-.kalender-input-month {
+.calendar-input-month {
     visibility: hidden;
     position: absolute;
     width: 0;
     left: 50%;
 }
 
-.kalender-card .status {
+.calendar-card .status {
     cursor: pointer;
 }
 
-.kalender-boomgaardcafe-dates {
+.calendar-boomgaardcafe-dates {
     background-color: #EE7357;
     color: #fff;
     padding: 4px 10px;
@@ -1315,19 +1315,19 @@ footer p {
     width: auto;
 }
 
-.kalender-boomgaardcafe-dates:first-of-type {
+.calendar-boomgaardcafe-dates:first-of-type {
     margin-top: 1rem;
 }
 
 .background-welkom h1,
 .contact-cards h1,
-.kalender-cards h1 {
+.calendar-cards h1 {
     text-align: center;
     font-weight: bold;
     font-size: 45px;
 }
 
-.kalender-card,
+.calendar-card,
 .shop-card {
     width: 330px !important;
     max-width: 98%;
@@ -1335,11 +1335,11 @@ footer p {
     font-family: adobe-clean, sans-serif;
 }
 
-.kalender-cards {
+.calendar-cards {
     margin-bottom: 50px;
 }
 
-.kalender-cards > h1 {
+.calendar-cards > h1 {
     margin: 50px auto 0px auto;
     text-align: center;
     font-weight: bold;
@@ -1350,7 +1350,7 @@ footer p {
     width: fit-content;
 }
 
-.kalender-card h3, .shop-card h3 {
+.calendar-card h3, .shop-card h3 {
     font-size: 30px;
     margin-top: 14px;
     margin-bottom: 0px;
@@ -1358,7 +1358,7 @@ footer p {
     color: #005329;
 }
 
-.kalender-card a, .shop-card a {
+.calendar-card a, .shop-card a {
     width: 100% !important;
     display: block;
 }

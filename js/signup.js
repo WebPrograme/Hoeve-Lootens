@@ -1,3 +1,6 @@
+// UPDATED VERSION - NOT IN USE
+
+// Create User Code
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -5,6 +8,7 @@ function getRandomIntInclusive(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
 }
 
+// GET Request
 function getRequest(target) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -16,6 +20,7 @@ function getRequest(target) {
     });
 }
 
+// POST Request
 function postRequest(target, data) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -28,6 +33,7 @@ function postRequest(target, data) {
     });
 }
 
+// PUT Request
 function putRequest(target, data) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -40,6 +46,7 @@ function putRequest(target, data) {
     });
 }
 
+// Create Payconiq Payment
 function createPayment(UserCode, Amount) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -51,11 +58,13 @@ function createPayment(UserCode, Amount) {
         }));
         xhr.onload = function () {
             let data = JSON.parse(this.response);
+
             resolve(data);
         }
     });
 }
 
+// Show Success
 function showSuccess(UserCode) {
     document.querySelector('.UserCodeResult').innerHTML = UserCode;
     document.querySelector('.form-signup').style.display = 'none';
@@ -66,12 +75,14 @@ function showSuccess(UserCode) {
     window.scrollTo(0, 0);
 }
 
+// Get All Events
 postRequest('init', {Target: 'Events'}).then((res) => {
     if (res.status == 200) {
         let events = JSON.parse(res.response);
         let data = [];
         let eventName;
 
+        // Get ONLY Food Event
         Object.keys(events).forEach(function (key) {
             if (events[key]['Type'] == 'Food') {
                 data = events[key];
@@ -80,10 +91,10 @@ postRequest('init', {Target: 'Events'}).then((res) => {
             }
         });
 
-        if (data.length == 0) {
-            return;
-        }
+        // Check if Event is Available
+        if (data.length == 0) return;
 
+        // Check if Event is Available
         if (data['Available Places'] == 0) {
             document.querySelector('.signup-count').innerHTML = 'Volzet!';
             document.querySelector('.btn-submit').innerHTML = 'Volzet!';
@@ -96,6 +107,7 @@ postRequest('init', {Target: 'Events'}).then((res) => {
         document.querySelector('.signup-description').innerHTML = data['Description'];
         document.querySelector('.btn-submit').setAttribute('data-name', data['Name']);
 
+        // Create Options (Food & Prices)
         Object.keys(data['Options']).forEach(function (key) {
             let option = document.createElement('p');
             option.innerHTML = '<span>' + key + '</span> <span class="label-discription">€' + data['Options'][key] + '</span>';
@@ -112,11 +124,14 @@ postRequest('init', {Target: 'Events'}).then((res) => {
             document.querySelector('.form-signup').insertBefore(input, document.querySelector('.form-signup').querySelector('.form-footer'));
         });
 
+        // Submit Form
         document.querySelector('.btn-submit').addEventListener('click', async function (e) {
+            // Get All Events
             postRequest('init', {Target: 'Events'}).then((res) => {
                 if (res.status == 200) {
                     let places = JSON.parse(res.response)[e.target.getAttribute('data-name')]['Available Places'];
 
+                    // Check if Event is Available
                     if (places == 0) {
                         document.querySelector('.signup-count').innerHTML = 'Volzet!';
                         document.querySelector('.btn-submit').innerHTML = 'Volzet!';
@@ -125,6 +140,7 @@ postRequest('init', {Target: 'Events'}).then((res) => {
                         var BtnSubmit = document.querySelector('.btn-submit');
                         BtnSubmit.innerHTML = 'Verzenden...';
                         
+                        // Get Form Data
                         const form = document.querySelector('.form-signup')
                         var FirstName = form.querySelector('[title="firstname"]').value;
                         var LastName = form.querySelector('[title="lastname"]').value;
@@ -136,34 +152,43 @@ postRequest('init', {Target: 'Events'}).then((res) => {
                         var FoodValues = {};
                         var Amount = 0;
                         
+                        // Get Food Prices
                         for (var i = 0; i < FoodInputs.length; i++) {
                             FoodPrices.push(parseInt(FoodInputs[i].getAttribute('data-price')));
                         }
 
+                        // Get Choosen Food Values & Amount
                         for (var i = 0; i < FoodInputs.length; i++) {
                             FoodValues[FoodInputs[i].getAttribute('title')] = parseInt(FoodInputs[i].value) || 0;
                             Amount += (parseInt(FoodInputs[i].value) * FoodPrices[i]) || 0;
                         }
                         
+                        // Check if Form is Valid
                         if (FirstName == '' || LastName == '' || Email == '' || Phone == '' || Address == '') {
                             BtnSubmit.innerHTML = 'Vul alle velden in!';
                             BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
                             return;
                         }
                         
+                        // Create User Code
                         var UserCode = FirstName[0] + LastName[0] + getRandomIntInclusive(10000, 99999);
                         UserCode = UserCode.toUpperCase();
+
+                        // Create Data Object
                         var data = {'FirstName': FirstName, 'LastName': LastName, 'Email': Email, 'Phone': Phone, 'Address': Address, 'UserCode': UserCode};
 
+                        // Add Food Values to Data Object
                         for (var key in FoodValues) {
                             data[key] = FoodValues[key];
                         }
 
-                        data['Amount'] = Amount;
+                        data['Amount'] = Amount; // Add Amount to Data Object
 
+                        // Add User to Database
                         putRequest('set', {Data: data, Event: e.target.getAttribute('data-name')})
                         .then((response) => {
                             if (response.response == 'success') {
+                                // Show Success Message
                                 showSuccess(UserCode);
                             } else {
                                 BtnSubmit.innerHTML = 'Er is iets fout gegaan!';
@@ -171,16 +196,32 @@ postRequest('init', {Target: 'Events'}).then((res) => {
                             }
                         });
 
-
+                        // Show Payconiq if Choosen
                         document.querySelector('.payconiq-img img').addEventListener('click', async function () {
                             document.querySelector('.payconiq-price').innerHTML = '€' + Amount;
 
+                            // Create Payment
                             let links = await createPayment(UserCode, Amount);
                             let qrcodeImg = document.querySelector('.payconiq-qrcode');
                             let phoneLink = document.querySelector('.payconiq-link');
 
+                            // Open Payconiq App if Mobile
                             if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
                                 window.open(links['deeplink'], '_blank');
+                            } else {
+                                // Create WebSocket Connection to Check if Payment is Completed
+                                const url = "ws://localhost:8081/api/v2/ws?UserCode=" + UserCode;
+                                const mywsServer = new WebSocket(url);
+                                
+                                mywsServer.onopen = function() {
+                                    console.log("WebSocket connection is open");
+                                };
+                                
+                                mywsServer.onmessage = function (event) {
+                                    if (event.data == 'Success') {
+                                        window.location.href = '/pages/success.html?UserCode=' + UserCode + '&Event=' + eventName;
+                                    }
+                                };
                             }
                             
                             qrcodeImg.src = links['qr'];
@@ -191,6 +232,7 @@ postRequest('init', {Target: 'Events'}).then((res) => {
             });
         });
 
+        // Get User Code from Email
         document.querySelector('.btn-submit-email').addEventListener('click', async function () {
             var BtnSubmit = document.querySelector('.btn-submit-email');
             var BtnClose = document.querySelector('.btn-close-email');
@@ -221,6 +263,7 @@ postRequest('init', {Target: 'Events'}).then((res) => {
             });
         });
 
+        // Create Payconiq from User Code
         document.querySelector('.btn-submit-email-code').addEventListener('click', async function () {
             const formEmail = document.querySelector('.form-email-to-code');
             var BtnSubmit = document.querySelector('.btn-submit-email-code');
@@ -253,6 +296,19 @@ postRequest('init', {Target: 'Events'}).then((res) => {
                     
                             if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
                                 window.open(links['deeplink'], '_blank');
+                            } else {
+                                const url = "ws://localhost:8081/api/v2/ws?UserCode=" + UserCode;
+                                const mywsServer = new WebSocket(url);
+                                
+                                mywsServer.onopen = function() {
+                                    console.log("WebSocket connection is open");
+                                };
+                                
+                                mywsServer.onmessage = function (event) {
+                                    if (event.data == 'Success') {
+                                        window.location.href = '/pages/success.html?UserCode=' + UserCode + '&Event=' + eventName;
+                                    }
+                                };
                             }
                             
                             qrcodeImg.src = links['qr'];
@@ -277,6 +333,7 @@ postRequest('init', {Target: 'Events'}).then((res) => {
             document.querySelector('.form-check-code').querySelector('[title="email"]').style.display = 'block';
         });
 
+        // Update Total Price on Change
         document.querySelectorAll('.form-signup .form-control[type=number]').forEach(function (element) {
             function updateValue() {
                 var total = 0;

@@ -395,3 +395,21 @@ input[type=tel] {
     color: #4A7D44;
     font-size: 1.5rem;
 }
+
+/* Success Page */
+
+.payment-success {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-inline: 1.5rem;
+}
+
+.payment-success i {
+    font-size: 5rem;
+    color: #4A7D44;
+    margin-bottom: 1rem;
+}
