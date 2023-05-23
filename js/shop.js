@@ -59,7 +59,7 @@ function putRequest(target, data) {
 }
 
 // Get All Events
-postRequest('init', {Target: 'Events'}).then((res) => {
+postRequest('init/public', {}).then((res) => {
     if (res.status == 200) {
         data = JSON.parse(res.response);
         let shop = document.querySelector('.shop-container');

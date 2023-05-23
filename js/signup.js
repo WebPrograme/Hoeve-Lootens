@@ -76,7 +76,7 @@ function showSuccess(UserCode) {
 }
 
 // Get All Events
-postRequest('init', {Target: 'Events'}).then((res) => {
+postRequest('init/public', {}).then((res) => {
     if (res.status == 200) {
         let events = JSON.parse(res.response);
         let data = [];
