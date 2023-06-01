@@ -1,0 +1,193 @@
+.volunteers {
+    overflow-x: auto;
+}
+
+.volunteers-select-date {
+    display: flex;
+    margin: 0 auto 2rem !important;
+}
+
+.volunteers-table {
+    margin-bottom: 5rem;
+}
+
+.volunteers-table thead tr th {
+    font-weight: 600;
+    text-align: center;
+}
+
+.volunteers-table thead tr th:first-child {
+    text-align: left;
+}
+
+.volunteers-table tbody tr td {
+    min-width: 6rem;
+    max-width: 6rem;
+    height: 25px;
+    text-align: center;
+}
+
+.volunteers-table tbody tr td:first-child {
+    width: 20%;
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.volunteers-table tbody tr td > div {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 50px;
+    border-radius: .5rem;
+    font-family: 'inter', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.volunteers-table-full {
+    background-color: #EE7357;
+    height: -webkit-fill-available;
+}
+
+.volunteers-table-spots {
+    justify-content: space-between !important;
+    background-color: #FCC000;
+    height: -webkit-fill-available;
+    padding: 1rem;
+}
+
+.volunteers-table-signup {
+    height: -webkit-fill-available;
+    background-color: rgb(204, 204, 209);
+    transition: background-color .2s ease-in-out;
+    cursor: pointer;
+}
+
+.volunteers-table-signup:hover {
+    background-color: rgb(185, 185, 190);
+}
+
+.volunteers-table-signup-selected {
+    background-color: #4A7D44;
+}
+
+.volunteers-table-signup-selected:hover {
+    background-color: #3A6D34;
+}
+
+.volunteers-table-signup-overlap:hover {
+    background-color: rgb(204, 204, 209);
+    cursor: not-allowed;
+}
+
+.volunteers-signup-add-btn {
+    display: none;
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    min-width: 25rem;
+    max-width: 90%;
+    background-color: #4A7D44;
+    border-color: #4A7D44;
+    border-radius: .5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+    z-index: 100;
+    transform: translateX(-50%);
+}
+
+.volunteers-signup-add-btn:hover {
+    opacity: 1;
+    background-color: #3A6D34;
+    border-color: #3A6D34;
+}
+
+.volunteers-modal-footer {
+    display: block;
+}
+
+.modal-footer:not(.btn-stack) {
+    display: block;
+}
+
+.modal-footer .btn {
+    width: 100%;
+    border-radius: .25rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0 !important;
+}
+
+.volunteers-input {
+    width: 100% !important;
+}
+
+.volunteers-options-event {
+    margin-bottom: .5rem !important;
+}
+
+.volunteers-options-shifts {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.volunteers-options-shifts-task {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+}
+
+.volunteers-options-shifts-task-title {
+    font-size: 1.2rem;
+}
+
+.volunteers-options-shifts-time {
+    color: #fff !important;
+    background-color: #4A7D44;
+    border-radius: .5rem;
+    padding: .4rem .7rem;
+}
+
+.volunteers-signup-points {
+    color: #4A7D44;
+}
+
+.volunteers-signup-account {
+    display: none;
+}
+
+.volunteers-signup-account-user {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    padding: 1rem 1.2rem;
+    border: 1px solid rgb(185, 185, 190);
+    background-color: transparent;
+    border-radius: .5rem;
+    transition: background-color .2s ease-in-out;
+    cursor: pointer;
+}
+
+.volunteers-signup-account-user:hover {
+    background-color: rgba(185, 185, 190, 0.178);
+}
+
+.volunteers-signup-account-user i {
+    font-size: 3rem;
+    color: rgb(185, 185, 190);
+}
+
+.volunteers-signup-account-user h3, .volunteers-signup-account-user p {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

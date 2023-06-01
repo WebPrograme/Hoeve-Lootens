@@ -1363,6 +1363,10 @@ footer p {
     display: block;
 }
 
+.shop-card img {
+    aspect-ratio: 1.5/1;
+}
+
 .cards {
     display: flex;
     flex-wrap: wrap;

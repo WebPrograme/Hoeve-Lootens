@@ -12,7 +12,7 @@ function getRandomIntInclusive(min, max) {
 function getRequest(target) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
+        xhr.open('GET', 'http://localhost:8081/api/v2/' + target, true);
         xhr.send();
         xhr.onload = function () {
             resolve(this);
@@ -24,7 +24,7 @@ function getRequest(target) {
 function postRequest(target, data) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
+        xhr.open('POST', 'http://localhost:8081/api/v2/' + target, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(data));
         xhr.onload = function () {
@@ -37,7 +37,7 @@ function postRequest(target, data) {
 function putRequest(target, data) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('PUT', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
+        xhr.open('PUT', 'http://localhost:8081/api/v2/' + target, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(data));
         xhr.onload = function () {
@@ -47,20 +47,13 @@ function putRequest(target, data) {
 }
 
 // Create Payconiq Payment
-function createPayment(UserCode, Amount) {
+function createPayment(UserCode, Amount, Event) {
     return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://hoeve-lootens-email.onrender.com/api/payconiq', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(JSON.stringify({
-            "Amount": Amount,
-            "Ref": UserCode
-        }));
-        xhr.onload = function () {
-            let data = JSON.parse(this.response);
+        postRequest('payconiq', {"Amount": Amount, "Ref": UserCode, "Event": Event}).then((res) => {
+            let data = JSON.parse(res.response);
 
             resolve(data);
-        }
+        });
     });
 }
 
@@ -127,7 +120,7 @@ postRequest('init/public', {}).then((res) => {
         // Submit Form
         document.querySelector('.btn-submit').addEventListener('click', async function (e) {
             // Get All Events
-            postRequest('init', {Target: 'Events'}).then((res) => {
+            postRequest('init/public', {}).then((res) => {
                 if (res.status == 200) {
                     let places = JSON.parse(res.response)[e.target.getAttribute('data-name')]['Available Places'];
 
@@ -151,6 +144,7 @@ postRequest('init/public', {}).then((res) => {
                         var FoodPrices = []
                         var FoodValues = {};
                         var Amount = 0;
+                        var Quantity = 0;
                         
                         // Get Food Prices
                         for (var i = 0; i < FoodInputs.length; i++) {
@@ -161,6 +155,7 @@ postRequest('init/public', {}).then((res) => {
                         for (var i = 0; i < FoodInputs.length; i++) {
                             FoodValues[FoodInputs[i].getAttribute('title')] = parseInt(FoodInputs[i].value) || 0;
                             Amount += (parseInt(FoodInputs[i].value) * FoodPrices[i]) || 0;
+                            Quantity += parseInt(FoodInputs[i].value) || 0;
                         }
                         
                         // Check if Form is Valid
@@ -183,6 +178,7 @@ postRequest('init/public', {}).then((res) => {
                         }
 
                         data['Amount'] = Amount; // Add Amount to Data Object
+                        data['Quantity'] = Quantity; // Add Quantity to Data Object
 
                         // Add User to Database
                         putRequest('set', {Data: data, Event: e.target.getAttribute('data-name')})
@@ -201,7 +197,7 @@ postRequest('init/public', {}).then((res) => {
                             document.querySelector('.payconiq-price').innerHTML = '€' + Amount;
 
                             // Create Payment
-                            let links = await createPayment(UserCode, Amount);
+                            let links = await createPayment(UserCode, Amount, eventName);
                             let qrcodeImg = document.querySelector('.payconiq-qrcode');
                             let phoneLink = document.querySelector('.payconiq-link');
 
@@ -210,7 +206,7 @@ postRequest('init/public', {}).then((res) => {
                                 window.open(links['deeplink'], '_blank');
                             } else {
                                 // Create WebSocket Connection to Check if Payment is Completed
-                                const url = "ws://localhost:8081/api/v2/ws?UserCode=" + UserCode;
+                                const url = "ws://localhost:8082/api/v2/payconiq/ws?UserCode=" + UserCode;
                                 const mywsServer = new WebSocket(url);
                                 
                                 mywsServer.onopen = function() {
@@ -290,14 +286,14 @@ postRequest('init/public', {}).then((res) => {
                                 return;
                             }
 
-                            let links = await createPayment(UserCode, response['Amount']);
+                            let links = await createPayment(UserCode, response['Amount'], eventName);
                             let qrcodeImg = document.querySelector('.payconiq-qrcode');
                             let phoneLink = document.querySelector('.payconiq-link');
                     
                             if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
                                 window.open(links['deeplink'], '_blank');
                             } else {
-                                const url = "ws://localhost:8081/api/v2/ws?UserCode=" + UserCode;
+                                const url = "ws://localhost:8082/api/v2/payconiq/ws?UserCode=" + UserCode;
                                 const mywsServer = new WebSocket(url);
                                 
                                 mywsServer.onopen = function() {

@@ -1,4 +1,4 @@
-// GENERAL FUNCTIONS
+import { getAvailableEvents } from "./shop.js";
 
 // Update The Mobile Navigation
 function updateMobileNav() {

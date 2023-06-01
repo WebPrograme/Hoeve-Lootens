@@ -5,21 +5,35 @@ let globalVariables = {};
 // Classes
 
 class Toast {
-    constructor(toastId) {
-        this.toast = toastId;
+    constructor(toastText, toastType, toastPosition = 'bottom') {
+        this.toastID = Math.random().toString(36).substr(2, 9);
+        this.toast = toastText;
+        this.type = toastType;
+        this.position = toastPosition;
+
+        let toast = document.createElement('div');
+        toast.classList.add('toast');
+        toast.classList.add(this.type);
+        toast.classList.add(this.position);
+        toast.id = this.toastID;
+        
+        toast.innerHTML = this.type === 'success' ? '<i class="fas fa-check-circle toast-icon"></i>' : '<i class="fas fa-exclamation-circle toast-icon"></i>';
+        toast.innerHTML += '<p class="toast-text">' + this.toast + '</p>';
+
+        document.querySelector('body').appendChild(toast);
     }
 
     show() {
-        let toast = document.getElementById(this.toast);
-        let time = Array.from(toast.classList).filter((item) => {
-            if (!isNaN(parseFloat(item))) {
-                return item;
-            }
-        })[0] || 3;
+        let toast = document.getElementById(this.toastID);
+        let time = this.time || 3;
 
         toast.classList.add('show');
         setTimeout(() => {
             toast.classList.remove('show');
+
+            setTimeout(() => {
+                toast.remove();
+            }, 500);
         }, time * 1000);
     }
 }

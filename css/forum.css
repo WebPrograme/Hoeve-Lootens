@@ -161,6 +161,10 @@ form p span.label-discription {
     color: #4A7D44;
 }
 
+form p:has(span.form-total) {
+    margin-block: .5rem .3rem;
+}
+
 form input[type=text],
 input[type=time],
 input[type=number],

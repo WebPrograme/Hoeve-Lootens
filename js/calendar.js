@@ -10,84 +10,39 @@ const calendarNextMonth = document.querySelector(".fa-chevron-right");
 const calendarMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; // English
 const calendarMonthsDutch = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"]; // Dutch
 const calendarMonthsDutchShort = ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"]; // Dutch Short
-const calendarData = { // Create Object With Dates, Start Week Day And Month Name For Each Month
-    "January": {
-        "Dates": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
-        "StartWeekDay": 7,
-        "Name": "Januari"
-    },
-    "February": {
-        "Dates": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28],
-        "StartWeekDay": 3,
-        "Name": "Februari"
-    },
-    "March": {
-        "Dates": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
-        "StartWeekDay": 3,
-        "Name": "Maart"
-    },
-    "April": {
-        "Dates": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
-        "StartWeekDay": 6,
-        "Name": "April"
-    },
-    "May": {
-        "Dates": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
-        "StartWeekDay": 1,
-        "Name": "Mei"
-    },
-    "June": {
-        "Dates": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
-        "StartWeekDay": 4,
-        "Name": "Juni"
-    },
-    "July": {
-        "Dates": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
-        "StartWeekDay": 6,
-        "Name": "Juli"
-    },
-    "August": {
-        "Dates": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
-        "StartWeekDay": 2,
-        "Name": "Augustus"
-    },
-    "September": {
-        "Dates": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
-        "StartWeekDay": 5,
-        "Name": "September"
-    },
-    "October": {
-        "Dates": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
-        "StartWeekDay": 7,
-        "Name": "Oktober"
-    },
-    "November": {
-        "Dates": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
-        "StartWeekDay": 3,
-        "Name": "November"
-    },
-    "December": {
-        "Dates": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
-        "StartWeekDay": 5,
-        "Name": "December"
-    }
-}
 
 // Calendar Events
 let calendarEvents = {
-    "January": {},
-    "February": {},
-    "March": {},
-    "April": {},
-    "May": {},
-    "June": {},
-    "July": {},
-    "August": {},
-    "September": {},
-    "October": {},
-    "November": {},
-    "December": {}
+    "2023": {
+        "January": {},
+        "February": {},
+        "March": {},
+        "April": {},
+        "May": {},
+        "June": {},
+        "July": {},
+        "August": {},
+        "September": {},
+        "October": {},
+        "November": {},
+        "December": {}
+    },
+    "2024": {
+        "January": {},
+        "February": {},
+        "March": {},
+        "April": {},
+        "May": {},
+        "June": {},
+        "July": {},
+        "August": {},
+        "September": {},
+        "October": {},
+        "November": {},
+        "December": {}
+    },
 }
+let calendarData = {}; // Calendar Data
 let calendarEventsContent = {}; // Calendar Events Content
 let boomgaardcafeEvents = []; // Boomgaardcafe Events
 
@@ -100,35 +55,38 @@ async function getCalendar() {
 }
 
 // Update Calendar When Month Changes
-function updateCalendar(month) {
+function updateCalendar(month, year = d.getFullYear()) {
     // Get Variables Based On Month
-    let index = Object.keys(calendarData).indexOf(month);
-    let year = d.getFullYear();
-    let name = calendarData[month].Name;
-    let dates = calendarData[month].Dates;
-    let events = calendarEvents[month];
-    let startWeekDay = calendarData[month].StartWeekDay;
+    let name = month;
+    let index = calendarMonths.indexOf(month);
+    let days = new Date(year, index + 1, 0).getDate();
+    let dates = Array.from(Array(days).keys()).map(x => ++x);
+    let events = calendarEvents[year][month];
+    let startWeekDay = new Date(year, index, 1).getDay();
     let calendarContent = "";
 
     calendarHeader.innerHTML = name + " " + year;
+    calendarHeader.setAttribute("data-year", year);
 
     // Change Prev Button
-    if (index == 0) {
+    if (index == 0 && year == "2023") {
         calendarPrevMonth.style.color = "#F5F5F5";
         calendarPrevMonth.style.cursor = "default";
     } else {
         calendarPrevMonth.style.color = "#FCC000";
-        calendarPrevMonth.setAttribute("data-month", Object.keys(calendarData)[index - 1])
+        calendarPrevMonth.setAttribute("data-month", calendarMonths[index == 0 ? 11 : index - 1])
+        calendarPrevMonth.setAttribute("data-year", month == "January" ? parseInt(year) - 1 : year)
         calendarPrevMonth.style.cursor = "pointer";
     }
 
     // Change Next Button
-    if (index == 11) {
+    if (index == 11 && year == "2024") {
         calendarNextMonth.style.color = "#F5F5F5";
         calendarNextMonth.style.cursor = "default";
     } else {
         calendarNextMonth.style.color = "#FCC000";
-        calendarNextMonth.setAttribute("data-month", Object.keys(calendarData)[index + 1])
+        calendarNextMonth.setAttribute("data-month", calendarMonths[index == 11 ? 0 : index + 1])
+        calendarNextMonth.setAttribute("data-year", month == "December" ? parseInt(year) + 1 : year)
         calendarNextMonth.style.cursor = "pointer";
     }
 
@@ -162,23 +120,25 @@ function updateCalendar(month) {
 
 // Show Events
 function showEvents() {
+    const year = d.getFullYear();
+    console.log(calendarEvents[year]);
     const calendarCards = document.querySelector(".calendar-cards .cards");
-    const eventMonths = Object.keys(calendarEvents);
+    const eventMonths = Object.keys(calendarEvents[year]);
     var calendarCardsContent = ''
     var boomgaardcafeCardsContent = ''
     
     // Loop Through Months
     for (let i = 0; i < eventMonths.length; i++) {
         let month = eventMonths[i];
-        let eventDays = Object.keys(calendarEvents[month]);
+        let eventDays = Object.keys(calendarEvents[year][month]);
 
         // Loop Through Days
         for (let j = 0; j < eventDays.length; j++) {
             // Check If Day Has Event
-            if (calendarEvents[month][eventDays[j]].Type == "event") {
+            if (calendarEvents[year][month][eventDays[j]].Type == "event") {
                 // Get Event Variables
-                let eventTitle = calendarEvents[month][eventDays[j]].Title
-                let eventDescription = calendarEvents[month][eventDays[j]].Description;
+                let eventTitle = calendarEvents[year][month][eventDays[j]].Title
+                let eventDescription = calendarEvents[year][month][eventDays[j]].Description;
                 let startMonth = month;
                 let startDay = eventDays[j];
                 let endMonth = month;
@@ -188,19 +148,20 @@ function showEvents() {
                 if (calendarEventsContent[eventTitle] != undefined) continue;
 
                 // Check If Event Is Multiple Days (Same Month)
-                for (let l = eventDays[j]; l <= calendarData[month].Dates.length; l++) {
-                    if (calendarEvents[month][l] == undefined) {
+                for (let l = eventDays[j]; l <= new Date(year, calendarMonths.indexOf(month) + 1, 0).getDate(); l++) {
+                    if (calendarEvents[year][month][l] == undefined) {
                         break;
-                    } else if (calendarEvents[month][l].Title == eventTitle && calendarEvents[month][l].Description == eventDescription) {
+                    } else if (calendarEvents[year][month][l].Title == eventTitle && calendarEvents[year][month][l].Description == eventDescription) {
                         endDay = l;
                     }
                 }
 
                 // Check If Event Is Multiple Days (Different Month)
-                for (let k = 1; k < calendarData[eventMonths[i+1]].Dates.length; k++) {
-                    if (calendarEvents[eventMonths[i+1]][k] == undefined) {
+                let nextMonthIndex = calendarMonths.indexOf(month) + 2 == 12 ? 0 : calendarMonths.indexOf(month) + 2;
+                for (let k = 1; k < new Date(year, nextMonthIndex, 0).getDate(); k++) {
+                    if (calendarEvents[year][eventMonths[i+1]][k] == undefined) {
                         break;
-                    } else if (calendarEvents[eventMonths[i+1]][k].Title == eventTitle && calendarEvents[eventMonths[i+1]][k].Description == eventDescription) {
+                    } else if (calendarEvents[year][eventMonths[i+1]][k].Title == eventTitle && calendarEvents[year][eventMonths[i+1]][k].Description == eventDescription) {
                         endMonth = eventMonths[i+1];
                         endDay = k;
                     }
@@ -215,7 +176,7 @@ function showEvents() {
                     "EndMonth": endMonth,
                     "EndDay": endDay
                 };
-            } else if (calendarEvents[month][eventDays[j]].Type == "boomgaardcafe") {
+            } else if (calendarEvents[year][month][eventDays[j]].Type == "boomgaardcafe") {
                 // Add Event To Boomgaardcafe Events
                 boomgaardcafeEvents.push({
                     "Month": month,
@@ -263,9 +224,9 @@ function showEvents() {
         var eventDate = ''
 
         if (startMonth == endMonth) {
-            eventDate = startDay + ' - ' + endDay + ' ' + calendarMonthsDutch[Object.keys(calendarData).indexOf(endMonth)] + ' 2023';
+            eventDate = startDay + ' - ' + endDay + ' ' + calendarMonthsDutch[calendarMonths.indexOf(startMonth)] + ' 2023';
         } else {
-            eventDate = startDay + ' ' + calendarMonthsDutchShort[Object.keys(calendarData).indexOf(startMonth)] + ' - ' + endDay + ' ' + calendarMonthsDutchShort[Object.keys(calendarData).indexOf(endMonth)] + ' 2023';
+            eventDate = startDay + ' ' + calendarMonthsDutchShort[calendarMonths.indexOf(startMonth)] + ' - ' + endDay + ' ' + calendarMonthsDutchShort[calendarMonths.indexOf(endMonth)] + ' 2023';
         }
 
         calendarCardsContent += '<div class="calendar-card"><h3>' + eventTitle + '</h3><p class="status" data-month="' + startMonth + '">' + eventDate + '</p><p class="highlight-text">' + eventDescription + '</p></div>';
@@ -328,7 +289,7 @@ function parseEvents(events) {
         }
 
         if (events[i]['summary'] != undefined) {
-            if (day == endDay && year == 2023) {
+            if (day == endDay && (year == 2023 || year == 2024)) {
                 let type = 'Not public';
                 let title = events[i]['summary'];
                 let description = '';
@@ -349,7 +310,7 @@ function parseEvents(events) {
                     if (events[i]['description'] != undefined) {description = events[i]['description']}
                 }
 
-                calendarEvents[Object.keys(calendarEvents)[month-1]][day] = {
+                calendarEvents[year][Object.keys(calendarEvents[year])[month-1]][day] = {
                     "Type": type,
                     "Title": title
                 }
@@ -358,7 +319,7 @@ function parseEvents(events) {
                     boomgaardcafeEvents['Description'] = description;
                 }
 
-            } else if (month == endMonth && year == 2023) {
+            } else if (month == endMonth && (year == 2023 || year == 2024)) {
                 let type = 'Not public';
                 let title = events[i]['summary'];
                 let description = '';
@@ -380,7 +341,7 @@ function parseEvents(events) {
                 }
 
                 for (let j = day; j < endDay; j++) {
-                    calendarEvents[Object.keys(calendarEvents)[month-1]][j] = {
+                    calendarEvents[year][Object.keys(calendarEvents[year])[month-1]][j] = {
                         "Type": type,
                         "Title": title,
                         "Description": description
@@ -391,7 +352,7 @@ function parseEvents(events) {
                     boomgaardcafeEvents['Description'] = description;
                 }
             
-            } else if (year == 2023) {
+            } else if (year == 2023 || year == 2024) {
                 let type = 'Not public';
                 let title = events[i]['summary'];
                 let description = '';
@@ -413,8 +374,8 @@ function parseEvents(events) {
                 
                 for (let j = month; j <= endMonth; j++) {
                     if (j == month) {
-                        for (let k = day; k <= calendarData[Object.keys(calendarData)[month-1]].Dates.length; k++) {
-                            calendarEvents[Object.keys(calendarEvents)[j-1]][k] = {
+                        for (let k = day; k <= new Date(year, month - 1, 0).getDate(); k++) {
+                            calendarEvents[year][Object.keys(calendarEvents[year])[j-1]][k] = {
                                 "Type": type,
                                 "Title": title,
                                 "Description": description
@@ -422,7 +383,7 @@ function parseEvents(events) {
                         }
                     } else if (j == endMonth) {
                         for (let k = 1; k < endDay; k++) {
-                            calendarEvents[Object.keys(calendarEvents)[j-1]][k] = {
+                            calendarEvents[year][Object.keys(calendarEvents[year])[j-1]][k] = {
                                 "Type": type,
                                 "Title": title,
                                 "Description": description
@@ -486,21 +447,22 @@ getCalendar().then(calendar => {
         let date = startTime.split('T')[0];
         let year = date.split('-')[0];
 
-        if (year == 2023) {
-            events = allEvents.slice(i);
+        if (year == 2023 || year == 2024) {
+            events.push(allEvents.slice(i));
             break
         }
     }
 
+    events = events.flat();
     parseEvents(events);
-    updateCalendar(Object.keys(calendarEvents)[d.getMonth()]);
+    updateCalendar(Object.keys(calendarEvents[d.getFullYear()])[d.getMonth()], d.getFullYear());
     showEvents();
 });
 
 // Get Previous Month
 calendarPrevMonth.addEventListener("click", function() {
     calendar.innerHTML = "";
-    updateCalendar(this.getAttribute("data-month"));
+    updateCalendar(this.getAttribute("data-month"), this.getAttribute("data-year"));
 
     tooltip();
 });
@@ -508,7 +470,7 @@ calendarPrevMonth.addEventListener("click", function() {
 // Get Next Month
 calendarNextMonth.addEventListener("click", function() {
     calendar.innerHTML = "";
-    updateCalendar(this.getAttribute("data-month"));
+    updateCalendar(this.getAttribute("data-month"), this.getAttribute("data-year"));
 
     tooltip();
 });
@@ -521,10 +483,11 @@ calendarHeader.addEventListener("click", function() {
     inputMonth.addEventListener("change", function() {
         if (inputMonth.value != "") {
             var monthIndex = inputMonth.value.split('-')[1];
-            var month = Object.keys(calendarEvents)[monthIndex-1];
+            var year = calendarHeader.getAttribute("data-year");
+            var month = Object.keys(calendarEvents[year])[monthIndex-1];
             
             calendar.innerHTML = "";
-            updateCalendar(month);
+            updateCalendar(month, year);
 
             tooltip();
         }
