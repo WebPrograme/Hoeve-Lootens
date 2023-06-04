@@ -18,14 +18,10 @@
     --primary-text-color: rgb(0, 0, 0);
     --secondary-text-color: rgb(109, 118, 126);
 
-    --primary-btn-bg: rgb(0, 93, 231);
     --primary-btn-color: rgb(255, 255, 255);
-    --primary-btn-hover-bg: rgb(7, 82, 194);
-    --primary-btn-outline-bg: rgb(0, 91, 229, 0.5);
-    --secondary-btn-bg: rgb(233, 233, 241);
-    --secondary-btn-color: rgb(0, 0, 0);
-    --secondary-btn-hover-bg: rgb(215, 215, 226);
-    --secondary-btn-outline-bg: rgb(215, 215, 226, 0.5);
+    --primary-btn-outline-bg: rgb(255, 193, 7, 0.5);
+    --secondary-btn-color: rgb(255, 255, 255);
+    --secondary-btn-outline-bg: rgb(241, 51, 4, 0.5);
 
     --input-bg-color: rgb(233, 233, 241);
     --input-border-color: rgb(215, 215, 226);

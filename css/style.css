@@ -195,7 +195,9 @@ nav a:hover {
 
 .social {
     position: absolute;
-    top: calc(50% - 70px);
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
     z-index: 5;
 }
 

@@ -2,6 +2,7 @@
 
 // Variables
 const d = new Date();
+const currentYear = d.getFullYear();
 const calendar = document.querySelector(".calendar-content");
 const calendarHeader = document.querySelector(".calendar-header-name");
 const calendarHeaderSkeleton = document.querySelector(".skeleton-header-name");
@@ -42,7 +43,6 @@ let calendarEvents = {
         "December": {}
     },
 }
-let calendarData = {}; // Calendar Data
 let calendarEventsContent = {}; // Calendar Events Content
 let boomgaardcafeEvents = []; // Boomgaardcafe Events
 
@@ -69,7 +69,7 @@ function updateCalendar(month, year = d.getFullYear()) {
     calendarHeader.setAttribute("data-year", year);
 
     // Change Prev Button
-    if (index == 0 && year == "2023") {
+    if (index == 0 && year == currentYear) {
         calendarPrevMonth.style.color = "#F5F5F5";
         calendarPrevMonth.style.cursor = "default";
     } else {
@@ -80,15 +80,10 @@ function updateCalendar(month, year = d.getFullYear()) {
     }
 
     // Change Next Button
-    if (index == 11 && year == "2024") {
-        calendarNextMonth.style.color = "#F5F5F5";
-        calendarNextMonth.style.cursor = "default";
-    } else {
-        calendarNextMonth.style.color = "#FCC000";
-        calendarNextMonth.setAttribute("data-month", calendarMonths[index == 11 ? 0 : index + 1])
-        calendarNextMonth.setAttribute("data-year", month == "December" ? parseInt(year) + 1 : year)
-        calendarNextMonth.style.cursor = "pointer";
-    }
+    calendarNextMonth.style.color = "#FCC000";
+    calendarNextMonth.setAttribute("data-month", calendarMonths[index == 11 ? 0 : index + 1])
+    calendarNextMonth.setAttribute("data-year", month == "December" ? parseInt(year) + 1 : year)
+    calendarNextMonth.style.cursor = "pointer";
 
     // Add Empty Days
     for (let i = 0; i < startWeekDay - 1; i++) {
@@ -288,8 +283,25 @@ function parseEvents(events) {
             endDay = endDay.split('0')[1];
         }
 
+        if (Object.keys(calendarEvents).indexOf(year) == -1) {
+            calendarEvents[year] = {
+                "January": {},
+                "February": {},
+                "March": {},
+                "April": {},
+                "May": {},
+                "June": {},
+                "July": {},
+                "August": {},
+                "September": {},
+                "October": {},
+                "November": {},
+                "December": {}
+            }
+        }
+
         if (events[i]['summary'] != undefined) {
-            if (day == endDay && (year == 2023 || year == 2024)) {
+            if (day == endDay && year >= currentYear) {
                 let type = 'Not public';
                 let title = events[i]['summary'];
                 let description = '';
@@ -319,7 +331,7 @@ function parseEvents(events) {
                     boomgaardcafeEvents['Description'] = description;
                 }
 
-            } else if (month == endMonth && (year == 2023 || year == 2024)) {
+            } else if (month == endMonth && year >= currentYear) {
                 let type = 'Not public';
                 let title = events[i]['summary'];
                 let description = '';
@@ -352,7 +364,7 @@ function parseEvents(events) {
                     boomgaardcafeEvents['Description'] = description;
                 }
             
-            } else if (year == 2023 || year == 2024) {
+            } else if (year >= currentYear) {
                 let type = 'Not public';
                 let title = events[i]['summary'];
                 let description = '';
@@ -447,7 +459,7 @@ getCalendar().then(calendar => {
         let date = startTime.split('T')[0];
         let year = date.split('-')[0];
 
-        if (year == 2023 || year == 2024) {
+        if (year >= currentYear) {
             events.push(allEvents.slice(i));
             break
         }
@@ -457,6 +469,7 @@ getCalendar().then(calendar => {
     parseEvents(events);
     updateCalendar(Object.keys(calendarEvents[d.getFullYear()])[d.getMonth()], d.getFullYear());
     showEvents();
+    tooltip();
 });
 
 // Get Previous Month
@@ -469,6 +482,25 @@ calendarPrevMonth.addEventListener("click", function() {
 
 // Get Next Month
 calendarNextMonth.addEventListener("click", function() {
+    let year = this.getAttribute("data-year");
+
+    if (Object.keys(calendarEvents).indexOf(year) == -1) {
+        calendarEvents[year] = {
+            "January": {},
+            "February": {},
+            "March": {},
+            "April": {},
+            "May": {},
+            "June": {},
+            "July": {},
+            "August": {},
+            "September": {},
+            "October": {},
+            "November": {},
+            "December": {}
+        }
+    }
+
     calendar.innerHTML = "";
     updateCalendar(this.getAttribute("data-month"), this.getAttribute("data-year"));
 
