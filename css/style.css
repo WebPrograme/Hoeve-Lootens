@@ -1495,7 +1495,7 @@ footer p {
 
 .shop-container {
     flex-wrap: wrap;
-    gap: 2rem 1rem;
+    gap: 3rem 1rem;
 }
 
 .shop-card:has(.btn-shop-food) {

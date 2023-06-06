@@ -12,7 +12,7 @@ function getRandomIntInclusive(min, max) {
 function getRequest(target) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', 'http://localhost:8081/api/v2/' + target, true);
+        xhr.open('GET', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
         xhr.send();
         xhr.onload = function () {
             resolve(this);
@@ -24,7 +24,7 @@ function getRequest(target) {
 function postRequest(target, data) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost:8081/api/v2/' + target, true);
+        xhr.open('POST', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(data));
         xhr.onload = function () {
@@ -37,7 +37,7 @@ function postRequest(target, data) {
 function putRequest(target, data) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('PUT', 'http://localhost:8081/api/v2/' + target, true);
+        xhr.open('PUT', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(data));
         xhr.onload = function () {
@@ -204,20 +204,6 @@ postRequest('init/public', {}).then((res) => {
                             // Open Payconiq App if Mobile
                             if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
                                 window.open(links['deeplink'], '_blank');
-                            } else {
-                                // Create WebSocket Connection to Check if Payment is Completed
-                                const url = "ws://localhost:8082/api/v2/payconiq/ws?UserCode=" + UserCode;
-                                const mywsServer = new WebSocket(url);
-                                
-                                mywsServer.onopen = function() {
-                                    console.log("WebSocket connection is open");
-                                };
-                                
-                                mywsServer.onmessage = function (event) {
-                                    if (event.data == 'Success') {
-                                        window.location.href = '/pages/success.html?UserCode=' + UserCode + '&Event=' + eventName;
-                                    }
-                                };
                             }
                             
                             qrcodeImg.src = links['qr'];
@@ -292,19 +278,6 @@ postRequest('init/public', {}).then((res) => {
                     
                             if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
                                 window.open(links['deeplink'], '_blank');
-                            } else {
-                                const url = "ws://localhost:8082/api/v2/payconiq/ws?UserCode=" + UserCode;
-                                const mywsServer = new WebSocket(url);
-                                
-                                mywsServer.onopen = function() {
-                                    console.log("WebSocket connection is open");
-                                };
-                                
-                                mywsServer.onmessage = function (event) {
-                                    if (event.data == 'Success') {
-                                        window.location.href = '/pages/success.html?UserCode=' + UserCode + '&Event=' + eventName;
-                                    }
-                                };
                             }
                             
                             qrcodeImg.src = links['qr'];

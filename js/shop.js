@@ -24,7 +24,7 @@ function getRandomIntInclusive(data, min, max) {
 function getRequest(target) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', 'http://localhost:8081/api/v2/' + target, true);
+        xhr.open('GET', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
         xhr.send();
         xhr.onload = function () {
             resolve(this);
@@ -36,7 +36,7 @@ function getRequest(target) {
 function postRequest(target, data) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost:8081/api/v2/' + target, true);
+        xhr.open('POST', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(data));
         xhr.onload = function () {
@@ -49,7 +49,7 @@ function postRequest(target, data) {
 function putRequest(target, data) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('PUT', 'http://localhost:8081/api/v2/' + target, true);
+        xhr.open('PUT', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(data));
         xhr.onload = function () {
@@ -169,13 +169,14 @@ if (window.location.pathname == '/pages/shop.html') {
                     modal.querySelector('.shop-title').innerHTML = e.target.getAttribute('data-value');
                     modal.querySelector('.shop-date').innerHTML = data[e.target.getAttribute('data-value')]['Date'];
                     modal.querySelector('.shop-description').innerHTML = data[e.target.getAttribute('data-value')]['Description'];
-                    modal.querySelector('.shop-input[name="Personen"]').setAttribute('max', data[e.target.getAttribute('data-value')]['Available Places']);
-                    modal.querySelector('.shop-input[name="Personen"]').setAttribute('data-value', e.target.getAttribute('data-value'));
                     modal.querySelector('.btn-shop-submit').setAttribute('data-value', e.target.getAttribute('data-value'));
+                    modal.querySelector('.shop-form-options').innerHTML = '';
             
                     if (data[e.target.getAttribute('data-value')]['Type'] == 'Quiz') {
                         // Show Custom Options for Quiz
-                        modal.querySelector('.shop-input[name="Personen"]').parentElement.remove();
+                        if (modal.querySelector('.shop-input[name="Personen"]') != undefined) {
+                            modal.querySelector('.shop-input[name="Personen"]').parentElement.remove();
+                        }
 
                         modal.querySelector('.shop-total').innerHTML = '€' + data[e.target.getAttribute('data-value')]['Price'];
 
@@ -202,8 +203,20 @@ if (window.location.pathname == '/pages/shop.html') {
                             modal.querySelector('.shop-form-options').appendChild(input);
                         });
                     } else {
-                        modal.querySelector('.shop-input[name="Personen"]').addEventListener('keyup', (e) => {
-                            modal.querySelector('.shop-total').innerHTML = '€' + (e.target.value * data[e.target.getAttribute('data-value')]['Price']);
+                        if (modal.querySelector('.shop-input[name="Personen"]') != null) {
+                            modal.querySelector('.shop-input[name="Personen"]').setAttribute('max', data[e.target.getAttribute('data-value')]['Available Places']);
+                            modal.querySelector('.shop-input[name="Personen"]').setAttribute('data-value', e.target.getAttribute('data-value'));
+                        } else {
+                            let personsContainer = document.createElement('div');
+                            personsContainer.innerHTML = `
+                                <label class="label" for="Personen">Personen</label>
+                                <input class="shop-input input" type="number" name="Personen" id="Personen" placeholder="Personen" min="1" max="` + data[e.target.getAttribute('data-value')]['Available Places'] + `">
+                            `;
+                            modal.querySelector('.shop-persons-line').appendChild(personsContainer);
+                        }
+
+                        modal.querySelector('.shop-input[name="Personen"]').addEventListener('keyup', (input) => {
+                            modal.querySelector('.shop-total').innerHTML = '€' + (input.target.value * data[e.target.getAttribute('data-value')]['Price']);
                         });
                     }
 
@@ -233,6 +246,10 @@ if (window.location.pathname == '/pages/shop.html') {
                     let modal = e.target.closest('.modal');
             
                     modal.classList.remove('modal-open');
+                    modal.querySelector('.shop-form').style.display = 'block';
+                    modal.querySelector('.shop-info').style.display = 'flex';
+                    modal.querySelector('.btn-shop-submit').style.display = 'block';
+                    modal.querySelector('.shop-success').style.display = 'none';
                 });
             });
         }
@@ -338,7 +355,7 @@ if (window.location.pathname == '/pages/shop.html') {
                                     document.querySelector('.shop-success-overschrijving-code').innerHTML = UserCode;
                                 } else if (method == 'payconiq') {
                                     // Create Payconiq QR Code
-                                    postRequest('payconiq', {Amount: dataEvent['Price'] * Amount, UserCode: UserCode, Event: EventName}).then((res) => {
+                                    postRequest('payconiq', {Amount: dataEvent['Price'] * Amount, Ref: UserCode, Event: EventName}).then((res) => {
                                         if (res.status == 200) {
                                             let links = JSON.parse(res.response);
                                             let qrcodeImg = document.querySelector('.shop-success-payconiq-qr');
@@ -373,6 +390,9 @@ if (window.location.pathname == '/pages/shop.html') {
                                 }
                             });
                         });
+                    } else if (res.status == 400) {
+                        BtnAdd.innerHTML = 'U bent al ingeschreven!';
+                        BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
                     } else {
                         BtnAdd.innerHTML = 'Er is iets misgegaan!';
                         BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');

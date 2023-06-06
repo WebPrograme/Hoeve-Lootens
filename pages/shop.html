@@ -79,7 +79,7 @@
                         <input type="text" class="input shop-input" placeholder="Email" name="Email">
                     </div>
 
-                    <div class="row justify-between input-group">
+                    <div class="row justify-between input-group shop-persons-line">
                         <div>
                             <label class="label" for="Telefoonnummer">Telefoonnummer</label>
                             <input type="text" class="input shop-input" placeholder="Telefoonnummer" name="Telefoonnummer">
@@ -133,6 +133,53 @@
         </div>
     </div>
 
+    <div class="modal" id="emailToQRModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title">Geef uw email</h1>
+                <a class="modal-close" data-close-modal="emailToQRModal">
+                    <i class="fas fa-times"></i>
+                </a>
+            </div>
+
+            <div class="modal-body">
+                <p>Als u al bent ingeschreven maar nog niet hebt betaalt kunt u hieronder uw email gebruiken om een Payconiq QR-Code te krijgen.</p>
+                <form class="form-email-to-code">
+                    <input type="text" class="form-control form-email-to-code-input" placeholder="Email" title="email">
+                </form>
+            </div>
+
+            <div class="modal-footer btn-stack">
+                <a class="btn btn-primary btn-primary-sm btn-submit-email-code" role="button">GA DOOR</a>
+                <a class="btn btn-primary btn-primary-sm btn-close-email-code" role="button" data-target-modal="payconiq-modal">SLUITEN</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="modalUserCode">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title">Geef uw email</h1>
+                <a class="modal-close" data-close-modal="modalUserCode">
+                    <i class="fas fa-times"></i>
+                </a>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-check-code">
+                    <input type="text" class="form-control form-check-code-email" placeholder="Email" title="email">
+                </form>
+
+                <h2 class="UserCode"></h2>
+            </div>
+
+            <div class="modal-footer btn-stack">
+                <a class="btn btn-primary btn-primary-sm btn-submit-email" role="button">CHECK CODE</a>
+                <a class="btn btn-primary btn-primary-sm btn-close-email" role="button" data-bs-dismiss="modal">SLUITEN</a>
+            </div>
+        </div>
+    </div>
+
     <main>
         <div class="top-page">
             <div>
@@ -144,7 +191,6 @@
                         We voorzien activiteiten voor groot en klein. Kijk hieronder om het volledige programma te bekijken en vergeet niet in te schrijven voor het kermismenu op zondag.</p>
                     <div class="btn-row shop-btn-row">
                         <a class="btn btn-primary btn-primary-sm btn-check-code shop-btn" role="button"  data-target-modal="modalUserCode" target="_blank">BETALINGSCODE VERGETEN?</a>
-                        <a class="btn btn-secondary btn-secondary-sm shop-btn" role="button" data-target-modal="emailToQRModal" target="_blank">BETALEN</a>
                     </div>
                 </div>
             </div>

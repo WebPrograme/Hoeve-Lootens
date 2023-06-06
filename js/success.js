@@ -4,7 +4,7 @@
 function getRequest(target) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', 'http://localhost:8081/v2/' + target, true);
+        xhr.open('GET', 'https://hoeve-lootens-email.onrender.com/v2/' + target, true);
         xhr.send();
         xhr.onload = function () {
             resolve(this);
@@ -16,7 +16,7 @@ function getRequest(target) {
 function postRequest(target, data) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost:8081/api/v2/' + target, true);
+        xhr.open('POST', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(data));
         xhr.onload = function () {

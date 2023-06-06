@@ -13,36 +13,7 @@ const calendarMonthsDutch = ["januari", "februari", "maart", "april", "mei", "ju
 const calendarMonthsDutchShort = ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"]; // Dutch Short
 
 // Calendar Events
-let calendarEvents = {
-    "2023": {
-        "January": {},
-        "February": {},
-        "March": {},
-        "April": {},
-        "May": {},
-        "June": {},
-        "July": {},
-        "August": {},
-        "September": {},
-        "October": {},
-        "November": {},
-        "December": {}
-    },
-    "2024": {
-        "January": {},
-        "February": {},
-        "March": {},
-        "April": {},
-        "May": {},
-        "June": {},
-        "July": {},
-        "August": {},
-        "September": {},
-        "October": {},
-        "November": {},
-        "December": {}
-    },
-}
+let calendarEvents = {}; // Calendar Events
 let calendarEventsContent = {}; // Calendar Events Content
 let boomgaardcafeEvents = []; // Boomgaardcafe Events
 
