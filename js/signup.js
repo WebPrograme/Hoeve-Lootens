@@ -135,11 +135,11 @@ postRequest('init/public', {}).then((res) => {
                         
                         // Get Form Data
                         const form = document.querySelector('.form-signup')
-                        var FirstName = form.querySelector('[title="firstname"]').value;
-                        var LastName = form.querySelector('[title="lastname"]').value;
-                        var Email = form.querySelector('[title="email"]').value;
+                        var FirstName = form.querySelector('[title="firstname"]').value.trim();
+                        var LastName = form.querySelector('[title="lastname"]').value.trim();
+                        var Email = form.querySelector('[title="email"]').value.trim();
                         var Phone = form.querySelector('[title="phone"]').value;
-                        var Address = form.querySelector('[title="address"]').value;
+                        var Address = form.querySelector('[title="address"]').value.trim();
                         var FoodInputs = form.querySelectorAll('.signup-input');
                         var FoodPrices = []
                         var FoodValues = {};

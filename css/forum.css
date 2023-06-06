@@ -181,7 +181,7 @@ input[type=email],
 input[type=tel] {
     width: 100%;
     padding: 12px 10px;
-    margin: 8px 0 !important;
+    margin: 8px 0;
     display: inline-block;
     border: 1px solid #ccc !important;
     border-radius: 4px;

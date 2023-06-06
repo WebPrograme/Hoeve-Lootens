@@ -1523,7 +1523,7 @@ footer p {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: .5rem;
 }
 
 .shop-header {
@@ -1554,6 +1554,7 @@ footer p {
 .shop-form input {
     flex: 1 1 auto;
     width: inherit !important;
+    margin-block: 0 !important;
 }
 
 .shop-date {

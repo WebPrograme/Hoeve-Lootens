@@ -49,7 +49,7 @@ function postRequest(target, data) {
 function putRequest(target, data) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('PUT', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
+        xhr.open('PUT', 'http://localhost:8081/api/v2/' + target, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(data));
         xhr.onload = function () {
@@ -58,6 +58,20 @@ function putRequest(target, data) {
     });
 }
 
+// Reset Modal
+function resetModal() {
+    let modal = document.querySelector('.modal');
+
+    modal.classList.remove('modal-open');
+    modal.querySelector('.shop-form').style.display = 'block';
+    modal.querySelector('.shop-info').style.display = 'flex';
+    modal.querySelector('.btn-shop-submit').style.display = 'block';
+    modal.querySelector('.btn-shop-submit').style.backgroundColor = '#FCC000';
+    modal.querySelector('.btn-shop-submit').innerHTML = 'Inschrijven';
+    modal.querySelector('.shop-success').style.display = 'none';
+}
+
+// Get Available Events
 function getAvailableEvents() {
     return new Promise((resolve, reject) => {
         postRequest('init/public', {}).then((res) => {
@@ -243,13 +257,7 @@ if (window.location.pathname == '/pages/shop.html') {
             // Close Modal
             document.querySelectorAll('.modal-close').forEach((el) => {
                 el.addEventListener('click', (e) => {
-                    let modal = e.target.closest('.modal');
-            
-                    modal.classList.remove('modal-open');
-                    modal.querySelector('.shop-form').style.display = 'block';
-                    modal.querySelector('.shop-info').style.display = 'flex';
-                    modal.querySelector('.btn-shop-submit').style.display = 'block';
-                    modal.querySelector('.shop-success').style.display = 'none';
+                    resetModal();
                 });
             });
         }
@@ -266,11 +274,11 @@ if (window.location.pathname == '/pages/shop.html') {
                 var form = document.querySelector('.shop-form');
                 var EventName = document.querySelector('.btn-shop-submit').getAttribute('data-value');
                 var BtnAdd = document.querySelector('.btn-shop-submit');
-                var FirstName = form.querySelector('[name="Voornaam"]').value;
-                var LastName = form.querySelector('[name="Achternaam"]').value;
-                var Email = form.querySelector('[name="Email"]').value;
+                var FirstName = form.querySelector('[name="Voornaam"]').value.trim();
+                var LastName = form.querySelector('[name="Achternaam"]').value.trim();
+                var Email = form.querySelector('[name="Email"]').value.trim();
                 var Phone = form.querySelector('[name="Telefoonnummer"]').value;
-                var Address = form.querySelector('[name="Adres"]').value;
+                var Address = form.querySelector('[name="Adres"]').value.trim();
     
                 if (dataEvent['Type'] == 'Quiz') {
                     // Get Unique Options For Type Quiz
