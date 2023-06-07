@@ -49,7 +49,7 @@ function postRequest(target, data) {
 function putRequest(target, data) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('PUT', 'http://localhost:8081/api/v2/' + target, true);
+        xhr.open('PUT', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(data));
         xhr.onload = function () {
