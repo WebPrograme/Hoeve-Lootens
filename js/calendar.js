@@ -29,6 +29,7 @@ async function getCalendar() {
 function updateCalendar(month, year = d.getFullYear()) {
     // Get Variables Based On Month
     let name = month;
+    let dutchName = calendarMonthsDutch[calendarMonths.indexOf(month)].charAt(0).toUpperCase() + calendarMonthsDutch[calendarMonths.indexOf(month)].slice(1);
     let index = calendarMonths.indexOf(month);
     let days = new Date(year, index + 1, 0).getDate();
     let dates = Array.from(Array(days).keys()).map(x => ++x);
@@ -36,7 +37,7 @@ function updateCalendar(month, year = d.getFullYear()) {
     let startWeekDay = new Date(year, index, 1).getDay();
     let calendarContent = "";
 
-    calendarHeader.innerHTML = name + " " + year;
+    calendarHeader.innerHTML = dutchName + " " + year;
     calendarHeader.setAttribute("data-year", year);
 
     // Change Prev Button
@@ -307,15 +308,15 @@ function parseEvents(events) {
                 let title = events[i]['summary'];
                 let description = '';
 
-                if (events[i]['summary'].includes(' Reservering')) {
+                if (events[i]['summary'].includes('Reservering')) {
                     type = 'res';
-                    title = events[i]['summary'].split(' Reservering')[0];
-                } else if (events[i]['summary'].includes(' Optie')) {
+                    title = events[i]['summary'].split('Reservering')[0];
+                } else if (events[i]['summary'].includes('Optie')) {
                     type = 'option';
-                    title = events[i]['summary'].split(' Optie')[0];
+                    title = events[i]['summary'].split('Optie')[0];
                 } else if (events[i]['summary'].includes(' Event')) {
                     type = 'event';
-                    title = events[i]['summary'].split(' Event')[0];
+                    title = events[i]['summary'].split('Event')[0];
                     description = events[i]['description'];
                 } else if (events[i]['summary'] == 'Boomgaardcafé') {
                     type = 'boomgaardcafe';
@@ -437,6 +438,7 @@ getCalendar().then(calendar => {
     }
 
     events = events.flat();
+    console.log(events);
     parseEvents(events);
     updateCalendar(Object.keys(calendarEvents[d.getFullYear()])[d.getMonth()], d.getFullYear());
     showEvents();
