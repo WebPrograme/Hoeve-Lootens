@@ -88,7 +88,6 @@ function updateCalendar(month, year = d.getFullYear()) {
 // Show Events
 function showEvents() {
     const year = d.getFullYear();
-    console.log(calendarEvents[year]);
     const calendarCards = document.querySelector(".calendar-cards .cards");
     const eventMonths = Object.keys(calendarEvents[year]);
     var calendarCardsContent = ''
@@ -438,7 +437,6 @@ getCalendar().then(calendar => {
     }
 
     events = events.flat();
-    console.log(events);
     parseEvents(events);
     updateCalendar(Object.keys(calendarEvents[d.getFullYear()])[d.getMonth()], d.getFullYear());
     showEvents();
