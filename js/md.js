@@ -1,13 +1,7 @@
-const mdContent = `Boomgaardcafé
-
-IMAGE: BoomgaardcafeFlyer.jpeg
-
-TEXT: Zin in een instant vakantiegevoel? Kom dan op vrijdagavond na t werk & school naar onze Boomgaardcafé.
-Geniet met de voetjes in het gras van een heerlijk drankje en hapje. Ontspan en laat je bedienen door afwisselend vzw Hoeve Lootens, vzw Wondelgemse Paters en Landelijke Gilde Wondelgem.
-`;
-
 function parse(md) {
     let articles = md.split('==================================================');
+
+    if (articles.at(-1) === '' || articles.at(-1) === '\n') articles.pop();
     
     for (let i = 0; i < articles.length; i++) {
         let lines = articles[i].split('\n').filter(line => line.trim() !== '');
