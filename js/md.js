@@ -135,7 +135,7 @@ class AddContent {
     }
 
     VERBOUWING() {
-        const colors = ['Blue', 'Green', 'Rose', 'Brown', 'Yellow']
+        const colors = ['Blue', 'Brown', 'Rose', 'Yellow']
 
         let colorIndex = 0;
         let articles = this.articles;
