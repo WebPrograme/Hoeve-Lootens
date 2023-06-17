@@ -103,10 +103,9 @@ function addContent(articles) {
 }
 
 
-fetch('https://github.com/WebPrograme/Hoeve-Lootens/blob/d552408296f9b26efc13cdb8a7bba48700c9097d/HOME.md')
+fetch('https://raw.githubusercontent.com/WebPrograme/Hoeve-Lootens/master/HOME.md')
     .then(response => response.text())
     .then(text => {
         let parsed = parse(text);
-        console.log(parsed);
         addContent(parsed);
     });
