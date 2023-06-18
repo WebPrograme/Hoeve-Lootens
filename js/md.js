@@ -172,7 +172,7 @@ class AddContent {
 
 
 let path = window.location.pathname;
-let page = path.split("/").pop().split(".")[0];
+let page = path.split("/").pop().split(".")[0] || 'index';
 let file = fileIndex[page];
 
 fetch(`https://raw.githubusercontent.com/WebPrograme/Hoeve-Lootens/master/${file}.md`)
