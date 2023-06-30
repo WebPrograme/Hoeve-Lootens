@@ -277,15 +277,15 @@ function parseEvents(events) {
                 let title = events[i]['summary'];
                 let description = '';
 
-                if (events[i]['summary'].includes(' Reservering')) {
+                if (events[i]['summary'].includes('Reservering')) {
                     type = 'res';
-                    title = events[i]['summary'].split(' Reservering')[0];
-                } else if (events[i]['summary'].includes(' Optie')) {
+                    title = events[i]['summary'].split('Reservering')[0];
+                } else if (events[i]['summary'].includes('Optie')) {
                     type = 'option';
-                    title = events[i]['summary'].split(' Optie')[0];
-                } else if (events[i]['summary'].includes(' Event')) {
+                    title = events[i]['summary'].split('Optie')[0];
+                } else if (events[i]['summary'].includes('Event')) {
                     type = 'event';
-                    title = events[i]['summary'].split(' Event')[0];
+                    title = events[i]['summary'].split('Event')[0];
                     description = events[i]['description'];
                 } else if (events[i]['summary'] == 'Boomgaardcafé') {
                     type = 'boomgaardcafe';

@@ -469,7 +469,7 @@ nav a:hover {
     font-size: 40px;
     font-weight: bold;
     padding-inline: 10px;
-    margin-block: 5rem
+    margin-block: 3rem
 }
 
 section {
@@ -1377,11 +1377,14 @@ footer p {
     flex-wrap: wrap;
     margin-top: 50px;
     justify-content: center;
+    row-gap: 40px;
 }
 
 .cards img {
     width: 285px;
-    margin-top: 40px;
+    object-fit: cover;
+    object-position: 100% 30%;
+    aspect-ratio: 4/3;
 }
 
 /* RESERVEREN */
