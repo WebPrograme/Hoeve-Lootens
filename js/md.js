@@ -175,7 +175,11 @@ let path = window.location.pathname;
 let page = path.split("/").pop().split(".")[0] || 'index';
 let file = fileIndex[page];
 
-fetch(`https://raw.githubusercontent.com/WebPrograme/Hoeve-Lootens/master/MD/${file}.md`)
+fetch(`https://raw.githubusercontent.com/WebPrograme/Hoeve-Lootens/master/MD/${file}.md`, {
+    method: 'GET',
+    headers: {
+        'no-cache': 'true'
+    }})
     .then(response => response.text())
     .then(text => {
         let parsed = new Parse(text).parse(file);
