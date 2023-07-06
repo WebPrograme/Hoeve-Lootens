@@ -24,7 +24,7 @@ function getRandomIntInclusive(data, min, max) {
 function getRequest(target) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
+        xhr.open('GET', 'http://localhost:8081/api/v2/' + target, true);
         xhr.send();
         xhr.onload = function () {
             resolve(this);
@@ -69,6 +69,8 @@ function resetModal() {
     modal.querySelector('.btn-shop-submit').style.backgroundColor = '#FCC000';
     modal.querySelector('.btn-shop-submit').innerHTML = 'Inschrijven';
     modal.querySelector('.shop-success').style.display = 'none';
+    
+    document.querySelector('.shop-success-payconiq-qr').src = '';
 }
 
 // Get Available Events
@@ -362,13 +364,18 @@ if (window.location.pathname == '/pages/shop.html') {
                                     document.querySelector('.shop-success-overschrijving-price').innerHTML = '€' + dataEvent['Price'] * Amount;
                                     document.querySelector('.shop-success-overschrijving-code').innerHTML = UserCode;
                                 } else if (method == 'payconiq') {
+                                    let qrcodeImg = document.querySelector('.shop-success-payconiq-qr');
+                                    let phoneLink = document.querySelector('.shop-success-payconiq-mobile');
+                                    
+                                    qrcodeImg.src = '';
+                                    phoneLink.href = '';
+                                    document.querySelector('.shop-success-payconiq-timer').innerHTML = '';
+
                                     // Create Payconiq QR Code
                                     postRequest('payconiq', {Amount: dataEvent['Price'] * Amount, Ref: UserCode, Event: EventName}).then((res) => {
                                         if (res.status == 200) {
                                             let links = JSON.parse(res.response);
-                                            let qrcodeImg = document.querySelector('.shop-success-payconiq-qr');
-                                            let phoneLink = document.querySelector('.shop-success-payconiq-mobile');
-                                    
+
                                             // Open Payconiq App On Mobile
                                             if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
                                                 window.open(links['deeplink'], '_blank');
@@ -407,6 +414,42 @@ if (window.location.pathname == '/pages/shop.html') {
                     }
                 });
             }
+        });
+    });
+
+    // Get UserCode From Email
+    document.querySelector('.btn-submit-email').addEventListener('click', (e) => {
+        let BtnSubmit = e.target;
+        let BtnClose = document.querySelector('.btn-close-email');
+        let EmailInput = document.querySelector('.form-check-code').querySelector('[title="email"]');
+        let Email = EmailInput.value;
+        let UserCodeElement = document.querySelector('.UserCode');
+
+        if (Email == '') {
+            BtnSubmit.innerHTML = 'Vul alle velden in!';
+            BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
+            return;
+        }
+        
+        getRequest('get/email?email=' + Email).then((response) => {
+            if (response.response != 'User not found!' && response.response != '{}') {
+                const data = JSON.parse(response.response);
+                let result = '';
+                Object.keys(data).forEach((key) => {
+                    result += key + ' (' + data[key] + ')<br>';
+                });
+
+                UserCodeElement.innerHTML = result;
+
+                EmailInput.setAttribute('style', 'display: none !important;');
+                UserCodeElement.setAttribute('style', 'display: block !important;');
+                BtnSubmit.setAttribute('style', 'display: none !important;');
+                BtnClose.setAttribute('style', 'display: block !important;');
+                return;
+            }
+        
+            BtnSubmit.innerHTML = 'Email niet gevonden!';
+            BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
         });
     });
 }

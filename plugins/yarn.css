@@ -2293,6 +2293,7 @@ a {
 /* Modal */
 
 .modal {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -2308,7 +2309,7 @@ a {
 .modal-open {
     opacity: 1;
     visibility: visible;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out, display 0s 0.3s;
 }
 
 .modal-open .modal-content {
@@ -2398,10 +2399,11 @@ a {
     text-align: center;
     line-height: 40px;
     border-radius: .3rem;
+    transition: background-color 0.2s ease-in-out;
 }
 
 .modal-header i:hover {
-    background-color: var(--secondary-btn-bg);
+    background-color: var(--secondary-bg-color);
 }
 
 .modal-header h1 {

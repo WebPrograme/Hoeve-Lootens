@@ -184,4 +184,4 @@ fetch(`https://raw.githubusercontent.com/WebPrograme/Hoeve-Lootens/master/MD/${f
     .then(text => {
         let parsed = new Parse(text).parse(file);
         new AddContent(parsed, file);
-    });
+    })

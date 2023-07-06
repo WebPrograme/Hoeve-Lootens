@@ -3990,6 +3990,12 @@ document.querySelectorAll('.observer').forEach((el) => {
     observer.observe(el);
 });
 
+window.addEventListener('load', (e) => {
+    document.querySelectorAll('.modal').forEach((el) => {
+        el.style.display = 'block';
+    });
+});
+
 window.addEventListener('scroll', (e) => {
     if (window.innerWidth > 590) {
         let windowTop = window.pageYOffset;
