@@ -417,6 +417,11 @@ if (window.location.pathname == '/pages/shop.html') {
         });
     });
 
+    // Reload Page When Modal Is Closed (Safety Measure)
+    document.querySelector('#modal-signup .modal-close').addEventListener('click', () => {
+        window.location.reload();
+    });
+
     // Get UserCode From Email
     document.querySelector('.btn-submit-email').addEventListener('click', (e) => {
         let BtnSubmit = e.target;
