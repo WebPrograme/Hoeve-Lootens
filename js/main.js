@@ -1,5 +1,3 @@
-import { getAvailableEvents } from "./shop.js";
-
 // Update The Mobile Navigation
 function updateMobileNav() {
     let navLink = document.querySelector('.nav-link-projects');
@@ -17,6 +15,6 @@ updateMobileNav();
 window.addEventListener('resize', updateMobileNav);
 
 // Add Event Listener To Logo
-document.querySelector('.logo img').addEventListener('click', function() {
+document.querySelector('.logo img').addEventListener('click', function () {
     window.location.href = '/index.html';
 });

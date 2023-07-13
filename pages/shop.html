@@ -1,301 +1,330 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="discription" content="De maatschappelijke projecten van Hoeve Lootens" />
+		<title>Hoeve Lootens</title>
+		<link href="/plugins/yarn.css" rel="stylesheet" type="text/css" />
+		<link href="/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="/css/forum.css" rel="stylesheet" type="text/css" />
+		<link rel="icon" href="../images/page image transparent.png" />
+		<link
+			rel="stylesheet"
+			href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+			integrity="sha384-
+    50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+			crossorigin="anonymous"
+		/>
+	</head>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <meta name="discription" content="De maatschappelijke projecten van Hoeve Lootens">
-    <title>Hoeve Lootens</title>
-    <link href="/plugins/yarn.css" rel="stylesheet" type="text/css" />
-    <link href="/css/style.css" rel="stylesheet" type="text/css" />
-    <link href="/css/forum.css" rel="stylesheet" type="text/css" />
-	<link rel="icon" href="../images/page image transparent.png" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-
-    50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-</head>
+	<body>
+		<nav>
+			<h1 class="logo"><img src="../images/HoeveLootens_Logo_Wit.png" /></h1>
+			<input type="checkbox" id="hamburger-toggle" />
+			<label for="hamburger-toggle" class="hamburger">
+				<span class="bar"></span>
+			</label>
+			<ul class="nav-list">
+				<li><a href="../index.html">Home</a></li>
+				<li><a href="verbouwing.html">Verbouwingen</a></li>
+				<li><a href="kalender.html">Kalender</a></li>
+				<li><a href="reserveren.html">Reserveren</a></li>
+				<li><a href="maatschappelijk.html" class="nav-link-projects">Maatschappelijke projecten</a></li>
+				<li><a href="geschiedenis.html">Geschiedenis</a></li>
+				<li><a href="contact.html">Contact</a></li>
+			</ul>
+		</nav>
 
-<body>
-    <nav>
-        <h1 class="logo"><img src="../images/HoeveLootens_Logo_Wit.png"></h1>
-        <input type="checkbox" id="hamburger-toggle">
-        <label for="hamburger-toggle" class="hamburger">
-            <span class="bar"></span>
-        </label>
-        <ul class="nav-list">
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="verbouwing.html">Verbouwingen</a></li>
-            <li><a href="kalender.html">Kalender</a></li>
-            <li><a href="reserveren.html">Reserveren</a></li>
-            <li><a href="maatschappelijk.html" class="nav-link-projects">Maatschappelijke projecten</a></li>
-            <li><a href="geschiedenis.html">Geschiedenis</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
-    </nav>
+		<div class="modal" id="modal-signup">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title"></h1>
+					<a class="modal-close" data-close-modal="modal-signup">
+						<i class="fas fa-times"></i>
+					</a>
+				</div>
 
-    <div class="modal" id="modal-signup">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title"></h1>
-                <a class="modal-close" data-close-modal="modal-signup">
-                    <i class="fas fa-times"></i>
-                </a>
-            </div>
+				<div class="modal-body">
+					<div class="row shop-info">
+						<div class="col-4">
+							<img class="shop-image" src="" />
+						</div>
 
-            <div class="modal-body">
-                <div class="row shop-info">
-                    <div class="col-4">
-                        <img class="shop-image" src="">
-                    </div>
+						<div class="col-8">
+							<div class="shop-header">
+								<h2 class="shop-title"></h2>
+								<h2 class="shop-price"></h2>
+							</div>
+							<p class="shop-date"></p>
+							<p class="shop-description"></p>
+						</div>
+					</div>
 
-                    <div class="col-8">
-                        <div class="shop-header">
-                            <h2 class="shop-title"></h2>
-                            <h2 class="shop-price"></h2>
-                        </div>
-                        <p class="shop-date"></p>
-                        <p class="shop-description"></p>
-                    </div>
-                </div>
+					<div class="shop-form">
+						<div class="row justify-between input-group">
+							<div>
+								<label class="label" for="Voornaam">Voornaam</label>
+								<input type="text" class="input shop-input" placeholder="Voornaam" name="Voornaam" />
+							</div>
 
-                <div class="shop-form">
-                    <div class="row justify-between input-group">
-                        <div>
-                            <label class="label" for="Voornaam">Voornaam</label>
-                            <input type="text" class="input shop-input" placeholder="Voornaam" name="Voornaam">
-                        </div>
+							<div>
+								<label class="label" for="Achternaam">Achternaam</label>
+								<input type="text" class="input shop-input" placeholder="Achternaam" name="Achternaam" />
+							</div>
+						</div>
 
-                        <div>
-                            <label class="label" for="Achternaam">Achternaam</label>
-                            <input type="text" class="input shop-input" placeholder="Achternaam" name="Achternaam">
-                        </div>
-                    </div>
+						<div>
+							<label class="label" for="Adres">Adres</label>
+							<input type="text" class="input shop-input" placeholder="Adres" name="Adres" />
+						</div>
+						<div>
+							<label class="label" for="Email">Email</label>
+							<input type="text" class="input shop-input" placeholder="Email" name="Email" />
+						</div>
 
-                    <div>
-                        <label class="label" for="Adres">Adres</label>
-                        <input type="text" class="input shop-input" placeholder="Adres" name="Adres">
-                    </div>
-                    <div>
-                        <label class="label" for="Email">Email</label>
-                        <input type="text" class="input shop-input" placeholder="Email" name="Email">
-                    </div>
+						<div class="row justify-between input-group shop-persons-line">
+							<div>
+								<label class="label" for="Telefoonnummer">Telefoonnummer</label>
+								<input type="text" class="input shop-input" placeholder="Telefoonnummer" name="Telefoonnummer" />
+							</div>
 
-                    <div class="row justify-between input-group shop-persons-line">
-                        <div>
-                            <label class="label" for="Telefoonnummer">Telefoonnummer</label>
-                            <input type="text" class="input shop-input" placeholder="Telefoonnummer" name="Telefoonnummer">
-                        </div>
+							<div>
+								<label class="label" for="Personen">Aantal Personen</label>
+								<input type="number" class="input shop-input" placeholder="Aantal Personen" name="Personen" />
+							</div>
+						</div>
 
-                        <div>
-                            <label class="label" for="Personen">Aantal Personen</label>
-                            <input type="number" class="input shop-input" placeholder="Aantal Personen" name="Personen">
-                        </div>
-                    </div>
+						<div class="shop-form-options"></div>
+					</div>
 
-                    <div class="shop-form-options">
-                        
-                    </div>
-                </div>
+					<div class="shop-success shop-success-methods">
+						<h2 class="shop-success-title text-center">Kies een betaalmethode</h2>
+						<div class="row justify-between col-12 gap-sm pt-1">
+							<a
+								class="btn btn-secondary btn-secondary-sm btn-shop-method btn-shop-payconiq"
+								role="button"
+								data-method="payconiq"
+								>Payconiq</a
+							>
+							<a
+								class="btn btn-secondary btn-secondary-sm btn-shop-method btn-shop-overschrijving"
+								role="button"
+								data-method="overschrijving"
+								>Overschrijving</a
+							>
+						</div>
+					</div>
 
-                <div class="shop-success shop-success-methods">
-                    <h2 class="shop-success-title text-center">Kies een betaalmethode</h2>
-                    <div class="row justify-between col-12 gap-sm pt-1">
-                        <a class="btn btn-secondary btn-secondary-sm btn-shop-method btn-shop-payconiq" role="button" data-method="payconiq">Payconiq</a>
-                        <a class="btn btn-secondary btn-secondary-sm btn-shop-method btn-shop-overschrijving" role="button" data-method="overschrijving">Overschrijving</a>
-                    </div>
-                </div>
+					<div class="shop-success shop-success-overschrijving text-center">
+						<h2 class="shop-success-title">Bedankt voor uw inschrijving!</h2>
+						<p class="pt-1">
+							U kan betalen met een overschrijving van <span class="shop-success-overschrijving-price"></span> naar BE82 0689
+							4839 2568 met als beschrijving: <span class="shop-success-overschrijving-code"></span>
+						</p>
+					</div>
 
-                <div class="shop-success shop-success-overschrijving text-center">
-                    <h2 class="shop-success-title">Bedankt voor uw inschrijving!</h2>
-                    <p class="pt-1">U kan betalen met een overschrijving van <span class="shop-success-overschrijving-price"></span> naar BE82 0689 4839 2568 met als beschrijving: <span class="shop-success-overschrijving-code"></span></p>
-                </div>
+					<div class="shop-success shop-success-payconiq text-center">
+						<h2 class="shop-success-title">Bedankt voor uw inschrijving!</h2>
+						<p>U kan betalen met Payconiq door de QR-code te scannen:</p>
 
-                <div class="shop-success shop-success-payconiq text-center">
-                    <h2 class="shop-success-title">Bedankt voor uw inschrijving!</h2>
-                    <p>U kan betalen met Payconiq door de QR-code te scannen:</p>
+						<div class="text-center pt-1">
+							<img class="shop-success-payconiq-qr" src="" />
+						</div>
 
-                    <div class="text-center pt-1">
-                        <img class="shop-success-payconiq-qr" src="">
-                    </div>
+						<p class="shop-success-payconiq-timer"></p>
 
-                    <p class="shop-success-payconiq-timer"></p>
-                    
-                    <a class="shop-success-payconiq-mobile" href="#">Ik ben op mobiel</a>
-                </div>
-            </div>
+						<a class="shop-success-payconiq-mobile" href="#">Ik ben op mobiel</a>
+					</div>
+				</div>
 
-            <div class="modal-footer btn-stack">
-                <div class="flex justify-between w-full">
-                    <h2>Totaal</h2>
-                    <h2 class="shop-total">€0</h2>
-                </div>
-                <a class="btn btn-primary btn-primary-sm btn-shop-submit" role="button">INSCHRIJVEN</a>
-                
-                <i>Vragen of problemen? Stuur gerust een email naar yarne.gooris@gmail.com</i>
-            </div>
-        </div>
-    </div>
+				<div class="modal-footer btn-stack">
+					<div class="flex justify-between w-full">
+						<h2>Totaal</h2>
+						<h2 class="shop-total">€0</h2>
+					</div>
+					<a class="btn btn-primary btn-primary-sm btn-shop-submit" role="button">INSCHRIJVEN</a>
 
-    <div class="modal" id="emailToQRModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title">Geef uw email</h1>
-                <a class="modal-close" data-close-modal="emailToQRModal">
-                    <i class="fas fa-times"></i>
-                </a>
-            </div>
-
-            <div class="modal-body">
-                <p>Als u al bent ingeschreven maar nog niet hebt betaalt kunt u hieronder uw email gebruiken om een Payconiq QR-Code te krijgen.</p>
-                <form class="form-email-to-code">
-                    <input type="text" class="form-control form-email-to-code-input" placeholder="Email" title="email">
-                </form>
-            </div>
-
-            <div class="modal-footer btn-stack">
-                <a class="btn btn-primary btn-primary-sm btn-submit-email-code" role="button">GA DOOR</a>
-                <a class="btn btn-primary btn-primary-sm btn-close-email-code" role="button" data-target-modal="payconiq-modal">SLUITEN</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="modalUserCode">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title">Geef uw email</h1>
-                <a class="modal-close" data-close-modal="modalUserCode">
-                    <i class="fas fa-times"></i>
-                </a>
-            </div>
-
-            <div class="modal-body">
-                <form class="form-check-code">
-                    <input type="text" class="form-control form-check-code-email" placeholder="Email" title="email">
-                </form>
-
-                <h2 class="UserCode"></h2>
-            </div>
-
-            <div class="modal-footer btn-stack">
-                <a class="btn btn-primary btn-primary-sm btn-submit-email">CHECK CODE</a>
-                <a class="btn btn-primary btn-primary-sm btn-close-email modal-close" data-close-modal="modalUserCode">SLUITEN</a>
-            </div>
-        </div>
-    </div>
-
-    <main>
-        <div class="top-page">
-            <div>
-                <h1>Drieskesweekend 2023</h1>
-                <img class="maatschappelijk-vorm3" src="../images/Contact_Vormen3.png">
-        
-                <div class="text-center col-6 m-auto mt-2">
-                    <p>We zijn blij om opnieuw een jubileumeditie te kunnen organiseren. Voor onze 35 ste Drieskesfeesten
-                        vieren we 3 dagen feest! We voorzien activiteiten voor groot en klein. Kijk hieronder om het
-                        volledige programma te bekijken.</p>
-                    <div class="btn-row shop-btn-row">
-                        <a class="btn btn-primary btn-primary-sm btn-check-code shop-btn" role="button"  data-target-modal="modalUserCode" target="_blank">BETALINGSCODE VERGETEN?</a>
-                    </div>
-                    <i class="text-center">Vragen of problemen? Stuur gerust een email naar yarne.gooris@gmail.com</i>
-                </div>
-            </div>
-        </div>
-
-        <div class="shop-container col-10 flex m-inline-auto mt-3 mb-3 justify-center">
-
-        </div>
-
-        <div class="header">
-            <h1>Programma</h1>
-        </div>
-
-        <section class="container m-auto">
-            <div class="row">
-                <div class="col-6">
-                    <img src="/images/programma_vrijdag.png" alt="programma vrijdag" class="img-fluid">
-                </div>
-    
-                <div class="col-6">
-                    <p>Op vrijdag kan je vanaf 17u in onze sfeervolle boomgaard terecht voor een heuse After Work Party.
-                        Schud je heupen los met DJ DIRK STOOPS (gevestigde waarde op de Gentse Feesten en vele andere
-                        zomerfestivals), ambiance gegarandeerd! We zorgen dat je tegen democratische prijzen je honger en
-                        dorst kan stillen.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="container m-auto">
-            <div class="row flex-wrap-reverse">    
-                <div class="col-6">
-                    <p>Op zaterdag tussen 14u en 17u komt niemand minder dan 'De KetnetBand' de kinderen entertainen
-                        met een leuk programma. Zing, dans en feest mee.</p>
-    
-                    <p>Wie zijn kennis over Wondelgem en andere actuele thema's wil testen, kan zich inschrijven voor onze
-                        alom bekende DrieskesQuiz op zaterdagavond. Vanaf 19u30 kan je een tafeltje komen kiezen, om
-                        20u start de quiz. Een ploeg bestaat uit 4 personen en je betaalt € 20 per ploeg.</p>
-                </div>
-
-                <div class="col-6">
-                    <img src="/images/programma_zaterdag.png" alt="programma zaterdag" class="img-fluid">
-                </div>
-            </div>
-        </section>
-
-        <section class="container m-auto mb-5">
-            <div class="row">
-                <div class="col-6">
-                    <img src="/images/programma_zondag.png" alt="programma zondag" class="img-fluid">
-                </div>
-
-                <div class="col-6">
-    
-                    <p>Aan het programma van zondag hebben we niet veel gesleuteld.</p>
-    
-                    <p>Om 10u starten we met de openluchtmis opgeluisterd door het gospelkoor Coeur Immaculé de
-                        Marie, gevolgd door een lekker glaasje tijdens het aperitiefconcert. Tussen 12u en 14u kan je smullen
-                        van onze traditionele Hoevebarbecue. In de namiddag is er animatie voor jong en oud en kan je
-                        smullen van ons dessertenbuffet, ijsjes en pannenkoeken. Uiteraard zijn er naast ons Octaafke en
-                        Maria's appelsap allerlei dranken te verkrijgen tegen democratische prijzen. Onze unieke en ludieke
-                        wedstrijd 'eierwerpen' mag uiteraard niet ontbreken en start om 17u30. 's Avonds (19u) sluiten we
-                        onze feesteditie af met een knallend optreden van Mutse.</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-	<footer>
-		<div class="footer-first">
-			<div class="footer-adres">
-				<p class="footer-bold">Hoeve Lootens VZW</p>
-				<p>Vroonstalledries 66</p>
-				<p>9032 Wondelgem</p>
-			</div>
-
-			<div class="footer-bank">
-				<p>BE 0475 328 308</p>
-				<p>RPR Gent</p>
+					<i>Vragen of problemen? Stuur gerust een email naar yarne.gooris@gmail.com</i>
+				</div>
 			</div>
 		</div>
 
-		<div class="footer-social">
-			<p>En vergeet ons zeker niet te volgen!</p>
-			<div style="display: flex">
-				<a href="https://www.facebook.com/HOEVELOOTENS" target="_blank"><i class="fab fa-facebook-f"></i></a>
-				<a href="https://www.instagram.com/hoevelootens/?hl=nl" target="_blank"><i
-						class="fab fa-instagram"></i></a>
+		<div class="modal" id="emailToQRModal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title">Geef uw email</h1>
+					<a class="modal-close" data-close-modal="emailToQRModal">
+						<i class="fas fa-times"></i>
+					</a>
+				</div>
+
+				<div class="modal-body">
+					<p>
+						Als u al bent ingeschreven maar nog niet hebt betaalt kunt u hieronder uw email gebruiken om een Payconiq QR-Code te
+						krijgen.
+					</p>
+					<form class="form-email-to-code">
+						<input type="text" class="form-control form-email-to-code-input" placeholder="Email" title="email" />
+					</form>
+				</div>
+
+				<div class="modal-footer btn-stack">
+					<a class="btn btn-primary btn-primary-sm btn-submit-email-code" role="button">GA DOOR</a>
+					<a class="btn btn-primary btn-primary-sm btn-close-email-code" role="button" data-target-modal="payconiq-modal"
+						>SLUITEN</a
+					>
+				</div>
 			</div>
 		</div>
-	</footer>
-	<div class="footer-acteur">
-		<p>Deze website is gemaakt door <a href="https://yarnegooris.netlify.app" target="_blank">Yarne Gooris</a></p>
-	</div>
 
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.7.2/angular-translate.js'></script>
-    <script src="https://kit.fontawesome.com/62dc937956.js" crossorigin="anonymous"></script>
-    <script src="/js/shop.js" type="module"></script>
-    <script src="/plugins/yarn.js"></script>
-    <script src="/js/main.js" type="module"></script>
-</body>
+		<div class="modal" id="modalUserCode">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title">Geef uw email</h1>
+					<a class="modal-close" data-close-modal="modalUserCode">
+						<i class="fas fa-times"></i>
+					</a>
+				</div>
 
+				<div class="modal-body">
+					<form class="form-check-code">
+						<input type="text" class="form-control form-check-code-email" placeholder="Email" title="email" />
+					</form>
+
+					<h2 class="UserCode"></h2>
+				</div>
+
+				<div class="modal-footer btn-stack">
+					<a class="btn btn-primary btn-primary-sm btn-submit-email">CHECK CODE</a>
+					<a class="btn btn-primary btn-primary-sm btn-close-email modal-close" data-close-modal="modalUserCode">SLUITEN</a>
+				</div>
+			</div>
+		</div>
+
+		<main>
+			<div class="top-page">
+				<div>
+					<h1>Drieskesweekend 2023</h1>
+					<img class="maatschappelijk-vorm3" src="../images/Contact_Vormen3.png" />
+
+					<div class="text-center col-6 m-auto mt-2">
+						<p>
+							We zijn blij om opnieuw een jubileumeditie te kunnen organiseren. Voor onze 35 ste Drieskesfeesten vieren we 3
+							dagen feest! We voorzien activiteiten voor groot en klein. Kijk hieronder om het volledige programma te
+							bekijken.
+						</p>
+						<div class="btn-row shop-btn-row">
+							<a
+								class="btn btn-primary btn-primary-sm btn-check-code shop-btn"
+								role="button"
+								data-target-modal="modalUserCode"
+								target="_blank"
+								>BETALINGSCODE VERGETEN?</a
+							>
+						</div>
+						<i class="text-center">Vragen of problemen? Stuur gerust een email naar yarne.gooris@gmail.com</i>
+					</div>
+				</div>
+			</div>
+
+			<div class="shop-container col-10 flex m-inline-auto mt-3 mb-3 justify-center"></div>
+
+			<div class="header">
+				<h1>Programma</h1>
+			</div>
+
+			<section class="container m-auto">
+				<div class="row">
+					<div class="col-6">
+						<img src="/images/programma_vrijdag.png" alt="programma vrijdag" class="img-fluid" />
+					</div>
+
+					<div class="col-6">
+						<p>
+							Op vrijdag kan je vanaf 17u in onze sfeervolle boomgaard terecht voor een heuse After Work Party. Schud je
+							heupen los met DJ DIRK STOOPS (gevestigde waarde op de Gentse Feesten en vele andere zomerfestivals), ambiance
+							gegarandeerd! We zorgen dat je tegen democratische prijzen je honger en dorst kan stillen.
+						</p>
+					</div>
+				</div>
+			</section>
+
+			<section class="container m-auto">
+				<div class="row flex-wrap-reverse">
+					<div class="col-6">
+						<p>
+							Op zaterdag tussen 14u en 17u komt niemand minder dan 'De KetnetBand' de kinderen entertainen met een leuk
+							programma. Zing, dans en feest mee.
+						</p>
+
+						<p>
+							Wie zijn kennis over Wondelgem en andere actuele thema's wil testen, kan zich inschrijven voor onze alom bekende
+							DrieskesQuiz op zaterdagavond. Vanaf 19u30 kan je een tafeltje komen kiezen, om 20u start de quiz. Een ploeg
+							bestaat uit 4 personen en je betaalt € 20 per ploeg.
+						</p>
+					</div>
+
+					<div class="col-6">
+						<img src="/images/programma_zaterdag.png" alt="programma zaterdag" class="img-fluid" />
+					</div>
+				</div>
+			</section>
+
+			<section class="container m-auto mb-5">
+				<div class="row">
+					<div class="col-6">
+						<img src="/images/programma_zondag.png" alt="programma zondag" class="img-fluid" />
+					</div>
+
+					<div class="col-6">
+						<p>Aan het programma van zondag hebben we niet veel gesleuteld.</p>
+
+						<p>
+							Om 10u starten we met de openluchtmis opgeluisterd door het gospelkoor Coeur Immaculé de Marie, gevolgd door een
+							lekker glaasje tijdens het aperitiefconcert. Tussen 12u en 14u kan je smullen van onze traditionele
+							Hoevebarbecue. In de namiddag is er animatie voor jong en oud en kan je smullen van ons dessertenbuffet, ijsjes
+							en pannenkoeken. Uiteraard zijn er naast ons Octaafke en Maria's appelsap allerlei dranken te verkrijgen tegen
+							democratische prijzen. Onze unieke en ludieke wedstrijd 'eierwerpen' mag uiteraard niet ontbreken en start om
+							17u30. 's Avonds (19u) sluiten we onze feesteditie af met een knallend optreden van Mutse.
+						</p>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<footer>
+			<div class="footer-first">
+				<div class="footer-adres">
+					<p class="footer-bold">Hoeve Lootens VZW</p>
+					<p>Vroonstalledries 66</p>
+					<p>9032 Wondelgem</p>
+				</div>
+
+				<div class="footer-bank">
+					<p>BE 0475 328 308</p>
+					<p>RPR Gent</p>
+				</div>
+			</div>
+
+			<div class="footer-social">
+				<p>En vergeet ons zeker niet te volgen!</p>
+				<div style="display: flex">
+					<a href="https://www.facebook.com/HOEVELOOTENS" target="_blank"><i class="fab fa-facebook-f"></i></a>
+					<a href="https://www.instagram.com/hoevelootens/?hl=nl" target="_blank"><i class="fab fa-instagram"></i></a>
+				</div>
+			</div>
+		</footer>
+		<div class="footer-acteur">
+			<p>Deze website is gemaakt door <a href="https://yarnegooris.netlify.app" target="_blank">Yarne Gooris</a></p>
+		</div>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.7.2/angular-translate.js"></script>
+		<script src="https://kit.fontawesome.com/62dc937956.js" crossorigin="anonymous"></script>
+		<script src="/js/shop.js" type="module"></script>
+		<script src="/plugins/yarn.js"></script>
+		<script src="/js/main.js" type="module"></script>
+	</body>
 </html>

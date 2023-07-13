@@ -1,198 +1,215 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="discription" content="De maatschappelijke projecten van Hoeve Lootens" />
+		<title>Hoeve Lootens</title>
+		<link href="/plugins/yarn.css" rel="stylesheet" type="text/css" />
+		<link href="/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="/css/forum.css" rel="stylesheet" type="text/css" />
+		<link rel="icon" href="../images/page image transparent.png" />
+		<link
+			rel="stylesheet"
+			href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+			integrity="sha384-
+    50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+			crossorigin="anonymous"
+		/>
+	</head>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <meta name="discription" content="De maatschappelijke projecten van Hoeve Lootens">
-    <title>Hoeve Lootens</title>
-    <link href="/plugins/yarn.css" rel="stylesheet" type="text/css" />
-    <link href="/css/style.css" rel="stylesheet" type="text/css" />
-    <link href="/css/forum.css" rel="stylesheet" type="text/css" />
-	<link rel="icon" href="../images/page image transparent.png" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-
-    50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-</head>
+	<body>
+		<nav>
+			<h1 class="logo"><img src="../images/HoeveLootens_Logo_Wit.png" /></h1>
+			<input type="checkbox" id="hamburger-toggle" />
+			<label for="hamburger-toggle" class="hamburger">
+				<span class="bar"></span>
+			</label>
+			<ul class="nav-list">
+				<li><a href="../index.html">Home</a></li>
+				<li><a href="verbouwing.html">Verbouwingen</a></li>
+				<li><a href="kalender.html">Kalender</a></li>
+				<li><a href="reserveren.html">Reserveren</a></li>
+				<li><a href="maatschappelijk.html" class="nav-link-projects">Maatschappelijke projecten</a></li>
+				<li><a href="geschiedenis.html">Geschiedenis</a></li>
+				<li><a href="contact.html">Contact</a></li>
+			</ul>
+		</nav>
 
-<body>
-    <nav>
-        <h1 class="logo"><img src="../images/HoeveLootens_Logo_Wit.png"></h1>
-        <input type="checkbox" id="hamburger-toggle">
-        <label for="hamburger-toggle" class="hamburger">
-            <span class="bar"></span>
-        </label>
-        <ul class="nav-list">
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="verbouwing.html">Verbouwingen</a></li>
-            <li><a href="kalender.html">Kalender</a></li>
-            <li><a href="reserveren.html">Reserveren</a></li>
-            <li><a href="maatschappelijk.html" class="nav-link-projects">Maatschappelijke projecten</a></li>
-            <li><a href="geschiedenis.html">Geschiedenis</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
-    </nav>
+		<div class="modal" id="modalUserCode">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title">Geef uw email</h1>
+					<a class="modal-close" data-close-modal="modalUserCode">
+						<i class="fas fa-times"></i>
+					</a>
+				</div>
 
-    <div class="modal" id="modalUserCode">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title">Geef uw email</h1>
-                <a class="modal-close" data-close-modal="modalUserCode">
-                    <i class="fas fa-times"></i>
-                </a>
-            </div>
+				<div class="modal-body">
+					<form class="form-check-code">
+						<input type="text" class="form-control form-check-code-email" placeholder="Email" title="email" />
+					</form>
 
-            <div class="modal-body">
-                <form class="form-check-code">
-                    <input type="text" class="form-control form-check-code-email" placeholder="Email" title="email">
-                </form>
+					<h2 class="UserCode"></h2>
+				</div>
 
-                <h2 class="UserCode"></h2>
-            </div>
-
-            <div class="modal-footer btn-stack">
-                <a class="btn btn-primary btn-primary-sm btn-submit-email" role="button">CHECK CODE</a>
-                <a class="btn btn-primary btn-primary-sm btn-close-email" role="button" data-bs-dismiss="modal">SLUITEN</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="emailToQRModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title">Geef uw email</h1>
-                <a class="modal-close" data-close-modal="emailToQRModal">
-                    <i class="fas fa-times"></i>
-                </a>
-            </div>
-
-            <div class="modal-body">
-                <p>Als u al bent ingeschreven maar nog niet hebt betaalt kunt u hieronder uw email gebruiken om een Payconiq QR-Code te krijgen.</p>
-                <form class="form-email-to-code">
-                    <input type="text" class="form-control form-email-to-code-input" placeholder="Email" title="email">
-                </form>
-            </div>
-
-            <div class="modal-footer btn-stack">
-                <a class="btn btn-primary btn-primary-sm btn-submit-email-code" role="button">GA DOOR</a>
-                <a class="btn btn-primary btn-primary-sm btn-close-email-code" role="button" data-target-modal="payconiq-modal">SLUITEN</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="payconiq-modal modal modal-s" aria-hidden="true" id="payconiq-modal">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <a class="modal-close btn-close" data-close-modal="emailToQRModal">
-                    <i class="fas fa-times"></i>
-                </a>
-                <div class="modal-body">
-                    <h3>Scan en betaal met Payconiq van Bancontact</h3>
-                    <div class="payconiq-modal-img">
-                        <img src="../images/payconiq.png" alt="Payconiq" data-bs-toggle="modal" data-bs-target="#payconiq-modal">
-                    </div>
-                    <h3 class="payconiq-price"></h3>
-
-                    <img class="payconiq-qrcode" src="" alt="Payconiq QR Code">
-
-                    <a class="payconiq-link" href="" target="_blank">Ik ben op een mobiel</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    
-    <div class="top-page">
-        <div>
-            <h1 class="signup-header"></h1>
-            <img class="maatschappelijk-vorm3" src="../images/Contact_Vormen3.png">
-            
-            <div class="text-center col-6 m-auto mt-2">
-                <p class="signup-description"></p>
-
-                <div class="btn-row">
-                    <a class="btn btn-primary btn-primary-sm btn-check-code shop-btn" role="button"  data-target-modal="modalUserCode" target="_blank">BETALINGSCODE VERGETEN?</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <section class="container m-auto mb-5">
-        <div class="row">
-            <div class="col-6">
-                <h4 class="section-header signup-subheader">Inschrijven</h4>
-                <span class="signup-count"></span>
-                            
-                <form class="form-signup">
-                    <p><span>Persoonlijke info</span></p>
-                    <div class="row">
-                        <input type="text" class="form-control" placeholder="Voornaam" title="firstname">
-                        <input type="text" class="form-control" placeholder="Achternaam" title="lastname">
-                    </div>
-
-                    <input type="text" class="form-control" placeholder="Adres" title="address">
-                    <input type="email" class="form-control" placeholder="Email" title="email">
-                    <input type="tel" class="form-control" placeholder="Telefoonnummer" title="phone">
-                    
-                    <div class="form-footer">
-                        <p><span>Totaal</span> <span class="label-discription form-total">€0</span></p>
-                        <a class="btn btn-primary btn-primary-sm btn-submit" role="button">INSCHRIJVEN</a>
-                    </div>
-
-                    <i>Vragen of problemen? Stuur gerust een email naar yarne.gooris@gmail.com</i>
-                </form>
-
-                <form class="form-success text-center">
-                    <h2 class="subheading">Success!</h2>
-                    <p><span>Uw inschrijving is succesvol geregistreerd.  Betalen kan via overschrijving, op rekeningnummer BE82 0689 4839 2568 met als mededeling:</span></p>
-                    <p><span>Uw code:</span></p>
-                    <h2 class="UserCodeResult"></h2>
-                    <p><span>Of via Payconiq klik op het logo:</span></p>
-                    <div class="payconiq-img">
-                        <img src="../images/payconiq.png" alt="Payconiq" data-target-modal="payconiq-modal" >
-                    </div>
-                </form>
-            </div>
-            
-            <div class="col-6">
-                <img src="/images/activiteiten.png" alt="">
-            </div>
-        </div>
-    </section>
-
-	<footer>
-		<div class="footer-first">
-			<div class="footer-adres">
-				<p class="footer-bold">Hoeve Lootens VZW</p>
-				<p>Vroonstalledries 66</p>
-				<p>9032 Wondelgem</p>
-			</div>
-
-			<div class="footer-bank">
-				<p>BE 0475 328 308</p>
-				<p>RPR Gent</p>
+				<div class="modal-footer btn-stack">
+					<a class="btn btn-primary btn-primary-sm btn-submit-email" role="button">CHECK CODE</a>
+					<a class="btn btn-primary btn-primary-sm btn-close-email" role="button" data-bs-dismiss="modal">SLUITEN</a>
+				</div>
 			</div>
 		</div>
 
-		<div class="footer-social">
-			<p>En vergeet ons zeker niet te volgen!</p>
-			<div style="display: flex">
-				<a href="https://www.facebook.com/HOEVELOOTENS" target="_blank"><i class="fab fa-facebook-f"></i></a>
-				<a href="https://www.instagram.com/hoevelootens/?hl=nl" target="_blank"><i
-						class="fab fa-instagram"></i></a>
+		<div class="modal" id="emailToQRModal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title">Geef uw email</h1>
+					<a class="modal-close" data-close-modal="emailToQRModal">
+						<i class="fas fa-times"></i>
+					</a>
+				</div>
+
+				<div class="modal-body">
+					<p>
+						Als u al bent ingeschreven maar nog niet hebt betaalt kunt u hieronder uw email gebruiken om een Payconiq QR-Code te
+						krijgen.
+					</p>
+					<form class="form-email-to-code">
+						<input type="text" class="form-control form-email-to-code-input" placeholder="Email" title="email" />
+					</form>
+				</div>
+
+				<div class="modal-footer btn-stack">
+					<a class="btn btn-primary btn-primary-sm btn-submit-email-code" role="button">GA DOOR</a>
+					<a class="btn btn-primary btn-primary-sm btn-close-email-code" role="button" data-target-modal="payconiq-modal"
+						>SLUITEN</a
+					>
+				</div>
 			</div>
 		</div>
-	</footer>
-	<div class="footer-acteur">
-		<p>Deze website is gemaakt door <a href="https://yarnegooris.netlify.app" target="_blank">Yarne Gooris</a></p>
-	</div>
 
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.7.2/angular-translate.js'></script>
-    <script src="https://kit.fontawesome.com/62dc937956.js" crossorigin="anonymous"></script>
-    <script src="/plugins/yarn.js"></script>
-    <script src="/js/signup.js" type="module"></script>
-    <script src="/js/main.js" type="module"></script>
-</body>
+		<div class="payconiq-modal modal modal-s" aria-hidden="true" id="payconiq-modal">
+			<div class="modal-dialog modal-dialog-scrollable">
+				<div class="modal-content">
+					<a class="modal-close btn-close" data-close-modal="emailToQRModal">
+						<i class="fas fa-times"></i>
+					</a>
+					<div class="modal-body">
+						<h3>Scan en betaal met Payconiq van Bancontact</h3>
+						<div class="payconiq-modal-img">
+							<img src="../images/payconiq.png" alt="Payconiq" data-bs-toggle="modal" data-bs-target="#payconiq-modal" />
+						</div>
+						<h3 class="payconiq-price"></h3>
 
+						<img class="payconiq-qrcode" src="" alt="Payconiq QR Code" />
+
+						<a class="payconiq-link" href="" target="_blank">Ik ben op een mobiel</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="top-page">
+			<div>
+				<h1 class="signup-header"></h1>
+				<img class="maatschappelijk-vorm3" src="../images/Contact_Vormen3.png" />
+
+				<div class="text-center col-6 m-auto mt-2">
+					<p class="signup-description"></p>
+
+					<div class="btn-row">
+						<a
+							class="btn btn-primary btn-primary-sm btn-check-code shop-btn"
+							role="button"
+							data-target-modal="modalUserCode"
+							target="_blank"
+							>BETALINGSCODE VERGETEN?</a
+						>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<section class="container m-auto mb-5">
+			<div class="row">
+				<div class="col-6">
+					<h4 class="section-header signup-subheader">Inschrijven</h4>
+					<span class="signup-count"></span>
+
+					<form class="form-signup">
+						<p><span>Persoonlijke info</span></p>
+						<div class="row">
+							<input type="text" class="form-control" placeholder="Voornaam" title="firstname" />
+							<input type="text" class="form-control" placeholder="Achternaam" title="lastname" />
+						</div>
+
+						<input type="text" class="form-control" placeholder="Adres" title="address" />
+						<input type="email" class="form-control" placeholder="Email" title="email" />
+						<input type="tel" class="form-control" placeholder="Telefoonnummer" title="phone" />
+
+						<div class="form-footer">
+							<p><span>Totaal</span> <span class="label-discription form-total">€0</span></p>
+							<a class="btn btn-primary btn-primary-sm btn-submit" role="button">INSCHRIJVEN</a>
+						</div>
+
+						<i>Vragen of problemen? Stuur gerust een email naar yarne.gooris@gmail.com</i>
+					</form>
+
+					<form class="form-success text-center">
+						<h2 class="subheading">Success!</h2>
+						<p>
+							<span
+								>Uw inschrijving is succesvol geregistreerd. Betalen kan via overschrijving, op rekeningnummer BE82 0689
+								4839 2568 met als mededeling:</span
+							>
+						</p>
+						<p><span>Uw code:</span></p>
+						<h2 class="UserCodeResult"></h2>
+						<p><span>Of via Payconiq klik op het logo:</span></p>
+						<div class="payconiq-img">
+							<img src="../images/payconiq.png" alt="Payconiq" data-target-modal="payconiq-modal" />
+						</div>
+					</form>
+				</div>
+
+				<div class="col-6">
+					<img src="/images/activiteiten.png" alt="" />
+				</div>
+			</div>
+		</section>
+
+		<footer>
+			<div class="footer-first">
+				<div class="footer-adres">
+					<p class="footer-bold">Hoeve Lootens VZW</p>
+					<p>Vroonstalledries 66</p>
+					<p>9032 Wondelgem</p>
+				</div>
+
+				<div class="footer-bank">
+					<p>BE 0475 328 308</p>
+					<p>RPR Gent</p>
+				</div>
+			</div>
+
+			<div class="footer-social">
+				<p>En vergeet ons zeker niet te volgen!</p>
+				<div style="display: flex">
+					<a href="https://www.facebook.com/HOEVELOOTENS" target="_blank"><i class="fab fa-facebook-f"></i></a>
+					<a href="https://www.instagram.com/hoevelootens/?hl=nl" target="_blank"><i class="fab fa-instagram"></i></a>
+				</div>
+			</div>
+		</footer>
+		<div class="footer-acteur">
+			<p>Deze website is gemaakt door <a href="https://yarnegooris.netlify.app" target="_blank">Yarne Gooris</a></p>
+		</div>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.7.2/angular-translate.js"></script>
+		<script src="https://kit.fontawesome.com/62dc937956.js" crossorigin="anonymous"></script>
+		<script src="/plugins/yarn.js"></script>
+		<script src="/js/signup.js" type="module"></script>
+		<script src="/js/main.js" type="module"></script>
+	</body>
 </html>

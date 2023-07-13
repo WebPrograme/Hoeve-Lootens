@@ -8,33 +8,55 @@
 }
 
 .volunteers-table {
+    position: relative;
     margin-bottom: 5rem;
 }
 
 .volunteers-table thead tr th {
     font-weight: 600;
     text-align: center;
+    border-bottom: 2px solid #999;
 }
 
 .volunteers-table thead tr th:first-child {
     text-align: left;
 }
 
-.volunteers-table tbody tr td {
-    min-width: 6rem;
-    max-width: 6rem;
+.volunteers-table tbody tr td:not(:first-child) {
+    min-width: 7rem;
+    max-width: 7rem;
     height: 25px;
     text-align: center;
+    transition: border-top 0.2s ease-in-out;
 }
 
 .volunteers-table tbody tr td:first-child {
-    width: 20%;
+    width: 1%;
     text-align: left;
     font-weight: 600;
     white-space: nowrap;
+    transform: translateY(-50%);
+    background: linear-gradient(90deg, #fff 60%, transparent 50%);
+    color: #999;
+    transition: scale 0.2s ease-in-out, color 0.2s ease-in-out, border-top 0.2s ease-in-out;
 }
 
-.volunteers-table tbody tr td > div {
+.volunteers-table tbody tr td:first-child:hover {
+    translate: (0, -50%);
+    scale: 1.1;
+    border-top: 1px solid #999;
+    color: #000;
+}
+
+.volunteers-table tbody tr td:first-child:hover~td {
+    border-top: 1px solid #999;
+}
+
+.volunteers-table tbody tr:first-child td:first-child:first-of-type {
+    display: none;
+}
+
+.volunteers-table tbody tr td>div {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -42,21 +64,21 @@
     justify-content: center;
     width: 100%;
     min-height: 50px;
-    border-radius: .5rem;
-    font-family: 'inter', sans-serif;
+    border-radius: 0.5rem;
+    font-family: "inter", sans-serif;
     font-size: 1.2rem;
     font-weight: 600;
     color: #fff;
 }
 
 .volunteers-table-full {
-    background-color: #EE7357;
+    background-color: #ee7357;
     height: -webkit-fill-available;
 }
 
 .volunteers-table-spots {
     justify-content: space-between !important;
-    background-color: #FCC000;
+    background-color: #fcc000;
     height: -webkit-fill-available;
     padding: 1rem;
 }
@@ -64,7 +86,7 @@
 .volunteers-table-signup {
     height: -webkit-fill-available;
     background-color: rgb(204, 204, 209);
-    transition: background-color .2s ease-in-out;
+    transition: background-color 0.2s ease-in-out;
     cursor: pointer;
 }
 
@@ -73,11 +95,11 @@
 }
 
 .volunteers-table-signup-selected {
-    background-color: #4A7D44;
+    background-color: #4a7d44;
 }
 
 .volunteers-table-signup-selected:hover {
-    background-color: #3A6D34;
+    background-color: #3a6d34;
 }
 
 .volunteers-table-signup-overlap:hover {
@@ -92,18 +114,18 @@
     left: 50%;
     min-width: 25rem;
     max-width: 90%;
-    background-color: #4A7D44;
-    border-color: #4A7D44;
-    border-radius: .5rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+    background-color: #4a7d44;
+    border-color: #4a7d44;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     z-index: 100;
     transform: translateX(-50%);
 }
 
 .volunteers-signup-add-btn:hover {
     opacity: 1;
-    background-color: #3A6D34;
-    border-color: #3A6D34;
+    background-color: #3a6d34;
+    border-color: #3a6d34;
 }
 
 .volunteers-modal-footer {
@@ -116,7 +138,7 @@
 
 .modal-footer .btn {
     width: 100%;
-    border-radius: .25rem;
+    border-radius: 0.25rem;
 }
 
 label {
@@ -129,20 +151,20 @@ label {
 }
 
 .volunteers-options-event {
-    margin-bottom: .5rem !important;
+    margin-bottom: 0.5rem !important;
 }
 
 .volunteers-options-shifts {
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: 0.5rem;
 }
 
 .volunteers-options-shifts-task {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: .5rem;
+    gap: 0.5rem;
 }
 
 .volunteers-options-shifts-task-title {
@@ -151,13 +173,13 @@ label {
 
 .volunteers-options-shifts-time {
     color: #fff !important;
-    background-color: #4A7D44;
-    border-radius: .5rem;
-    padding: .4rem .7rem;
+    background-color: #4a7d44;
+    border-radius: 0.5rem;
+    padding: 0.4rem 0.7rem;
 }
 
 .volunteers-signup-points {
-    color: #4A7D44;
+    color: #4a7d44;
 }
 
 .volunteers-signup-account {
@@ -171,8 +193,8 @@ label {
     padding: 1rem 1.2rem;
     border: 1px solid rgb(185, 185, 190);
     background-color: transparent;
-    border-radius: .5rem;
-    transition: background-color .2s ease-in-out;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s ease-in-out;
     cursor: pointer;
 }
 
@@ -185,7 +207,8 @@ label {
     color: rgb(185, 185, 190);
 }
 
-.volunteers-signup-account-user h3, .volunteers-signup-account-user p {
+.volunteers-signup-account-user h3,
+.volunteers-signup-account-user p {
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;

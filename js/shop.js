@@ -8,7 +8,7 @@ function getRandomIntInclusive(data, min, max) {
     for (var i = 0; i < data.length; i++) {
         UserCodes.push(data[i].UserCode);
     }
-    
+
     min = Math.ceil(min);
     max = Math.floor(max);
 
@@ -69,7 +69,7 @@ function resetModal() {
     modal.querySelector('.btn-shop-submit').style.backgroundColor = '#FCC000';
     modal.querySelector('.btn-shop-submit').innerHTML = 'Inschrijven';
     modal.querySelector('.shop-success').style.display = 'none';
-    
+
     document.querySelector('.shop-success-payconiq-qr').src = '';
 }
 
@@ -116,7 +116,7 @@ if (window.location.pathname == '/pages/shop.html') {
                 let now = new Date();
                 let start = data[key]['Start Date'] != undefined ? new Date(data[key]['Start Date']) : null;
                 let end = data[key]['End Date'] != undefined ? new Date(data[key]['End Date']) : null;
-                
+
                 // Check if Event can be shown
                 if (start != null && now < start) return;
                 if (end != null && now > end) return;
@@ -135,7 +135,7 @@ if (window.location.pathname == '/pages/shop.html') {
                             <p class="status">` + data[key]['Date'] + `</p>
                             <a class="btn btn-primary btn-primary-sm btn-shop-add" data-value="` + key + `" data-target-modal="modal-signup">Schrijf in</a>
                         `;
-                    
+
                         card.classList.add('shop-card');
                         shop.appendChild(card);
                     } else if (data[key]['Type'] == 'Food') { // Unique for Food
@@ -159,13 +159,13 @@ if (window.location.pathname == '/pages/shop.html') {
                             <p class="status">` + data[key]['Date'] + `</p>
                             <a class="btn btn-secondary btn-secondary-sm btn-shop-add">Volzet!</a>
                         `;
-                    
+
                         card.classList.add('shop-card');
                         shop.appendChild(card);
                     }
                 }
             });
-                    
+
             if (cardFood != undefined) {
                 cardFood.classList.add('shop-card');
                 shop.appendChild(cardFood);
@@ -187,7 +187,7 @@ if (window.location.pathname == '/pages/shop.html') {
                     modal.querySelector('.shop-description').innerHTML = data[e.target.getAttribute('data-value')]['Description'];
                     modal.querySelector('.btn-shop-submit').setAttribute('data-value', e.target.getAttribute('data-value'));
                     modal.querySelector('.shop-form-options').innerHTML = '';
-            
+
                     if (data[e.target.getAttribute('data-value')]['Type'] == 'Quiz') {
                         // Show Custom Options for Quiz
                         if (modal.querySelector('.shop-input[name="Personen"]') != undefined) {
@@ -204,7 +204,7 @@ if (window.location.pathname == '/pages/shop.html') {
 
                             let input = document.createElement('input');
                             input.classList.add('shop-input', 'input');
-                            
+
                             if (typeof data[e.target.getAttribute('data-value')]['Options'][key] === 'string') {
                                 input.setAttribute('type', 'text');
                             } else if (typeof data[e.target.getAttribute('data-value')]['Options'][key] === 'number') {
@@ -242,10 +242,10 @@ if (window.location.pathname == '/pages/shop.html') {
                     if (closeTrough !== null) {
                         // Close Modal When Clicked Outside
                         modal.classList.add('close-trough');
-            
+
                         document.addEventListener('click', (event) => {
                             const withinBoundaries = event.composedPath().includes(document.querySelector('.modal-content'));
-            
+
                             if (!withinBoundaries) {
                                 modal.classList.remove('modal-open');
                             } else {
@@ -255,7 +255,7 @@ if (window.location.pathname == '/pages/shop.html') {
                     }
                 });
             });
-            
+
             // Close Modal
             document.querySelectorAll('.modal-close').forEach((el) => {
                 el.addEventListener('click', (e) => {
@@ -271,31 +271,31 @@ if (window.location.pathname == '/pages/shop.html') {
         postRequest('init/public', {}).then((res) => {
             if (res.status == 200) {
                 let dataEvent = JSON.parse(res.response)[document.querySelector('.btn-shop-submit').getAttribute('data-value')];
-                
+
                 // Get Form Data
                 var form = document.querySelector('.shop-form');
                 var EventName = document.querySelector('.btn-shop-submit').getAttribute('data-value');
                 var BtnAdd = document.querySelector('.btn-shop-submit');
                 var FirstName = form.querySelector('[name="Voornaam"]').value.trim();
                 var LastName = form.querySelector('[name="Achternaam"]').value.trim();
-                var Email = form.querySelector('[name="Email"]').value.trim();
+                let Email = form.querySelector('[name="Email"]').value.trim();
                 var Phone = form.querySelector('[name="Telefoonnummer"]').value;
                 var Address = form.querySelector('[name="Adres"]').value.trim();
-    
+
                 if (dataEvent['Type'] == 'Quiz') {
                     // Get Unique Options For Type Quiz
                     var Amount = 1;
                     var Options = {};
-    
+
                     Object.keys(dataEvent['Options']).forEach(function (key) {
                         Options[key] = form.querySelector('[name="' + key + '"]').value;
                     });
-    
+
                     if (Object.values(Options).includes('')) {
                         BtnAdd.innerHTML = 'Vul alle velden in!';
                         BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
                     }
-    
+
                     // Create Data Object From Values
                     var data = {
                         'FirstName': FirstName,
@@ -310,7 +310,7 @@ if (window.location.pathname == '/pages/shop.html') {
                 } else {
                     // Create Data Object From Values
                     var Amount = form.querySelector('[name="Personen"]').value;
-    
+
                     var data = {
                         'FirstName': FirstName,
                         'LastName': LastName,
@@ -321,44 +321,44 @@ if (window.location.pathname == '/pages/shop.html') {
                         'Amount': dataEvent['Price'] * Amount,
                     };
                 }
-    
+
                 BtnAdd.innerHTML = 'Bezig met inschrijven...';
-    
+
                 // Check If Event Is Still Available
                 if (dataEvent['Available Places'] < Amount || dataEvent['Available Places'] == 0) {
                     BtnAdd.innerHTML = 'Geen plaatsen meer beschikbaar!';
                     BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
                     return;
                 }
-    
+
                 // Check If All Fields Are Filled In
                 if (FirstName == "" || LastName == "" || Email == "" || Phone == "" || Amount == "") {
                     BtnAdd.innerHTML = 'Vul alle velden in!';
                     BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
                     return;
                 }
-    
+
                 // Create User Code
                 var UserCode = FirstName[0] + LastName[0] + getRandomIntInclusive(data, 1000, 9999);
                 UserCode = UserCode.toUpperCase();
                 data['UserCode'] = UserCode;
-    
+
                 // Add User To Database
-                putRequest('set', {Event: EventName, Data: data}).then((res) => {
+                putRequest('set', { Event: EventName, Data: data }).then((res) => {
                     if (res.status === 200) {
                         document.querySelector('.shop-form').style.display = 'none';
                         document.querySelector('.shop-info').style.display = 'none';
                         document.querySelector('.btn-shop-submit').style.display = 'none';
                         document.querySelector('.shop-success-methods').style.display = 'block';
-    
+
                         // Get Choosed Payment Method
                         document.querySelectorAll('.btn-shop-method').forEach((el) => {
                             el.addEventListener('click', (e) => {
                                 let method = e.target.getAttribute('data-method');
-    
+
                                 document.querySelector('.shop-success-methods').style.display = 'none';
                                 document.querySelector('.shop-success-' + method).style.display = 'block';
-    
+
                                 if (method == 'overschrijving') {
                                     // Show Info For Overschrijving
                                     document.querySelector('.shop-success-overschrijving-price').innerHTML = '€' + dataEvent['Price'] * Amount;
@@ -366,34 +366,34 @@ if (window.location.pathname == '/pages/shop.html') {
                                 } else if (method == 'payconiq') {
                                     let qrcodeImg = document.querySelector('.shop-success-payconiq-qr');
                                     let phoneLink = document.querySelector('.shop-success-payconiq-mobile');
-                                    
+
                                     qrcodeImg.src = '';
                                     phoneLink.href = '';
                                     document.querySelector('.shop-success-payconiq-timer').innerHTML = '';
 
                                     // Create Payconiq QR Code
-                                    postRequest('payconiq', {Amount: dataEvent['Price'] * Amount, Ref: UserCode, Event: EventName}).then((res) => {
+                                    postRequest('payconiq', { Amount: dataEvent['Price'] * Amount, Ref: UserCode, Event: EventName }).then((res) => {
                                         if (res.status == 200) {
                                             let links = JSON.parse(res.response);
 
                                             // Open Payconiq App On Mobile
-                                            if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+                                            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
                                                 window.open(links['deeplink'], '_blank');
                                             }
-                                            
+
                                             qrcodeImg.src = links['qr'];
                                             phoneLink.href = links['deeplink'];
-    
+
                                             // Start Timer (15 Minutes)
                                             var start = Date.now();
-                                            setInterval(function() {
+                                            setInterval(function () {
                                                 var delta = Date.now() - start;
                                                 var seconds = Math.floor(delta / 1000);
                                                 var minutes = Math.floor(seconds / 60);
                                                 seconds = seconds % 60;
                                                 minutes = minutes % 60;
                                                 document.querySelector('.shop-success-payconiq-timer').innerHTML = 14 - minutes + ':' + (60 - seconds);
-    
+
                                                 if (minutes == 14 && seconds == 59) {
                                                     document.querySelector('.shop-success-payconiq-timer').innerHTML = 'De tijd is verstreken!';
                                                     document.querySelector('.shop-success-payconiq-timer').style.color = 'red';
@@ -435,7 +435,7 @@ if (window.location.pathname == '/pages/shop.html') {
             BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;')
             return;
         }
-        
+
         getRequest('get/email?email=' + Email).then((response) => {
             if (response.response != 'User not found!' && response.response != '{}') {
                 const data = JSON.parse(response.response);
@@ -452,7 +452,7 @@ if (window.location.pathname == '/pages/shop.html') {
                 BtnClose.setAttribute('style', 'display: block !important;');
                 return;
             }
-        
+
             BtnSubmit.innerHTML = 'Email niet gevonden!';
             BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
         });

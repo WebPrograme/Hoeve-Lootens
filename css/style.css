@@ -13,11 +13,13 @@ img {
     margin: 0;
 }
 
-p, li {
+p,
+li {
     font-size: 18px;
 }
 
-p span, span {
+p span,
+span {
     font-weight: bold;
 }
 
@@ -123,7 +125,7 @@ nav a:hover {
     transform: translateY(10px);
 }
 
-@media (max-width: 1365px) {
+@media (max-width: 1435px) {
     .nav-list {
         position: fixed;
         top: 0;
@@ -397,33 +399,34 @@ nav a:hover {
     }
 }
 
-.cookie{
+.cookie {
     display: flex;
     justify-content: space-between;
     font-family: adobe-clean, sans-serif;
     box-shadow: 0px 0px 20px 11px rgb(0 0 0 / 10%);
-	width: 420px;
+    width: 420px;
     max-width: 90%;
     background-color: #fff;
     border-radius: .35rem;
     position: fixed;
-	left: 5%;
+    left: 5%;
     right: 5%;
     bottom: 5%;
-	padding: 10px 20px;
+    padding: 10px 20px;
     z-index: 1000;
 }
 
-.cookie-txt{
+.cookie-txt {
     height: min-content;
     display: flex;
     margin-top: auto;
     margin-bottom: auto;
-	float: left;
+    float: left;
     width: 65%;
 }
-.cookie-txt p{
-	color:#1D2D35;
+
+.cookie-txt p {
+    color: #1D2D35;
     height: min-content;
     margin: 0rem;
 }
@@ -446,14 +449,15 @@ nav a:hover {
     font-size: 1.1rem;
 }
 
-.header, .contact-header {
+.header,
+.contact-header {
     min-width: 200px;
     width: fit-content;
     text-align: center;
     margin-inline: auto;
 }
 
-.header h1{
+.header h1 {
     color: #101315;
     border-bottom: 3px #101315 solid;
     font-family: adobe-clean, sans-serif;
@@ -545,7 +549,8 @@ main.highlight {
     margin-block: 1rem 5rem;
 }
 
-.highlight section:last-of-type .row, .top-page section:last-of-type .row {
+.highlight section:last-of-type .row,
+.top-page section:last-of-type .row {
     flex-wrap: wrap-reverse;
 }
 
@@ -590,13 +595,15 @@ main.highlight {
     bottom: -80px;
 }
 
-.top-page h1,.top-page-contact h1 {
+.top-page h1,
+.top-page-contact h1 {
     padding-top: 30px;
     margin-inline: auto;
     font-family: PT serif;
 }
 
-.top-page:not(:has(.calendar)) h1, .top-page-contact h1 {
+.top-page:not(:has(.calendar)) h1,
+.top-page-contact h1 {
     font-size: 45px;
     font-weight: bold;
     text-align: center;
@@ -742,7 +749,8 @@ main.highlight {
         z-index: 0;
     }
 
-    .btn-primary, .btn-secondary {
+    .btn-primary,
+    .btn-secondary {
         width: 100%;
     }
 
@@ -1151,7 +1159,8 @@ footer p {
     background-image: url('../images/calendar_cafe2.png');
 }
 
-.calendar-prev-month-day p, .calendar-next-month-day p {
+.calendar-prev-month-day p,
+.calendar-next-month-day p {
     color: #4A7D4480;
 }
 
@@ -1176,7 +1185,8 @@ footer p {
     color: hsl(200, 20%, 90%);
 }
 
-.calendar-card-skeleton, .shop-card-skeleton {
+.calendar-card-skeleton,
+.shop-card-skeleton {
     background-color: hsl(200, 20%, 90%);
     border-radius: 4px;
     width: 330px;
@@ -1189,7 +1199,10 @@ footer p {
     height: 350px;
 }
 
-.modal *:not(input), .modal-header, .modal-body, .modal-footer {
+.modal *:not(input),
+.modal-header,
+.modal-body,
+.modal-footer {
     font-family: adobe-clean, sans-serif;
     border: none !important;
 }
@@ -1232,7 +1245,8 @@ footer p {
     margin-bottom: 20px;
 }
 
-.calendar-info .calendar-info-name, .calendar-info .calendar-info-price {
+.calendar-info .calendar-info-name,
+.calendar-info .calendar-info-price {
     font-size: 24px;
     margin-top: 14px;
     margin-bottom: 0px;
@@ -1263,7 +1277,7 @@ footer p {
     left: 50%;
     transform: translate(-50%, -100%);
     padding: 3px 8px;
-    color:#fff;
+    color: #fff;
     border-radius: 5px;
     position: absolute;
     z-index: 99999999;
@@ -1283,17 +1297,20 @@ footer p {
     opacity: 1;
 }
 
-.calendar-tooltip-event .calendar-top, .calendar-tooltip-event .calendar-top i::after {
+.calendar-tooltip-event .calendar-top,
+.calendar-tooltip-event .calendar-top i::after {
     background-color: #A4D8DE;
     box-shadow: 0 1px 8px rgba(164, 216, 222, .5);
 }
 
-.calendar-tooltip-res .calendar-top, .calendar-tooltip-res .calendar-top i::after {
+.calendar-tooltip-res .calendar-top,
+.calendar-tooltip-res .calendar-top i::after {
     background-color: #EE7357;
     box-shadow: 0 1px 8px rgba(74, 125, 68, 0.5);
 }
 
-.calendar-tooltip-boomgaardcafe .calendar-top, .calendar-tooltip-boomgaardcafe .calendar-top i::after {
+.calendar-tooltip-boomgaardcafe .calendar-top,
+.calendar-tooltip-boomgaardcafe .calendar-top i::after {
     background-color: #6ab561;
     box-shadow: 0 1px 8px rgba(106, 181, 97, .5);
 }
@@ -1342,7 +1359,7 @@ footer p {
     margin-bottom: 50px;
 }
 
-.calendar-cards > h1 {
+.calendar-cards>h1 {
     margin: 50px auto 0px auto;
     text-align: center;
     font-weight: bold;
@@ -1353,7 +1370,8 @@ footer p {
     width: fit-content;
 }
 
-.calendar-card h3, .shop-card h3 {
+.calendar-card h3,
+.shop-card h3 {
     font-size: 30px;
     margin-top: 14px;
     margin-bottom: 0px;
@@ -1361,7 +1379,8 @@ footer p {
     color: #005329;
 }
 
-.calendar-card a, .shop-card a {
+.calendar-card a,
+.shop-card a {
     width: 100% !important;
     display: block;
 }
@@ -1548,7 +1567,7 @@ footer p {
     object-fit: cover;
 }
 
-.shop-form > div {
+.shop-form>div {
     flex: 1 1 auto;
     width: 100%;
 }

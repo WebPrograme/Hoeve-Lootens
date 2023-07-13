@@ -42,7 +42,7 @@ function checkOverlap(cell) {
     let cellTimeslot = cell.parentNode.getAttribute('data-timeslot');
     let cellTimeslotStart = cellTimeslot.split(' - ')[0];
     let cellTimeslotEnd = cellTimeslot.split(' - ')[1];
-    
+
     let selectedShifts = [];
 
     selectedCellsTimeslots.forEach((timeslot) => {
@@ -59,7 +59,7 @@ function checkOverlap(cell) {
         let previousShift = timeslotStart;
 
         selectedShifts.push(previousShift);
-        
+
         for (let i = 0; i < shiftCount; i++) {
             let time = previousShift.split(':');
             let hours = parseInt(time[0]);
@@ -89,7 +89,7 @@ function checkOverlap(cell) {
 function showTimeTable(dataFull, date) {
     let data = {}
     data[date] = dataFull[date];
-    
+
     let table = document.querySelector('.volunteers-table');
     let allShifts = [];
     let allShiftsStart = [];
@@ -119,17 +119,17 @@ function showTimeTable(dataFull, date) {
         allShifts.push(startTime);
         allShiftsStart.push(startTime.split(' - ')[0]);
     }
-    
+
     allShifts.forEach((shift) => {
         let timetableBodyRow = document.createElement('tr');
         let timetableBodyCell = document.createElement('td');
 
-        timetableBodyCell.innerHTML = shift;
+        timetableBodyCell.innerHTML = shift.split(' - ')[0];
 
         timetableBodyRow.appendChild(timetableBodyCell);
         table.querySelector('tbody').appendChild(timetableBodyRow);
     });
-    
+
     Object.keys(data).forEach((date) => {
         let timetableHeader = document.createElement('tr');
         let timetableHeaderCell = document.createElement('th');
@@ -163,12 +163,12 @@ function showTimeTable(dataFull, date) {
                 timetableBodyCell.setAttribute('data-time', shift);
                 if (timetableShiftsStart.includes(shiftStart)) {
                     let index = timetableShiftsStart.indexOf(shiftStart);
-                    
+
                     let shiftEnd = Object.keys(timetable)[index].split(' - ')[1];
                     shiftEnd = shiftEnd.split(':');
                     let shiftEndHours = parseInt(shiftEnd[0]);
                     let shiftEndMinutes = parseInt(shiftEnd[1]);
-                    
+
                     let shiftStartHours = parseInt(shiftStart.split(':')[0]);
                     let shiftStartMinutes = parseInt(shiftStart.split(':')[1]);
 
@@ -204,11 +204,41 @@ function showTimeTable(dataFull, date) {
             });
         });
     });
+
+    let latestTime = Object.keys(data[date]).map((task) => {
+        return Object.keys(data[date][task]['TimeTable']).map((shift) => {
+            return shift.split(' - ')[1];
+        });
+    }).flat().sort().reverse()[0];
+
+    let latestTimeHours = parseInt(latestTime.split(':')[0]);
+    let latestTimeMinutes = latestTime.split(':')[1];
+    latestTimeHours += 2;
+
+    if (latestTimeMinutes == '30') latestTimeMinutes = '00';
+
+    latestTime = latestTimeHours + ':' + latestTimeMinutes;
+
+    if (latestTimeHours < 24) {
+        let rows = document.querySelectorAll('.volunteers-table tbody tr');
+        rows = Array.from(rows).reverse();
+
+        for (let row of rows) {
+            let firstCell = row.children[0];
+            let firstCellTime = firstCell.innerHTML.split(' - ')[0];
+            table.deleteRow(row.rowIndex);
+
+            if (firstCellTime === latestTime) {
+                break;
+            }
+        }
+    }
 }
+
 
 document.querySelector('.volunteers-select-date').addEventListener('change', (e) => {
     let selectedDate = e.target.value;
-    
+
     postRequest('volunteers/get', {}).then((res) => {
         if (res.status === 200) {
             let data = JSON.parse(res.responseText);
@@ -260,7 +290,7 @@ document.querySelector('.volunteers-signup-btn').addEventListener('click', (e) =
             }
 
             let otherCells = document.querySelectorAll('.volunteers-table-signup:not(.volunteers-table-signup-selected), .volunteers-table-spots:not(.volunteers-table-signup-selected)');
-            
+
             otherCells.forEach((cell) => {
                 let overlap = checkOverlap(cell);
 
@@ -391,7 +421,7 @@ document.querySelector('.volunteers-signup-btn').addEventListener('click', (e) =
 
         data[selectedDate] = shifts;
 
-        postRequest('volunteers/set', {UserData: user, Data: data}).then((res) => {
+        postRequest('volunteers/set', { UserData: user, Data: data }).then((res) => {
             if (res.status === 200) {
                 localStorage.setItem('volunteer', JSON.stringify(user));
 

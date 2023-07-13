@@ -1,166 +1,168 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="discription" content="De maatschappelijke projecten van Hoeve Lootens" />
+		<title>Hoeve Lootens</title>
+		<link href="/plugins/yarn.css" rel="stylesheet" type="text/css" />
+		<link href="/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="/css/forum.css" rel="stylesheet" type="text/css" />
+		<link href="/css/volunteers.css" rel="stylesheet" type="text/css" />
+		<link rel="icon" href="../images/page image transparent.png" />
+		<link
+			rel="stylesheet"
+			href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+			integrity="sha384-
+    50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+			crossorigin="anonymous"
+		/>
+	</head>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <meta name="discription" content="De maatschappelijke projecten van Hoeve Lootens">
-    <title>Hoeve Lootens</title>
-    <link href="/plugins/yarn.css" rel="stylesheet" type="text/css" />
-    <link href="/css/style.css" rel="stylesheet" type="text/css" />
-    <link href="/css/forum.css" rel="stylesheet" type="text/css" />
-    <link href="/css/volunteers.css" rel="stylesheet" type="text/css" />
-	<link rel="icon" href="../images/page image transparent.png" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-
-    50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-</head>
+	<body>
+		<nav>
+			<h1 class="logo"><img src="../images/HoeveLootens_Logo_Wit.png" /></h1>
+			<input type="checkbox" id="hamburger-toggle" />
+			<label for="hamburger-toggle" class="hamburger">
+				<span class="bar"></span>
+			</label>
+			<ul class="nav-list">
+				<li><a href="../index.html">Home</a></li>
+				<li><a href="verbouwing.html">Verbouwingen</a></li>
+				<li><a href="kalender.html">Kalender</a></li>
+				<li><a href="reserveren.html">Reserveren</a></li>
+				<li><a href="maatschappelijk.html" class="nav-link-projects">Maatschappelijke projecten</a></li>
+				<li><a href="geschiedenis.html">Geschiedenis</a></li>
+				<li><a href="contact.html">Contact</a></li>
+			</ul>
+		</nav>
 
-<body>
-    <nav>
-        <h1 class="logo"><img src="../images/HoeveLootens_Logo_Wit.png"></h1>
-        <input type="checkbox" id="hamburger-toggle">
-        <label for="hamburger-toggle" class="hamburger">
-            <span class="bar"></span>
-        </label>
-        <ul class="nav-list">
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="verbouwing.html">Verbouwingen</a></li>
-            <li><a href="kalender.html">Kalender</a></li>
-            <li><a href="reserveren.html">Reserveren</a></li>
-            <li><a href="maatschappelijk.html" class="nav-link-projects">Maatschappelijke projecten</a></li>
-            <li><a href="geschiedenis.html">Geschiedenis</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
-    </nav>
+		<div class="modal" id="volunteers-modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title">Schrijf Je In</h1>
+					<a class="modal-close" data-close-modal="modalUserCode">
+						<i class="fas fa-times"></i>
+					</a>
+				</div>
 
-    <div class="modal" id="volunteers-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title">Schrijf Je In</h1>
-                <a class="modal-close" data-close-modal="modalUserCode">
-                    <i class="fas fa-times"></i>
-                </a>
-            </div>
+				<div class="modal-body">
+					<div class="pt-1 pb-2 volunteers-options">
+						<label class="label volunteers-options-date"></label>
 
-            <div class="modal-body">
-                <div class="pt-1 pb-2 volunteers-options">
-                    <label class="label volunteers-options-date"></label>
+						<div class="volunteers-options-shifts"></div>
+					</div>
 
-                    <div class="volunteers-options-shifts"></div>
-                </div>
+					<div class="volunteers-signup-account">
+						<label class="label pb-1">Hergebruik Gegevens</label>
 
-                <div class="volunteers-signup-account">
-                    <label class="label pb-1">Hergebruik Gegevens</label>
+						<div class="row gap align-stretch col-7 m-inline-auto">
+							<div class="volunteers-signup-account-user">
+								<i class="fa-solid fa-circle-user"></i>
+								<div>
+									<h3 class="volunteers-signup-account-name"></h3>
+									<p class="volunteers-signup-account-email"></p>
+								</div>
+							</div>
+						</div>
+					</div>
 
-                    <div class="row gap align-stretch col-7 m-inline-auto">
-                        <div class="volunteers-signup-account-user">
-                            <i class="fa-solid fa-circle-user"></i>
-                            <div>
-                                <h3 class="volunteers-signup-account-name"></h3>
-                                <p class="volunteers-signup-account-email"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+					<div class="volunteers-signup-form">
+						<div class="row justify-between input-group">
+							<div>
+								<label class="label" for="Voornaam">Voornaam</label>
+								<input type="text" class="input volunteers-input" placeholder="Voornaam" name="Voornaam" />
+							</div>
+							<div>
+								<label class="label" for="Achternaam">Achternaam</label>
+								<input type="text" class="input volunteers-input" placeholder="Achternaam" name="Achternaam" />
+							</div>
+						</div>
+						<div class="row justify-between input-group">
+							<div>
+								<label class="label" for="Email">Email</label>
+								<input type="text" class="input volunteers-input" placeholder="Email" name="Email" />
+							</div>
+							<div>
+								<label class="label" for="Telefoonnummer">Telefoonnummer</label>
+								<input type="text" class="input volunteers-input" placeholder="Telefoonnummer" name="Telefoonnummer" />
+							</div>
+						</div>
+						<div>
+							<label class="label" for="Adres">Adres</label>
+							<input type="text" class="input volunteers-input" placeholder="Adres" name="Adres" />
+						</div>
+					</div>
+				</div>
 
-                <div class="volunteers-signup-form">
-                    <div class="row justify-between input-group">
-                        <div>
-                            <label class="label" for="Voornaam">Voornaam</label>
-                            <input type="text" class="input volunteers-input" placeholder="Voornaam" name="Voornaam">
-                        </div>
-                        <div>
-                            <label class="label" for="Achternaam">Achternaam</label>
-                            <input type="text" class="input volunteers-input" placeholder="Achternaam" name="Achternaam">
-                        </div>
-                    </div>
-                    <div class="row justify-between input-group">
-                        <div>
-                            <label class="label" for="Email">Email</label>
-                            <input type="text" class="input volunteers-input" placeholder="Email" name="Email">
-                        </div>
-                        <div>
-                            <label class="label" for="Telefoonnummer">Telefoonnummer</label>
-                            <input type="text" class="input volunteers-input" placeholder="Telefoonnummer" name="Telefoonnummer">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="label" for="Adres">Adres</label>
-                        <input type="text" class="input volunteers-input" placeholder="Adres" name="Adres">
-                    </div>
-                </div>
-            </div>
+				<div class="modal-footer volunteers-account-footer">
+					<a class="btn btn-primary btn-primary-sm volunteers-account-new-btn" role="button">ANDERE GEGEVENS</a>
+				</div>
 
-            <div class="modal-footer volunteers-account-footer">
-                <a class="btn btn-primary btn-primary-sm volunteers-account-new-btn" role="button">ANDERE GEGEVENS</a>
-            </div>
-
-            <div class="modal-footer volunteers-signup-footer">
-                <a class="btn btn-primary btn-primary-sm volunteers-signup-confirm-btn" role="button">SCHRIJF IN</a>
-            </div>
-        </div>
-    </div>
-
-    <main>
-        <div class="top-page">
-            <div>
-                <h1>Meikermis 2023</h1>
-                <img class="maatschappelijk-vorm3" src="../images/Contact_Vormen3.png">
-        
-                <div class="text-center col-6 m-auto mt-2">
-                    <p>We zijn blij om opnieuw de Meikermis te organiseren @Hoeve Lootens op 5 & 7 mei!
-                        We voorzien activiteiten voor groot en klein. Kijk hieronder om het volledige programma te bekijken en vergeet niet in te schrijven voor het kermismenu op zondag.</p>
-                    <div class="btn-row shop-btn-row">
-                        <a class="btn btn-primary btn-primary-sm volunteers-signup-btn">SCHRIJF IN</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="volunteers col-10 flex m-inline-auto mt-3 mb-3 justify-center column">
-            <select class="input volunteers-select-date" name="event" id="event">
-            </select>
-
-            <table class="volunteers-table">
-                
-            </table>
-
-            <a class="btn btn-primary btn-primary-sm volunteers-signup-add-btn" data-target-modal="volunteers-modal">KLAAR</a>
-        </div>
-    </main>
-
-	<footer>
-		<div class="footer-first">
-			<div class="footer-adres">
-				<p class="footer-bold">Hoeve Lootens VZW</p>
-				<p>Vroonstalledries 66</p>
-				<p>9032 Wondelgem</p>
-			</div>
-
-			<div class="footer-bank">
-				<p>BE 0475 328 308</p>
-				<p>RPR Gent</p>
+				<div class="modal-footer volunteers-signup-footer">
+					<a class="btn btn-primary btn-primary-sm volunteers-signup-confirm-btn" role="button">SCHRIJF IN</a>
+				</div>
 			</div>
 		</div>
 
-		<div class="footer-social">
-			<p>En vergeet ons zeker niet te volgen!</p>
-			<div style="display: flex">
-				<a href="https://www.facebook.com/HOEVELOOTENS" target="_blank"><i class="fab fa-facebook-f"></i></a>
-				<a href="https://www.instagram.com/hoevelootens/?hl=nl" target="_blank"><i
-						class="fab fa-instagram"></i></a>
+		<main>
+			<div class="top-page">
+				<div>
+					<h1>Meikermis 2023</h1>
+					<img class="maatschappelijk-vorm3" src="../images/Contact_Vormen3.png" />
+
+					<div class="text-center col-6 m-auto mt-2">
+						<p>
+							We zijn blij om opnieuw de Meikermis te organiseren @Hoeve Lootens op 5 & 7 mei! We voorzien activiteiten voor
+							groot en klein. Kijk hieronder om het volledige programma te bekijken en vergeet niet in te schrijven voor het
+							kermismenu op zondag.
+						</p>
+						<div class="btn-row shop-btn-row">
+							<a class="btn btn-primary btn-primary-sm volunteers-signup-btn">SCHRIJF IN</a>
+						</div>
+					</div>
+				</div>
 			</div>
+
+			<div class="volunteers col-10 flex m-inline-auto mt-3 mb-3 justify-center column">
+				<select class="input volunteers-select-date" name="event" id="event"></select>
+
+				<table class="volunteers-table"></table>
+
+				<a class="btn btn-primary btn-primary-sm volunteers-signup-add-btn" data-target-modal="volunteers-modal">KLAAR</a>
+			</div>
+		</main>
+
+		<footer>
+			<div class="footer-first">
+				<div class="footer-adres">
+					<p class="footer-bold">Hoeve Lootens VZW</p>
+					<p>Vroonstalledries 66</p>
+					<p>9032 Wondelgem</p>
+				</div>
+
+				<div class="footer-bank">
+					<p>BE 0475 328 308</p>
+					<p>RPR Gent</p>
+				</div>
+			</div>
+
+			<div class="footer-social">
+				<p>En vergeet ons zeker niet te volgen!</p>
+				<div style="display: flex">
+					<a href="https://www.facebook.com/HOEVELOOTENS" target="_blank"><i class="fab fa-facebook-f"></i></a>
+					<a href="https://www.instagram.com/hoevelootens/?hl=nl" target="_blank"><i class="fab fa-instagram"></i></a>
+				</div>
+			</div>
+		</footer>
+		<div class="footer-acteur">
+			<p>Deze website is gemaakt door <a href="https://yarnegooris.netlify.app" target="_blank">Yarne Gooris</a></p>
 		</div>
-	</footer>
-	<div class="footer-acteur">
-		<p>Deze website is gemaakt door <a href="https://yarnegooris.netlify.app" target="_blank">Yarne Gooris</a></p>
-	</div>
 
-    <script src="https://kit.fontawesome.com/62dc937956.js" crossorigin="anonymous"></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-    <script src="/js/volunteers.js" type="module"></script>
-    <script src="/plugins/yarn.js"></script>
-    <script src="/js/main.js" type="module"></script>
-</body>
-
+		<script src="https://kit.fontawesome.com/62dc937956.js" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<script src="/js/volunteers.js" type="module"></script>
+		<script src="/plugins/yarn.js"></script>
+		<script src="/js/main.js" type="module"></script>
+	</body>
 </html>
