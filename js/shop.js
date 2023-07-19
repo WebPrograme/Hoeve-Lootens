@@ -133,7 +133,7 @@ if (window.location.pathname == '/pages/shop.html') {
                                 <h3>€` + data[key]['Price'] + `</h3>
                             </div>
                             <p class="status">` + data[key]['Date'] + `</p>
-                            <a class="btn btn-primary btn-primary-sm btn-shop-add" data-value="` + key + `" data-target-modal="modal-signup">Schrijf in</a>
+                            <a class="btn btn-primary btn-primary-sm btn-shop-add" data-value="` + key + `" data-target-modal="modal-signup">Tickets</a>
                         `;
 
                         card.classList.add('shop-card');
