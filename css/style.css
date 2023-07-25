@@ -1199,7 +1199,7 @@ footer p {
     height: 350px;
 }
 
-.modal *:not(input),
+.modal *:not(input, i),
 .modal-header,
 .modal-body,
 .modal-footer {

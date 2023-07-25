@@ -1,7 +1,7 @@
 function getRequest(target) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
+        xhr.open('GET', 'http://localhost:801/api/v2/' + target, true);
         xhr.send();
         xhr.onload = function () {
             resolve(this);
@@ -12,7 +12,7 @@ function getRequest(target) {
 function postRequest(target, data) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
+        xhr.open('POST', 'http://localhost:8081/api/v2/' + target, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(data));
         xhr.onload = function () {
@@ -186,10 +186,10 @@ function showTimeTable(dataFull, date) {
                     let timetableBodyCellContent = document.createElement('div');
 
                     if (volunteersCount === volunteersMax) {
-                        timetableBodyCellContent.innerHTML = 'Vol';
+                        timetableBodyCellContent.innerHTML = 'Volzet';
                         timetableBodyCellContent.classList.add('volunteers-table-full');
                     } else {
-                        timetableBodyCellContent.innerHTML = `<span>${shiftStart}</span> <span>${shiftEnd.join(':')}</span>`;
+                        timetableBodyCellContent.innerHTML = `<span>${shiftStart}</span> <i class="fa-solid fa-plus"></i> <span>${shiftEnd.join(':')}</span>`;
                         timetableBodyCellContent.classList.add('volunteers-table-spots');
 
                         timetableBodyCell.setAttribute('data-timeslot', shiftStart + ' - ' + shiftEnd.join(':'));
@@ -258,181 +258,6 @@ document.querySelector('.volunteers-select-date').addEventListener('change', (e)
     });
 });
 
-document.querySelector('.volunteers-signup-btn').addEventListener('click', (e) => {
-    let selectedDate = document.querySelector('.volunteers-select-date').value;
-
-    document.querySelectorAll('.volunteers-table tbody td[data-task] div:not(.volunteers-table-full)').forEach((cell) => {
-        cell.classList.replace('volunteers-table-spots', 'volunteers-table-signup');
-        cell.innerHTML = '<i class="fa-solid fa-plus"></i>';
-
-        cell.addEventListener('click', (e) => {
-            let cell = e.target.closest('div');
-            let icon = cell.querySelector('i');
-
-            if (cell.classList.contains('volunteers-table-signup-overlap')) return;
-
-            if (cell.classList.contains('volunteers-table-signup-selected')) {
-                cell.classList.remove('volunteers-table-signup-selected');
-
-                icon.classList.replace('fa-check', 'fa-plus');
-            } else {
-                cell.classList.add('volunteers-table-signup-selected');
-
-                icon.classList.replace('fa-plus', 'fa-check');
-            }
-
-            let selectedShifts = document.querySelectorAll('.volunteers-table-signup-selected');
-
-            if (selectedShifts.length > 0) {
-                document.querySelector('.volunteers-signup-add-btn').style.display = 'block';
-            } else {
-                document.querySelector('.volunteers-signup-add-btn').style.display = 'none';
-            }
-
-            let otherCells = document.querySelectorAll('.volunteers-table-signup:not(.volunteers-table-signup-selected), .volunteers-table-spots:not(.volunteers-table-signup-selected)');
-
-            otherCells.forEach((cell) => {
-                let overlap = checkOverlap(cell);
-
-                if (overlap) {
-                    cell.classList.add('volunteers-table-signup-overlap');
-                    cell.innerHTML = '<i class="fa-solid fa-ban"></i>';
-                } else {
-                    cell.classList.remove('volunteers-table-signup-overlap');
-                    cell.innerHTML = '<i class="fa-solid fa-plus"></i>';
-                }
-            });
-        });
-    });
-
-    document.querySelector('.volunteers-signup-add-btn').addEventListener('click', (e) => {
-        e.preventDefault();
-
-        document.querySelector('.volunteers-signup-add-btn').style.display = 'none';
-
-        let volunteer = localStorage.getItem('volunteer') ? JSON.parse(localStorage.getItem('volunteer')) : null;
-        let selectedShifts = document.querySelectorAll('.volunteers-table-signup-selected');
-        let shifts = {};
-
-        selectedShifts.forEach((shift) => {
-
-            shifts[shift.closest('td').getAttribute('data-task')] = shifts[shift.closest('td').getAttribute('data-task')] || [];
-
-            shifts[shift.closest('td').getAttribute('data-task')].push({
-                'TimeSpan': shift.closest('td').getAttribute('data-timeslot'),
-                'Shiftcount': 1
-            });
-        });
-
-        document.querySelector('.volunteers-options-date').innerHTML = selectedDate;
-        document.querySelector('.volunteers-options-shifts').innerHTML = '';
-
-        Object.keys(shifts).forEach((task) => {
-            let taskElement = document.createElement('div');
-            taskElement.classList.add('volunteers-options-shifts-task');
-
-            let taskElementTitle = document.createElement('span');
-            taskElementTitle.classList.add('volunteers-options-shifts-task-title');
-            taskElementTitle.innerHTML = task + ': ';
-
-            taskElement.appendChild(taskElementTitle);
-
-            Object.keys(shifts[task]).forEach((shift) => {
-                let shiftElement = document.createElement('span');
-                shiftElement.classList.add('volunteers-options-shifts-time');
-                shiftElement.innerHTML = shifts[task][shift]['TimeSpan'];
-
-                taskElement.appendChild(shiftElement);
-            });
-
-            document.querySelector('.volunteers-options-shifts').appendChild(taskElement);
-        });
-
-        if (volunteer) {
-            let modal = document.querySelector('#volunteers-modal');
-
-            modal.querySelector('.volunteers-signup-account-name').innerHTML = volunteer['FirstName'] + ' ' + volunteer['LastName'];
-            modal.querySelector('.volunteers-signup-account-email').innerHTML = volunteer['Email'];
-
-            modal.querySelector('.volunteers-signup-account').style.display = 'block';
-            modal.querySelector('.volunteers-account-footer').style.display = 'block';
-            modal.querySelector('.volunteers-signup-form').style.display = 'none';
-            modal.querySelector('.volunteers-signup-footer').style.display = 'none';
-
-            document.querySelector('.volunteers-signup-account-user').addEventListener('click', (e) => {
-                modal.querySelector('.volunteers-account-footer').style.display = 'none';
-                modal.querySelector('.volunteers-signup-account').style.display = 'none';
-                modal.querySelector('.volunteers-signup-form').style.display = 'block';
-                modal.querySelector('.volunteers-signup-footer').style.display = 'block';
-
-                modal.querySelector('.volunteers-input[name="Voornaam"]').value = volunteer['FirstName'];
-                modal.querySelector('.volunteers-input[name="Achternaam"]').value = volunteer['LastName'];
-                modal.querySelector('.volunteers-input[name="Email"]').value = volunteer['Email'];
-                modal.querySelector('.volunteers-input[name="Telefoonnummer"]').value = volunteer['Phone'];
-                modal.querySelector('.volunteers-input[name="Adres"]').value = volunteer['Address'];
-            });
-
-            document.querySelector('.volunteers-account-new-btn').addEventListener('click', (e) => {
-                modal.querySelector('.volunteers-signup-account').style.display = 'none';
-                modal.querySelector('.volunteers-account-footer').style.display = 'none';
-                modal.querySelector('.volunteers-signup-form').style.display = 'block';
-                modal.querySelector('.volunteers-signup-footer').style.display = 'block';
-            });
-        } else {
-            document.querySelector('.volunteers-signup-account').style.display = 'none';
-            document.querySelector('.volunteers-account-footer').style.display = 'none';
-        }
-    });
-
-    document.querySelector('.volunteers-signup-confirm-btn').addEventListener('click', (e) => {
-        let firstName = document.querySelector('.volunteers-input[name="Voornaam"]').value;
-        let lastName = document.querySelector('.volunteers-input[name="Achternaam"]').value;
-        let email = document.querySelector('.volunteers-input[name="Email"]').value;
-        let phone = document.querySelector('.volunteers-input[name="Telefoonnummer"]').value;
-        let address = document.querySelector('.volunteers-input[name="Adres"]').value;
-
-        if (firstName === '' || lastName === '' || email === '' || phone === '' || address === '') {
-            document.querySelector('.volunteers-signup-add-btn').innerHTML = 'Vul alle velden in';
-            document.querySelector('.volunteers-signup-add-btn').style.backgroundColor = '#EE7357';
-            return;
-        }
-
-        let user = {
-            'FirstName': firstName,
-            'LastName': lastName,
-            'Email': email,
-            'Phone': phone,
-            'Address': address
-        };
-
-        let selectedShifts = document.querySelectorAll('.volunteers-table-signup-selected');
-        let shifts = {};
-
-        selectedShifts.forEach((shift) => {
-            shifts[shift.closest('td').getAttribute('data-task')] = shifts[shift.closest('td').getAttribute('data-task')] || [];
-
-            shifts[shift.closest('td').getAttribute('data-task')].push({
-                'TimeSpan': shift.closest('td').getAttribute('data-timeslot'),
-                'Shiftcount': 1
-            });
-        });
-
-        let data = {};
-
-        data[selectedDate] = shifts;
-
-        postRequest('volunteers/set', { UserData: user, Data: data }).then((res) => {
-            if (res.status === 200) {
-                localStorage.setItem('volunteer', JSON.stringify(user));
-
-                location.reload();
-            } else {
-                new Toast('Er Is Iets Foutgelopen', 'error').show();
-            }
-        });
-    });
-});
-
 postRequest('volunteers/tasks/get', {}).then((res) => {
     if (res.status === 200) {
         let data = JSON.parse(res.responseText);
@@ -442,6 +267,210 @@ postRequest('volunteers/tasks/get', {}).then((res) => {
         });
 
         showTimeTable(data, Object.keys(data)[0]);
+
+        const tableWidth = document.querySelector('.volunteers-table').scrollWidth;
+        const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+
+        if (tableWidth > viewportWidth) {
+            document.querySelector('.volunteers-nav-icon.fa-angles-right').classList.remove('volunteers-nav-icon-disabled');
+        } else {
+            document.querySelector('.volunteers-nav-icon.fa-angles-right').classList.add('volunteers-nav-icon-disabled');
+        }
+
+        let selectedDate = document.querySelector('.volunteers-select-date').value;
+
+        document.querySelector('.volunteers').addEventListener('scroll', (e) => {
+            const tableLeft = e.target.scrollLeft;
+
+            if (tableLeft > 0) {
+                document.querySelector('.volunteers-nav-icon.fa-angles-left').classList.remove('volunteers-nav-icon-disabled');
+            } else {
+                document.querySelector('.volunteers-nav-icon.fa-angles-left').classList.add('volunteers-nav-icon-disabled');
+            }
+
+            if (e.target.scrollLeft >= e.target.scrollWidth - e.target.offsetWidth) {
+                document.querySelector('.volunteers-nav-icon.fa-angles-right').classList.add('volunteers-nav-icon-disabled');
+            } else {
+                document.querySelector('.volunteers-nav-icon.fa-angles-right').classList.remove('volunteers-nav-icon-disabled');
+            }
+        });
+
+        document.querySelector('.volunteers-nav-icon.fa-angles-left').addEventListener('click', (e) => {
+            document.querySelector('.volunteers').scrollLeft -= 200;
+        });
+
+        document.querySelector('.volunteers-nav-icon.fa-angles-right').addEventListener('click', (e) => {
+            document.querySelector('.volunteers').scrollLeft += 200;
+        });
+
+        document.querySelectorAll('.volunteers-table tbody td[data-task] div:not(.volunteers-table-full)').forEach((cell) => {
+            cell.addEventListener('click', (e) => {
+                let cell = e.target.closest('div');
+                let icon = cell.querySelector('i');
+
+                if (cell.classList.contains('volunteers-table-signup-overlap')) return;
+
+                if (cell.classList.contains('volunteers-table-signup-selected')) {
+                    cell.classList.remove('volunteers-table-signup-selected');
+
+                    icon.classList.replace('fa-check', 'fa-plus');
+                } else {
+                    cell.classList.add('volunteers-table-signup-selected');
+
+                    icon.classList.replace('fa-plus', 'fa-check');
+                }
+
+                let selectedShifts = document.querySelectorAll('.volunteers-table-signup-selected');
+
+                if (selectedShifts.length > 0) {
+                    document.querySelector('.volunteers-signup-add-btn').style.display = 'block';
+                } else {
+                    document.querySelector('.volunteers-signup-add-btn').style.display = 'none';
+                }
+
+                let otherCells = document.querySelectorAll('.volunteers-table-signup:not(.volunteers-table-signup-selected), .volunteers-table-spots:not(.volunteers-table-signup-selected)');
+
+                otherCells.forEach((cell) => {
+                    let overlap = checkOverlap(cell);
+                    let icon = cell.querySelector('i');
+
+                    if (overlap) {
+                        cell.classList.add('volunteers-table-signup-overlap');
+                        icon.classList.replace('fa-plus', 'fa-ban');
+                    } else {
+                        cell.classList.remove('volunteers-table-signup-overlap');
+                        icon.classList.replace('fa-ban', 'fa-plus');
+                    }
+                });
+            });
+        });
+
+        document.querySelector('.volunteers-signup-add-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+
+            document.querySelector('.volunteers-signup-add-btn').style.display = 'none';
+
+            let volunteer = localStorage.getItem('volunteer') ? JSON.parse(localStorage.getItem('volunteer')) : null;
+            let selectedShifts = document.querySelectorAll('.volunteers-table-signup-selected');
+            let shifts = {};
+
+            selectedShifts.forEach((shift) => {
+
+                shifts[shift.closest('td').getAttribute('data-task')] = shifts[shift.closest('td').getAttribute('data-task')] || [];
+
+                shifts[shift.closest('td').getAttribute('data-task')].push({
+                    'TimeSpan': shift.closest('td').getAttribute('data-timeslot'),
+                    'Shiftcount': 1
+                });
+            });
+
+            document.querySelector('.volunteers-options-date').innerHTML = selectedDate;
+            document.querySelector('.volunteers-options-shifts').innerHTML = '';
+
+            Object.keys(shifts).forEach((task) => {
+                let taskElement = document.createElement('div');
+                taskElement.classList.add('volunteers-options-shifts-task');
+
+                let taskElementTitle = document.createElement('span');
+                taskElementTitle.classList.add('volunteers-options-shifts-task-title');
+                taskElementTitle.innerHTML = task + ': ';
+
+                taskElement.appendChild(taskElementTitle);
+
+                Object.keys(shifts[task]).forEach((shift) => {
+                    let shiftElement = document.createElement('span');
+                    shiftElement.classList.add('volunteers-options-shifts-time');
+                    shiftElement.innerHTML = shifts[task][shift]['TimeSpan'];
+
+                    taskElement.appendChild(shiftElement);
+                });
+
+                document.querySelector('.volunteers-options-shifts').appendChild(taskElement);
+            });
+
+            if (volunteer) {
+                let modal = document.querySelector('#volunteers-modal');
+
+                modal.querySelector('.volunteers-signup-account-name').innerHTML = volunteer['FirstName'] + ' ' + volunteer['LastName'];
+                modal.querySelector('.volunteers-signup-account-email').innerHTML = volunteer['Email'];
+
+                modal.querySelector('.volunteers-signup-account').style.display = 'block';
+                modal.querySelector('.volunteers-account-footer').style.display = 'block';
+                modal.querySelector('.volunteers-signup-form').style.display = 'none';
+                modal.querySelector('.volunteers-signup-footer').style.display = 'none';
+
+                document.querySelector('.volunteers-signup-account-user').addEventListener('click', (e) => {
+                    modal.querySelector('.volunteers-account-footer').style.display = 'none';
+                    modal.querySelector('.volunteers-signup-account').style.display = 'none';
+                    modal.querySelector('.volunteers-signup-form').style.display = 'block';
+                    modal.querySelector('.volunteers-signup-footer').style.display = 'block';
+
+                    modal.querySelector('.volunteers-input[name="Voornaam"]').value = volunteer['FirstName'];
+                    modal.querySelector('.volunteers-input[name="Achternaam"]').value = volunteer['LastName'];
+                    modal.querySelector('.volunteers-input[name="Email"]').value = volunteer['Email'];
+                    modal.querySelector('.volunteers-input[name="Telefoonnummer"]').value = volunteer['Phone'];
+                    modal.querySelector('.volunteers-input[name="Adres"]').value = volunteer['Address'];
+                });
+
+                document.querySelector('.volunteers-account-new-btn').addEventListener('click', (e) => {
+                    modal.querySelector('.volunteers-signup-account').style.display = 'none';
+                    modal.querySelector('.volunteers-account-footer').style.display = 'none';
+                    modal.querySelector('.volunteers-signup-form').style.display = 'block';
+                    modal.querySelector('.volunteers-signup-footer').style.display = 'block';
+                });
+            } else {
+                document.querySelector('.volunteers-signup-account').style.display = 'none';
+                document.querySelector('.volunteers-account-footer').style.display = 'none';
+            }
+        });
+
+        document.querySelector('.volunteers-signup-confirm-btn').addEventListener('click', (e) => {
+            let firstName = document.querySelector('.volunteers-input[name="Voornaam"]').value;
+            let lastName = document.querySelector('.volunteers-input[name="Achternaam"]').value;
+            let email = document.querySelector('.volunteers-input[name="Email"]').value;
+            let phone = document.querySelector('.volunteers-input[name="Telefoonnummer"]').value;
+            let address = document.querySelector('.volunteers-input[name="Adres"]').value;
+
+            if (firstName === '' || lastName === '' || email === '' || phone === '' || address === '') {
+                document.querySelector('.volunteers-signup-add-btn').innerHTML = 'Vul alle velden in';
+                document.querySelector('.volunteers-signup-add-btn').style.backgroundColor = '#EE7357';
+                return;
+            }
+
+            let user = {
+                'FirstName': firstName,
+                'LastName': lastName,
+                'Email': email,
+                'Phone': phone,
+                'Address': address
+            };
+
+            let selectedShifts = document.querySelectorAll('.volunteers-table-signup-selected');
+            let shifts = {};
+
+            selectedShifts.forEach((shift) => {
+                shifts[shift.closest('td').getAttribute('data-task')] = shifts[shift.closest('td').getAttribute('data-task')] || [];
+
+                shifts[shift.closest('td').getAttribute('data-task')].push({
+                    'TimeSpan': shift.closest('td').getAttribute('data-timeslot'),
+                    'Shiftcount': 1
+                });
+            });
+
+            let data = {};
+
+            data[selectedDate] = shifts;
+
+            postRequest('volunteers/set', { UserData: user, Data: data }).then((res) => {
+                if (res.status === 200) {
+                    localStorage.setItem('volunteer', JSON.stringify(user));
+
+                    location.reload();
+                } else {
+                    new Toast('Er Is Iets Foutgelopen', 'error').show();
+                }
+            });
+        });
     } else {
         console.log('Error');
     }

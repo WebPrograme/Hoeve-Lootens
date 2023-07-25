@@ -2,6 +2,15 @@
     overflow-x: auto;
 }
 
+.volunteers-nav-icon {
+    padding: 1rem;
+    color: #4a7d44;
+}
+
+.volunteers-nav-icon-disabled {
+    opacity: 0;
+}
+
 .volunteers-select-date {
     display: flex;
     margin: 0 auto 2rem !important;
@@ -81,17 +90,12 @@
     background-color: #fcc000;
     height: -webkit-fill-available;
     padding: 1rem;
-}
-
-.volunteers-table-signup {
-    height: -webkit-fill-available;
-    background-color: rgb(204, 204, 209);
-    transition: background-color 0.2s ease-in-out;
     cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
 }
 
-.volunteers-table-signup:hover {
-    background-color: rgb(185, 185, 190);
+.volunteers-table-spots:hover {
+    background-color: #eca807;
 }
 
 .volunteers-table-signup-selected {
@@ -102,9 +106,12 @@
     background-color: #3a6d34;
 }
 
-.volunteers-table-signup-overlap:hover {
-    background-color: rgb(204, 204, 209);
+.volunteers-table-signup-overlap {
     cursor: not-allowed;
+}
+
+.volunteers-table-signup-overlap:hover {
+    background-color: #fcc000;
 }
 
 .volunteers-signup-add-btn {

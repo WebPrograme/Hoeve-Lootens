@@ -95,7 +95,8 @@
     margin-left: 5%;
 }
 
-.UserCode, .UserCodeResult {
+.UserCode,
+.UserCodeResult {
     padding-top: 10px;
     text-align: center;
     color: rgb(211, 115, 89);
@@ -113,7 +114,8 @@
     margin-top: 20px;
 }
 
-.modal-open, body {
+.modal-open,
+body {
     overflow: auto !important;
 }
 
@@ -189,16 +191,28 @@ input[type=tel] {
     color: #212529;
 }
 
-.btn-submit, .btn-shop-submit, .btn-close-email, .btn-shop-confirm, .btn-shop-close, .btn-modal-footer, .btn-submit-email-code, .btn-submit-email {
+.btn-submit,
+.btn-shop-submit,
+.btn-close-email,
+.btn-shop-confirm,
+.btn-shop-close,
+.btn-modal-footer,
+.btn-submit-email-code,
+.btn-submit-email {
     width: 100%;
     border-radius: 4px !important;
 }
 
-.btn-close-email, .btn-shop-close, .btn-close-email-code {
+.btn-close-email,
+.btn-shop-close,
+.btn-close-email-code {
     display: none !important;
 }
 
-.modal *:not(input), .modal-header, .modal-body, .modal-footer {
+.modal *:not(input, i),
+.modal-header,
+.modal-body,
+.modal-footer {
     font-family: adobe-clean, sans-serif;
     border: none !important;
 }
@@ -235,7 +249,8 @@ input[type=tel] {
     margin-bottom: 20px;
 }
 
-.choosen-item .choosen-item-name, .choosen-item .choosen-item-price {
+.choosen-item .choosen-item-name,
+.choosen-item .choosen-item-price {
     font-size: 24px;
     margin-top: 14px;
     margin-bottom: 0px;
@@ -252,7 +267,7 @@ input[type=tel] {
     border-radius: 4px;
 }
 
-.choosen-item .col-8 div{
+.choosen-item .col-8 div {
     display: flex;
     justify-content: space-between;
 }
@@ -298,10 +313,12 @@ input[type=tel] {
         stroke-dasharray: 1, 200;
         stroke-dashoffset: 0;
     }
+
     50% {
         stroke-dasharray: 89, 200;
         stroke-dashoffset: -35;
     }
+
     100% {
         stroke-dasharray: 89, 200;
         stroke-dashoffset: -124;
