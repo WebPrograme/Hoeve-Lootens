@@ -121,8 +121,6 @@
     left: 50%;
     min-width: 25rem;
     max-width: 90%;
-    background-color: #4a7d44;
-    border-color: #4a7d44;
     border-radius: 0.5rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     z-index: 100;
@@ -130,9 +128,7 @@
 }
 
 .volunteers-signup-add-btn:hover {
-    opacity: 1;
-    background-color: #3a6d34;
-    border-color: #3a6d34;
+    opacity: .8;
 }
 
 .volunteers-modal-footer {

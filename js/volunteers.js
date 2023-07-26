@@ -58,7 +58,7 @@ function checkOverlap(cell) {
         let shiftCount = (timeslotEndHours - timeslotStartHours) * 2 + ((timeslotEndMinutes - timeslotStartMinutes) / 30);
         let previousShift = timeslotStart;
 
-        selectedShifts.push(previousShift);
+        selectedShifts.push(timeslotStart);
 
         for (let i = 0; i < shiftCount; i++) {
             let time = previousShift.split(':');
@@ -77,9 +77,11 @@ function checkOverlap(cell) {
 
             selectedShifts.push(previousShift);
         }
+
+        selectedShifts.pop();
     });
 
-    if (selectedShifts.includes(cellTimeslotStart) || selectedShifts.includes(cellTimeslotEnd)) {
+    if ((selectedShifts.includes(cellTimeslotStart))) {
         return true;
     }
 
@@ -239,7 +241,7 @@ function showTimeTable(dataFull, date) {
 document.querySelector('.volunteers-select-date').addEventListener('change', (e) => {
     let selectedDate = e.target.value;
 
-    postRequest('volunteers/get', {}).then((res) => {
+    postRequest('volunteers/tasks/get', {}).then((res) => {
         if (res.status === 200) {
             let data = JSON.parse(res.responseText);
 
