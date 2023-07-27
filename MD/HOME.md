@@ -9,6 +9,19 @@ LINKS: pages/shop.html || KOOP HIER JE TICKETS
 
 ==================================================
 
+Medewerkers 
+
+IMAGE: medewerkers.jpg
+
+TEXT: Om alles vlot te laten verlopen kunnen we elk jaar rekenen op veel vrijwilligers. Wens je ook
+graag mee te helpen? Je kan kiezen om je handen uit de mouwen te steken voor één of
+meerdere taken tijdens uren die jou het beste uitkomen. Help je mee tijdens de After Work
+Party of KetnetBand? Dan krijg je er een persoonlijk toegangsticket bovenop!
+
+LINKS: pages/volunteers.html || SCHRIJF JE IN
+
+==================================================
+
 Boomgaardcafé
 
 IMAGE: BoomgaardcafeFlyer.jpeg
