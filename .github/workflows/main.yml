@@ -1,19 +1,17 @@
-on:
-    push:
-        branches:
-            - master
-name: Production Deployment
+on: push
+name: 🚀 Deploy website on push
 jobs:
     web-deploy:
-        name: Deploy
+        name: 🎉 Deploy
         runs-on: ubuntu-latest
         steps:
-            - name: Get latest code
-              uses: actions/checkout@v2
+            - name: 🚚 Get latest code
+              uses: actions/checkout@v3
 
-            - name: Sync files
-              uses: SamKirkland/FTP-Deploy-Action@4.1.0
+            - name: 📂 Sync files
+              uses: SamKirkland/FTP-Deploy-Action@v4.3.4
               with:
                   server: www.it4pro-server3.be
                   username: hoeveloo
                   password: ${{ secrets.PROD_FTP_PWD }}
+                  server-dir: plublic_html
