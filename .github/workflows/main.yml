@@ -14,4 +14,4 @@ jobs:
                   server: www.it4pro-server3.be
                   username: hoeveloo
                   password: ${{ secrets.PROD_FTP_PWD }}
-                  server-dir: plublic_html/
+                  server-dir: domains/hoevelootens.be/public_html/
