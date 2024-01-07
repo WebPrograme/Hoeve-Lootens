@@ -354,7 +354,7 @@ if (window.location.pathname == '/pages/shop.html') {
 
 								if (method == 'overschrijving') {
 									// Show Info For Overschrijving
-									document.querySelector('.shop-success-overschrijving-price').innerHTML = '€' + dataEvent['Price'] * Quantity;
+									document.querySelector('.shop-success-overschrijving-price').innerHTML = '€' + dataEvent['Price'] * data['Amount'];
 									document.querySelector('.shop-success-overschrijving-code').innerHTML = UserCode;
 								} else if (method == 'payconiq') {
 									const qrcodeImg = document.querySelector('.shop-success-payconiq-qr');
@@ -365,7 +365,7 @@ if (window.location.pathname == '/pages/shop.html') {
 									document.querySelector('.shop-success-payconiq-timer').innerHTML = '';
 
 									// Create Payconiq QR Code
-									postRequest('/api/payconiq/create', { Amount: dataEvent['Price'] * Quantity, Ref: UserCode, Event: EventName }).then((res) => {
+									postRequest('/api/payconiq/create', { Amount: dataEvent['Price'] * data['Amount'], Ref: UserCode, Event: EventName }).then((res) => {
 										if (res.status == 200) {
 											let links = JSON.parse(res.response);
 
@@ -380,9 +380,9 @@ if (window.location.pathname == '/pages/shop.html') {
 											// Start Timer (15 Minutes)
 											const start = Date.now();
 											setInterval(function () {
-												const delta = Date.now() - start;
-												const seconds = Math.floor(delta / 1000);
-												const minutes = Math.floor(seconds / 60);
+												let delta = Date.now() - start;
+												let seconds = Math.floor(delta / 1000);
+												let minutes = Math.floor(seconds / 60);
 												seconds = seconds % 60;
 												minutes = minutes % 60;
 												document.querySelector('.shop-success-payconiq-timer').innerHTML = 14 - minutes + ':' + (60 - seconds);
