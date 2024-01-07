@@ -68,29 +68,18 @@ function updateCalendar(month, year = d.getFullYear()) {
 			// Check If Day Has Event
 			if (events[dates[i]].Type == 'event') {
 				// Check If Event Is Event
-				calendarContent +=
-					"<div class='calendar-day calendar-active calendar-event calendar-tooltip calendar-tooltip-event' id='day-" +
-					dates[i] +
-					"'><p>" +
-					dates[i] +
-					"</p><div class='calendar-top'><p>" +
-					events[dates[i]].Title +
-					'</p><i></i></div></div>';
+				calendarContent += `<div class='calendar-day calendar-active calendar-event calendar-tooltip calendar-tooltip-event' id='day-${dates[i]}'><p>${
+					dates[i]
+				}</p><div class='calendar-top'><p>${events[dates[i]].Title}</p><i></i></div></div>`;
 			} else if (events[dates[i]].Type == 'res') {
 				// Check If Event Is Reservation
-				calendarContent +=
-					"<div class='calendar-day calendar-active calendar-res calendar-tooltip calendar-tooltip-res'><p>" +
-					dates[i] +
-					"</p><div class='calendar-top'><p>Gerserveerd</p><i></i></div></div>";
+				calendarContent += `<div class='calendar-day calendar-active calendar-res calendar-tooltip calendar-tooltip-res'><p>${dates[i]}</p><div class='calendar-top'><p>Gerserveerd</p><i></i></div></div>`;
 			} else if (events[dates[i]].Type == 'option') {
 				// Check If Event Is Option
-				calendarContent += "<div class='calendar-day calendar-active calendar-option'><p>" + dates[i] + '</p></div>';
+				calendarContent += `<div class='calendar-day calendar-active calendar-option calendar-tooltip calendar-tooltip-option'><p>${dates[i]}</p><div class='calendar-top'><p>Optie</p><i></i></div></div>`;
 			} else if (events[dates[i]].Type == 'boomgaardcafe') {
 				// Check If Event Is Boomgaardcafe
-				calendarContent +=
-					"<div class='calendar-day calendar-active calendar-boomgaardcafe calendar-tooltip calendar-tooltip-boomgaardcafe'><p>" +
-					dates[i] +
-					"</p><div class='calendar-top'><p>Boomgaardcafé</p><i></i></div></div>";
+				calendarContent += `<div class='calendar-day calendar-active calendar-boomgaardcafe calendar-tooltip calendar-tooltip-boomgaardcafe'><p>${dates[i]}</p><div class='calendar-top'><p>Boomgaardcafé</p><i></i></div></div>`;
 			}
 		} else {
 			// If Day Has No Event
@@ -304,51 +293,20 @@ function parseEvents(events) {
 		}
 
 		if (events[i]['summary'] != undefined) {
-			if (day == endDay && year >= currentYear) {
+			if (month == endMonth && year >= currentYear) {
 				let type = 'Not public';
 				let title = events[i]['summary'];
 				let description = '';
 
-				if (events[i]['summary'].includes('Reservering')) {
+				if (events[i]['summary'].toLowerCase().includes('reservering')) {
 					type = 'res';
-					title = events[i]['summary'].split('Reservering')[0];
-				} else if (events[i]['summary'].includes('Optie')) {
+					title = events[i]['summary'].replace('Reservering', '').replace('reservering', '');
+				} else if (events[i]['summary'].toLowerCase().includes('optie')) {
 					type = 'option';
-					title = events[i]['summary'].split('Optie')[0];
-				} else if (events[i]['summary'].includes('Event')) {
+					title = events[i]['summary'].replace('Optie', '').replace('optie', '');
+				} else if (events[i]['summary'].toLowerCase().includes('event')) {
 					type = 'event';
-					title = events[i]['summary'].split('Event')[0];
-					description = events[i]['description'];
-				} else if (events[i]['summary'] == 'Boomgaardcafé') {
-					type = 'boomgaardcafe';
-					title = events[i]['summary'];
-					if (events[i]['description'] != undefined) {
-						description = events[i]['description'];
-					}
-				}
-
-				calendarEvents[year][Object.keys(calendarEvents[year])[month - 1]][day] = {
-					Type: type,
-					Title: title,
-				};
-
-				if (description != '' && type == 'boomgaardcafe') {
-					boomgaardcafeEvents['Description'] = description;
-				}
-			} else if (month == endMonth && year >= currentYear) {
-				let type = 'Not public';
-				let title = events[i]['summary'];
-				let description = '';
-
-				if (events[i]['summary'].includes('Reservering')) {
-					type = 'res';
-					title = events[i]['summary'].split('Reservering')[0];
-				} else if (events[i]['summary'].includes('Optie')) {
-					type = 'option';
-					title = events[i]['summary'].split('Optie')[0];
-				} else if (events[i]['summary'].includes(' Event')) {
-					type = 'event';
-					title = events[i]['summary'].split('Event')[0];
+					title = events[i]['summary'].replace('Event', '').replace('event', '');
 					description = events[i]['description'];
 				} else if (events[i]['summary'] == 'Boomgaardcafé') {
 					type = 'boomgaardcafe';
@@ -374,15 +332,15 @@ function parseEvents(events) {
 				let title = events[i]['summary'];
 				let description = '';
 
-				if (events[i]['summary'].includes('Reservering')) {
+				if (events[i]['summary'].toLowerCase().includes('reservering')) {
 					type = 'res';
-					title = events[i]['summary'].split('Reservering')[0];
-				} else if (events[i]['summary'].includes(' Optie')) {
+					title = events[i]['summary'].replace('Reservering', '').replace('reservering', '');
+				} else if (events[i]['summary'].toLowerCase().includes('optie')) {
 					type = 'option';
-					title = events[i]['summary'].split('Optie')[0];
-				} else if (events[i]['summary'].includes(' Event')) {
+					title = events[i]['summary'].replace('Optie', '').replace('optie', '');
+				} else if (events[i]['summary'].toLowerCase().includes('event')) {
 					type = 'event';
-					title = events[i]['summary'].split('Event')[0];
+					title = events[i]['summary'].replace('Event', '').replace('event', '');
 					description = events[i]['description'];
 				} else if (events[i]['summary'] == 'Boomgaardcafé') {
 					type = 'boomgaardcafe';
@@ -415,7 +373,7 @@ function parseEvents(events) {
 
 // Hover On Calendar Dates
 function tooltip() {
-	var tooltips = document.querySelectorAll('.calendar-tooltip');
+	const tooltips = document.querySelectorAll('.calendar-tooltip');
 	tooltips.forEach(function (tooltip, index) {
 		tooltip.addEventListener('mouseover', positionTooltip); // On hover, launch the function below
 	});
@@ -430,13 +388,13 @@ function tooltip() {
 // Position Tooltip
 function positionTooltip() {
 	// Get .ktooltiptext sibling
-	var tooltip = this.childNodes[1];
+	const tooltip = this.childNodes[1];
 
 	// Get calculated ktooltip coordinates and size
-	var tooltip_rect = this.getBoundingClientRect();
-	var tooltip_width = tooltip_rect.width;
-	var tooltip_pos_right = tooltip_rect.right;
-	var tooltip_pos_y = tooltip_rect.y;
+	const tooltip_rect = this.getBoundingClientRect();
+	const tooltip_width = tooltip_rect.width;
+	const tooltip_pos_right = tooltip_rect.right;
+	const tooltip_pos_y = tooltip_rect.y;
 
 	if (tooltip_pos_right + tooltip_width > window.innerWidth) {
 		tooltip.style.left = '0px';
