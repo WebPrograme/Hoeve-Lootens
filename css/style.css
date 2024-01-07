@@ -1065,7 +1065,7 @@ footer p {
 }
 
 .calendar-header h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: #FCC000;
     margin: 0 0 0 0 !important;
     padding: 0 0 0 0 !important;
@@ -1080,7 +1080,7 @@ footer p {
 
 .calendar-header i {
     padding: 9px;
-    font-size: 2.8rem;
+    font-size: 2.25rem;
     color: #FCC000;
     cursor: pointer;
 }
@@ -1099,7 +1099,7 @@ footer p {
 }
 
 .calendar-lint h3 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: bold;
     color: #4A7D4480;
     margin: 0 0 0 0 !important;

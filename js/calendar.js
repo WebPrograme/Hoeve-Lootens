@@ -181,39 +181,28 @@ function showEvents() {
 			if (lastMonth == boomgaardcafeEvents[i].Month) {
 				daysInMonth.push(boomgaardcafeEvents[i].Day);
 			} else {
-				boomgaardcafeCardsContent +=
-					"<p class='calendar-boomgaardcafe-dates' data-month='" +
-					calendarMonths[calendarMonths.indexOf(lastMonth)] +
-					"'>" +
-					daysInMonth.join(' / ') +
-					' ' +
-					calendarMonthsDutch[calendarMonths.indexOf(lastMonth)].charAt(0).toUpperCase() +
-					calendarMonthsDutch[calendarMonths.indexOf(lastMonth)].slice(1) +
-					'</p>';
+				boomgaardcafeCardsContent += `
+					<p class='calendar-boomgaardcafe-dates' data-month='${calendarMonths[calendarMonths.indexOf(lastMonth)]}'>${daysInMonth.join(' / ')} ${calendarMonthsDutch[
+					calendarMonths.indexOf(lastMonth)
+				]
+					.charAt(0)
+					.toUpperCase()}${calendarMonthsDutch[calendarMonths.indexOf(lastMonth)].slice(1)}</p>`;
 				daysInMonth = [boomgaardcafeEvents[i].Day];
 			}
 			lastMonth = boomgaardcafeEvents[i].Month;
 
 			if (boomgaardcafeEvents[i + 1] == undefined) {
-				boomgaardcafeCardsContent +=
-					"<p class='calendar-boomgaardcafe-dates' data-month='" +
-					calendarMonths[calendarMonths.indexOf(lastMonth)] +
-					"'>" +
-					daysInMonth.join(' / ') +
-					' ' +
-					calendarMonthsDutch[calendarMonths.indexOf(lastMonth)].charAt(0).toUpperCase() +
-					calendarMonthsDutch[calendarMonths.indexOf(lastMonth)].slice(1) +
-					'</p>';
+				boomgaardcafeCardsContent += `<p class='calendar-boomgaardcafe-dates' data-month='${calendarMonths[calendarMonths.indexOf(lastMonth)]}'>${daysInMonth.join(
+					' / '
+				)} ${calendarMonthsDutch[calendarMonths.indexOf(lastMonth)].charAt(0).toUpperCase()}${calendarMonthsDutch[calendarMonths.indexOf(lastMonth)].slice(1)}
+					</p>`;
 			}
 			var description = boomgaardcafeEvents['Description'];
 		}
 
-		calendarCardsContent +=
-			"<div class='calendar-card'><h3>Boomgaardcafé</h3><div class='card-content'><p class='highlight-text'>" +
-			description +
-			'</p>' +
-			boomgaardcafeCardsContent +
-			'</div></div>';
+		calendarCardsContent += `<div class='calendar-card'><h3>Boomgaardcafé</h3><div class='card-content'><p class='highlight-text'>${
+			description || ''
+		}</p>${boomgaardcafeCardsContent}</div></div>`;
 	}
 
 	// Build Calendar Cards Content (Events)
@@ -236,16 +225,9 @@ function showEvents() {
 				`${endDay} ${calendarMonthsDutchShort[calendarMonths.indexOf(endMonth)]} ${year}`;
 		}
 
-		calendarCardsContent +=
-			'<div class="calendar-card"><h3>' +
-			eventTitle +
-			'</h3><p class="status" data-month="' +
-			startMonth +
-			'">' +
-			eventDate +
-			'</p><p class="highlight-text">' +
-			eventDescription +
-			'</p></div>';
+		calendarCardsContent += `<div class="calendar-card"><h3>${eventTitle}</h3><p class="status" data-month="${startMonth}">${eventDate}</p><p class="highlight-text">${
+			eventDescription || ''
+		}</p></div>`;
 	}
 
 	// Add Calendar Cards Content To Calendar Cards
