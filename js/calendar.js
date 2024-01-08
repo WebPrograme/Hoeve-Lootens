@@ -1,8 +1,8 @@
 // VERSION: 1.0
 
 // Variables
-const d = new Date();
-const currentYear = d.getFullYear();
+const currentDate = new Date();
+const currentYear = currentDate.getFullYear();
 const calendar = document.querySelector('.calendar-content');
 const calendarHeader = document.querySelector('.calendar-header-name');
 const calendarHeaderSkeleton = document.querySelector('.skeleton-header-name');
@@ -16,7 +16,7 @@ let filteredEvents = {};
 let filteredEventsContent = {};
 
 // Get Google Calendar
-async function getCalendar() {
+async function fetchCalendar() {
 	const response = await fetch('https://www.googleapis.com/calendar/v3/calendars/planning.hoevelootens@gmail.com/events?key=AIzaSyA4R3_Qmo2k4LyMtXs86xTkHtx9tIM8VoA', {
 		method: 'GET',
 	});
@@ -24,7 +24,7 @@ async function getCalendar() {
 }
 
 // Show Month
-function showMonth(month, year = d.getFullYear()) {
+function showMonth(month, year = currentDate.getFullYear()) {
 	// Get Variables Based On Month
 	const dutchMonth = calendarMonthsDutch[calendarMonths.indexOf(month)].charAt(0).toUpperCase() + calendarMonthsDutch[calendarMonths.indexOf(month)].slice(1);
 	const monthIndex = calendarMonths.indexOf(month);
@@ -90,7 +90,7 @@ function showMonth(month, year = d.getFullYear()) {
 
 // Show Events
 function showEvents() {
-	const year = d.getFullYear();
+	const year = currentDate.getFullYear();
 	const calendarCards = document.querySelector('.calendar-cards .cards');
 	const months = Object.keys(filteredEvents[year]);
 
@@ -365,7 +365,7 @@ function positionTooltip() {
 }
 
 // Init Calendar
-getCalendar().then((calendar) => {
+fetchCalendar().then((calendar) => {
 	const allEvents = calendar.items || [];
 	let events = [];
 
@@ -387,7 +387,7 @@ getCalendar().then((calendar) => {
 
 	events = events.flat();
 	parseEvents(events);
-	showMonth(Object.keys(filteredEvents[d.getFullYear()])[d.getMonth()], d.getFullYear());
+	showMonth(Object.keys(filteredEvents[currentDate.getFullYear()])[currentDate.getMonth()], currentDate.getFullYear());
 	showEvents();
 	tooltip();
 });
