@@ -277,7 +277,7 @@ if (window.location.pathname == '/pages/shop.html') {
 					Address: Address,
 					PayMethod: 'Niet Betaald',
 					PayDate: '--',
-					CreatedAt: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
+					CreatedAt: new Date().toISOString().split('T')[0],
 					Event: EventName,
 				};
 
