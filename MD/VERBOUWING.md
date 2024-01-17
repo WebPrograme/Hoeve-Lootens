@@ -21,3 +21,11 @@ TEXT: Herstellen metselwerk kan starten.
 IMAGE: articles/verbouwing-4.jpg
 
 ==================================================
+
+Januari 2024
+
+TEXT: Plaatsen nieuw onderdak.
+
+IMAGE: articles/Verbouwing_Jan_2024.jpg
+
+==================================================
