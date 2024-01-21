@@ -1,0 +1,23 @@
+.images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: 100%;
+}
+
+.images .image-card {
+    flex: 0 1 300px;
+    margin: 0;
+    font-family: adobe-clean, sans-serif;
+}
+
+@media (max-width: 650px) {
+    .images .image-card {
+        flex: 1 1 200px;
+    }
+}
+
+.images .image-card img {
+    aspect-ratio: 4/3;
+    object-fit: cover;
+}
