@@ -1,5 +1,6 @@
 // FILE IN PROGRESS - NOT READY FOR PRODUCTION
 import { postRequest, getRequest } from '../modules/Requests.js';
+import analytics from './analyse.js';
 let data = [];
 
 // Create User Code
@@ -343,6 +344,8 @@ if (window.location.pathname == '/pages/shop.html') {
 						document.querySelector('.shop-info').style.display = 'none';
 						document.querySelector('.btn-shop-submit').style.display = 'none';
 						document.querySelector('.shop-success-methods').style.display = 'block';
+
+						analytics.log('signup', { event: EventName, user: UserCode });
 
 						// Get Choosed Payment Method
 						document.querySelectorAll('.btn-shop-method').forEach((el) => {
