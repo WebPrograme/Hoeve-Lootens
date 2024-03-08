@@ -8,6 +8,7 @@
 		<link href="/plugins/yarn.css" rel="stylesheet" type="text/css" />
 		<link href="/css/style.css" rel="stylesheet" type="text/css" />
 		<link href="/css/forum.css" rel="stylesheet" type="text/css" />
+		<link href="/css/shop.css" rel="stylesheet" type="text/css" />
 		<link rel="icon" href="../images/page image transparent.png" />
 		<link
 			rel="stylesheet"
@@ -59,7 +60,7 @@
 				</div>
 
 				<div class="modal-body">
-					<div class="row shop-info">
+					<div class="row shop-inffo">
 						<div class="col-4">
 							<img class="shop-image" src="" />
 						</div>
@@ -206,24 +207,114 @@
 					<h1>Drieskesweekend 2023</h1>
 					<img class="maatschappelijk-vorm3" src="../images/Contact_Vormen3.png" />
 
-					<div class="text-center col-6 m-auto mt-2">
+					<div class="text-center col-8 m-auto mt-2">
 						<img src="/images/gent.png" alt="Gent" class="gent-img mb-1" />
 						<p>
 							We zijn blij om opnieuw een jubileumeditie te kunnen organiseren. Voor onze 35 ste Drieskesfeesten vieren we 3 dagen feest! We voorzien activiteiten
 							voor groot en klein. Kijk hieronder om het volledige programma te bekijken. Pas op, je kan niet hetzelfde email adres gebruiken voor dezelfde activiteit
 							(om dubbele inschrijvingen te vermijden).
 						</p>
-						<div class="btn-row shop-btn-row">
-							<a class="btn btn-primary btn-primary-sm btn-check-code shop-btn" role="button" data-target-modal="modalUserCode" target="_blank"
-								>BETALINGSCODE VERGETEN?</a
-							>
-						</div>
 						<i class="text-center">Vragen of problemen? Stuur gerust een email naar yarne.gooris@gmail.com</i>
 					</div>
 				</div>
 			</div>
 
-			<div class="shop-container col-10 flex m-inline-auto mt-3 mb-3 justify-center"></div>
+			<div class="shop-tickets col-10 flex m-inline-auto mt-3 mb-3 justify-center column">
+				<button class="btn btn-primary btn-primary-sm shop-tickets-next" disabled>VOLGENDE <i class="fa-solid fa-angle-right"></i></button>
+			</div>
+
+			<div class="shop-info shop-hidden flex m-inline-auto mt-3 mb-3 justify-center column">
+					<div>
+						<label class="label" for="shop-firstname">Voornaam</label>
+						<input type="text" class="input" placeholder="Voornaam" name="shop-firstname" />
+					</div>
+
+					<div>
+						<label class="label" for="shop-lastname">Achternaam</label>
+						<input type="text" class="input" placeholder="Achternaam" name="shop-lastname" />
+					</div>
+
+					<div>
+						<label class="label" for="shop-email">Email</label>
+						<input type="text" class="input" placeholder="Email" name="shop-email" />
+					</div>
+
+					<div>
+						<label class="label" for="shop-telephone">Telefoonnummer</label>
+						<input type="text" class="input" placeholder="Telefoonnummer" name="shop-phone" />
+					</div>
+
+					<div>
+						<label class="label" for="shop-address">Adres</label>
+						<input type="text" class="input" placeholder="Adres" name="shop-address" />
+					</div>
+
+					<div class="mb-2 shop-info-saved">
+						<input type="checkbox" id="shop-info-saved" class="input" name="shop-info-saved" checked />
+						<label for="shop-info-saved">Bewaar mijn gegevens</label>
+					</div>
+
+				<button class="btn btn-primary btn-primary-sm shop-info-next" disabled>VOLGENDE <i class="fa-solid fa-angle-right"></i></button>
+			</div>
+
+			<div class="shop-additional shop-hidden flex m-inline-auto mt-3 mb-3 justify-center column">
+				<button class="btn btn-primary btn-primary-sm shop-additional-next" disabled>VOLGENDE <i class="fa-solid fa-angle-right"></i></button>
+			</div>
+
+			<div class="shop-summary shop-hidden flex m-inline-auto mt-3 mb-3 justify-center column">
+				<div class="shop-summary-info">
+					<div>
+						<h3 class="shop-summary-title">Uw Gegevens</h3>
+						<p class="shop-summary-name"></p>
+						<p class="shop-summary-email"></p>
+						<p class="shop-summary-phone"></p>
+						<p class="shop-summary-address"></p>
+					</div>
+
+					<div class="shop-summary-tickets">
+						<h3 class="shop-summary-title mt-2">Uw Tickets</h3>
+						<div class="shop-summary-tickets-list"></div>
+						<div class="shop-summary-tickets-total">
+							<h4 class="shop-summary-title">Totaal</h4>
+							<p class="shop-summary-total"></p>
+						</div>
+					</div>
+				</div>
+
+				<button class="btn btn-primary btn-primary-sm shop-summary-next" >SUBMIT <i class="fa-solid fa-angle-right"></i></button>
+			</div>
+
+			<div class="shop-payment shop-hidden flex m-inline-auto mt-3 mb-3 justify-center column">
+				<h3 class="shop-payment-title">Overschrijving</h3>
+				<p>U kan betalen met een overschrijving van <span class="shop-payment-total"></span> naar BE82 0689 4839 2568 met als beschrijving: <span class="shop-payment-ref"></span></p>
+				
+				<div class="shop-payment-divider">
+					<span>OF</span>
+				</div>
+
+				<h3 class="shop-payment-title">Payconiq</h3>
+				<p>U kan betalen met Payconiq door de QR-code te scannen:</p>
+				<img class="shop-payment-qr" src="" />
+
+				<p class="shop-payment-timer"></p>
+				<a class="btn btn-primary btn-primary-sm shop-payment-mobile" >Ik ben op mobiel</a>
+			</div>
+
+			<div class="shop-already-subscribed shop-hidden flex m-inline-auto mt-3 mb-3 justify-center column">
+				<h3 class="shop-already-subscribed-title">U bent al ingeschreven</h3>
+				<p>U bent al ingeschreven voor deze activiteit met dit email adres.</p>
+
+				<label class="label">1. Wilt u uw inschrijving aanpassen?</label>
+				<p>Stuur een email naar yarne.gooris@gmail.com. Vermeld uw email adres en de activiteit waarvoor u bent ingeschreven.</p>
+
+				<label class="label">2. Wilt u betalen?</label>
+				<p>Klik op de knop hieronder om de verdere betalingsinstructies te krijgen.</p>
+				<a class="btn btn-primary btn-primary-sm shop-already-subscribed-pay">BETALEN <i class="fa-solid fa-angle-right"></i></a>
+
+				<label class="label">3. Wilt u een aparte inschrijving maken?</label>
+				<p>Gebruik een ander email adres om een aparte inschrijving te maken. Als u geen ander email adres heeft, stuur een email naar yarne.gooris@gmail.com met de
+					activiteit waarvoor u wilt inschrijven.</p>
+			</div>
 
 			<div class="header">
 				<h1>Programma</h1>

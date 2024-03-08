@@ -612,6 +612,30 @@ main.highlight {
     width: fit-content;
 }
 
+@media(max-width: 768px) {
+
+    .top-page:not(:has(.calendar)) h1,
+    .top-page-contact h1 {
+        font-size: 35px;
+    }
+
+    .top-page p {
+        font-size: 1rem;
+    }
+}
+
+@media(max-width: 576px) {
+
+    .top-page:not(:has(.calendar)) h1,
+    .top-page-contact h1 {
+        font-size: 30px;
+    }
+
+    .top-page p {
+        font-size: 1rem;
+    }
+}
+
 .btn {
     font-weight: 400;
     text-align: center;
@@ -1533,7 +1557,7 @@ footer p {
 
 .shop-container {
     flex-wrap: wrap;
-    gap: 3rem 1rem;
+    gap: 2rem 1rem;
 }
 
 .shop-card:has(.btn-shop-food) {
@@ -1551,10 +1575,6 @@ footer p {
 
 .btn-shop-food {
     display: block;
-}
-
-.shop-info {
-    row-gap: 1rem;
 }
 
 .shop-card-header {

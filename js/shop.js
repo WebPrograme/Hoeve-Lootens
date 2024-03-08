@@ -66,14 +66,153 @@ function getAvailableEvents() {
 	});
 }
 
+// Show Additional Info
+function showAdditionalInfo(options, type, event) {
+	const container = document.querySelector('.shop-additional');
+	const group = document.createElement('div');
+	group.dataset.event = event;
+	container.appendChild(group);
+
+	// Create Title
+	const title = document.createElement('h3');
+	title.innerHTML = event;
+	group.appendChild(title);
+
+	// Create Inputs
+	Object.keys(options).forEach((key, index) => {
+		const div = document.createElement('div');
+
+		const label = document.createElement('label');
+		label.classList.add('label');
+		label.innerHTML = key + (type == 'Food' ? ' (€' + options[key] + ')' : '');
+		label.setAttribute('for', key);
+
+		const input = document.createElement('input');
+		input.classList.add('shop-input', 'input');
+
+		if (type == 'Quiz') {
+			input.setAttribute('type', 'text');
+		} else {
+			input.setAttribute('type', 'number');
+			input.setAttribute('min', '0');
+			input.value = '0';
+		}
+
+		input.setAttribute('name', key);
+		input.setAttribute('id', key);
+		input.setAttribute('placeholder', key);
+
+		div.appendChild(label);
+		div.appendChild(input);
+		if (Object.keys(options).length != 1 || Object.keys(options).length != index + 1) {
+			if (index % 2 == 0) {
+				const row = document.createElement('div');
+				row.classList.add('shop-additional-input-group');
+				group.appendChild(row);
+			}
+
+			group.querySelector('.shop-additional-input-group:last-child').appendChild(div);
+		} else {
+			group.appendChild(div);
+		}
+	});
+
+	group.querySelector('.shop-additional-input-group:last-child').style.marginBottom = '1rem';
+}
+
+// Check Additional Info
+function checkAdditionalInfo() {
+	const groups = document.querySelectorAll('.shop-additional>div[data-event]');
+	let valid = true;
+
+	groups.forEach((el) => {
+		const inputs = el.querySelectorAll('.input');
+
+		if (inputs.length == 1) {
+			if (inputs[0].value == '') {
+				valid = false;
+			}
+		} else {
+			let total = 0;
+			inputs.forEach((el) => {
+				total += parseInt(el.value);
+			});
+
+			if (total == 0) {
+				valid = false;
+			}
+		}
+	});
+
+	document.querySelector('.shop-additional-next').disabled = !valid;
+}
+
+// Show Summary
+function showSummary(data) {
+	data = data['Participant'];
+	// Show Personal Data
+	document.querySelector('.shop-summary-name').innerHTML = data['FirstName'] + ' ' + data['LastName'];
+	document.querySelector('.shop-summary-email').innerHTML = data['Email'];
+	document.querySelector('.shop-summary-phone').innerHTML = data['Phone'];
+	document.querySelector('.shop-summary-address').innerHTML = data['Address'];
+
+	// Show Event Data
+	const event = document.createElement('div');
+	event.classList.add('shop-summary-tickets-list-item');
+	event.innerHTML = `
+			<div>
+				<h4>${data.Event} (${data.Quantity}x)</h4>
+				<h4>€${data.Amount}</h4>
+			</div>
+			${
+				data.Options != undefined
+					? Object.keys(data.Options)
+							.map((key) => {
+								if (data.Options[key] == 0) return;
+								return `<div><p>${key}</p><p>${data.Options[key]}x</p></div>`;
+							})
+							.join('')
+					: ''
+			}
+		`;
+
+	document.querySelector('.shop-summary-tickets-list').appendChild(event);
+
+	// Show Total
+	document.querySelector('.shop-summary-total').innerHTML = '€' + data.Amount;
+}
+
+// Show Payment
+function showPayment(requestBody) {
+	// Show Payment Info
+	document.querySelector('.shop-payment-total').innerHTML = '€' + requestBody['Participant']['Amount'];
+	document.querySelector('.shop-payment-ref').innerHTML = requestBody['Participant']['UserCode'] + ' - ' + requestBody['Participant']['Event'];
+
+	// Create Payconiq QR Code
+	postRequest('/api/payconiq/create', {
+		Payment: {
+			Amount: requestBody['Participant']['Amount'],
+			Ref: requestBody['Participant']['UserCode'],
+			Event: requestBody['Participant']['Event'],
+		},
+	}).then((paymentRes) => {
+		if (paymentRes.status == 200) {
+			const links = paymentRes.data;
+			document.querySelector('.shop-payment-qr').src = links['qr'];
+			document.querySelector('.shop-payment-mobile').href = links['deeplink'];
+		}
+	});
+}
+
 // Get All Events
 if (window.location.pathname == '/pages/shop.html') {
 	postRequest('/api/events/init/public', {}).then((res) => {
 		if (res.status == 200) {
 			data = res.data;
-			const shop = document.querySelector('.shop-container');
+			const shop = document.querySelector('.shop-tickets');
+			let requestBody = {};
 
-			// Create Event Cards
+			// Create Tickets
 			Object.keys(data).forEach(function (key) {
 				const now = new Date();
 				const start = data[key]['Start Date'] != undefined ? new Date(data[key]['Start Date']) : null;
@@ -84,374 +223,352 @@ if (window.location.pathname == '/pages/shop.html') {
 				if (end != null && now > end) return;
 
 				if (data[key]['AvailablePlaces'] > 0) {
-					// Create Card
-					const card = document.createElement('div');
-					card.innerHTML = `
-                        <img src="${data[key]['Image']}">
-                        <div class="shop-card-header">
-                            <h3>${key}</h3>
-                            ${data[key]['Type'] != 'Food' ? '<h3>€' + data[key]['Price'] + '</h3>' : ''}
-                        </div>
-                        <p class="status">${data[key]['Date']}</p>
-                        <a class="btn btn-primary btn-primary-sm btn-shop-add" data-value="${key}" data-target-modal="modal-signup">Tickets</a>
+					// Create Ticket
+					const ticket = document.createElement('div');
+					ticket.innerHTML = `
+						<div class="shop-ticket-start"></div>
+						<div class="shop-ticket-body">
+							<div>
+								<h3>${key}</h3>
+								<p class="status">${data[key]['Date']}</p>
+							</div>
+							<div class="shop-ticket-amount" ${data[key]['Type'] != 'QR' ? 'style="display: none;"' : ''}>
+								<h3>0</h3>
+							</div>
+						</div>
+						<div class="shop-ticket-actions">
+							${
+								data[key]['Type'] == 'QR'
+									? `<a class="shop-ticket-actions-plus" data-value="${key}"><i class="fa-solid fa-plus"></i></a>
+							<a class="shop-ticket-actions-minus" data-value="${key}"><i class="fa-solid fa-minus"></i></a>`
+									: '<a class="shop-ticket-actions-add" data-value="' + key + '"><i class="fa-regular fa-circle-check"></i></a>'
+							}
+						</div>
                     `;
 
-					card.classList.add('shop-card');
-					shop.appendChild(card);
+					ticket.classList.add('shop-ticket');
+					shop.appendChild(ticket);
 				} else {
-					// Create Card (Sold Out)
-					if (data[key]['Type'] == 'Activity' || data[key]['Type'] == 'QR' || data[key]['Type'] == 'Quiz') {
-						const card = document.createElement('div');
-
-						card.innerHTML = `
-                        	<img src="${data[key]['Image']}">
-							<div class="shop-card-header">
+					// Create Ticket (Sold Out)
+					const ticket = document.createElement('div');
+					ticket.innerHTML = `
+						<div class="shop-ticket-start"></div>
+						<div class="shop-ticket-body">
+							<div>
 								<h3>${key}</h3>
-                            	${data[key]['Type'] != 'Food' ? '<h3>€' + data[key]['Price'] + '</h3>' : ''}
+								<p class="status">${data[key]['Date']}</p>
 							</div>
-                            <p class="status">${data[key]['Date']}</p>
-                            <a class="btn btn-secondary btn-secondary-sm btn-shop-add">Volzet!</a>
-                        `;
+						</div>
+						<div class="shop-ticket-actions">
+							${
+								data[key]['Type'] == 'QR'
+									? `<a class="shop-ticket-actions-plus" data-value="${key}"><i class="fa-solid fa-plus"></i></a>
+							<a class="shop-ticket-actions-minus" data-value="${key}"><i class="fa-solid fa-minus"></i></a>`
+									: '<a class="shop-ticket-actions-add" data-value="' + key + '"><i class="fa-regular fa-circle-check"></i></a>'
+							}
+						</div>
+                    `;
 
-						card.classList.add('shop-card');
-						shop.appendChild(card);
-					}
+					ticket.classList.add('shop-ticket', 'shop-ticket-sold-out');
+					shop.appendChild(ticket);
 				}
 			});
 
-			// Show Signup Modal
-			document.querySelectorAll('.btn-shop-add').forEach((el) => {
+			// Ticket Actions
+			document.querySelectorAll('.shop-ticket-actions-plus').forEach((el) => {
 				el.addEventListener('click', (e) => {
-					// Change Modal Content Based on Event
-					const target = e.target.getAttribute('data-target-modal');
-					const eventName = e.target.getAttribute('data-value');
-					const event = data[eventName];
-					const modal = document.getElementById(target);
-					const closeTrough = modal.getAttribute('close-trough') || null;
+					const eventName = e.currentTarget.getAttribute('data-value');
+					const counter = e.currentTarget.parentElement.parentElement.querySelector('.shop-ticket-amount').querySelector('h3');
+					const amount = parseInt(counter.innerHTML);
 
-					modal.querySelector('.modal-title').innerHTML = eventName;
-					modal.querySelector('.shop-image').setAttribute('src', event['Image']);
-					modal.querySelector('.shop-price').innerHTML = event['Type'] == 'QR' ? '€' + event['Price'] + '/pp' : event['Type'] != 'Food' ? '€' + event['Price'] : '';
-					modal.querySelector('.shop-title').innerHTML = eventName;
-					modal.querySelector('.shop-date').innerHTML = event['Date'];
-					modal.querySelector('.shop-description').innerHTML = event['Description'];
-					modal.querySelector('.btn-shop-submit').setAttribute('data-value', eventName);
-					modal.querySelector('.shop-form-options').innerHTML = '';
+					counter.innerHTML = amount + 1 > data[eventName]['AvailablePlaces'] ? data[eventName]['AvailablePlaces'] : amount + 1;
 
-					if (event['Type'] == 'Quiz' || event['Type'] == 'Food') {
-						// Show Custom Options for Quiz
-						if (modal.querySelector('.shop-input[name="Personen"]') != undefined) {
-							modal.querySelector('.shop-input[name="Personen"]').parentElement.remove();
+					e.currentTarget.parentElement.parentElement.classList.add('shop-ticket-amount-active');
+					const allCounters = document.querySelectorAll('.shop-ticket-amount');
+					let active = false;
+
+					allCounters.forEach((el) => {
+						if (el.querySelector('h3').innerHTML != '0') {
+							active = true;
 						}
+					});
 
-						if (event['Type'] == 'Quiz') {
-							modal.querySelector('.shop-total').innerHTML = '€' + event['Price'];
+					if (active) {
+						document.querySelector('.shop-tickets-next').disabled = false;
 
-							Object.keys(event['Options']).forEach(function (key) {
-								const label = document.createElement('label');
-								label.classList.add('label');
-								label.innerHTML = key;
-								label.setAttribute('for', key);
-
-								const input = document.createElement('input');
-								input.classList.add('shop-input', 'input');
-
-								if (typeof event['Options'][key] === 'string') {
-									input.setAttribute('type', 'text');
-								} else if (typeof event['Options'][key] === 'number') {
-									input.setAttribute('type', 'number');
-									input.setAttribute('min', '0');
-								}
-
-								input.setAttribute('name', key);
-								input.setAttribute('id', key);
-								input.setAttribute('placeholder', key);
-
-								modal.querySelector('.shop-form-options').appendChild(label);
-								modal.querySelector('.shop-form-options').appendChild(input);
-							});
-						} else {
-							Object.keys(event['Options']).forEach(function (key) {
-								const label = document.createElement('label');
-								label.classList.add('label');
-								label.innerHTML = `${key} (€${event['Options'][key]})`;
-								label.setAttribute('for', key);
-
-								const input = document.createElement('input');
-								input.classList.add('shop-input', 'input');
-								input.setAttribute('type', 'number');
-								input.setAttribute('name', key);
-								input.setAttribute('id', key);
-								input.setAttribute('placeholder', 'Aantal');
-								input.setAttribute('min', '0');
-
-								modal.querySelector('.shop-form-options').appendChild(label);
-								modal.querySelector('.shop-form-options').appendChild(input);
-							});
-
-							modal.querySelectorAll('.shop-form-options .shop-input').forEach((el) => {
-								el.addEventListener('keyup', (input) => {
-									let total = 0;
-									modal.querySelectorAll('.shop-form-options .shop-input').forEach((el) => {
-										const value = el.value ? el.value : 0;
-										total += parseInt(value) * parseFloat(event['Options'][el.getAttribute('name')]);
-									});
-									modal.querySelector('.shop-total').innerHTML = '€' + total;
-								});
-							});
-						}
-					} else {
-						if (modal.querySelector('.shop-input[name="Personen"]') != null) {
-							modal.querySelector('.shop-input[name="Personen"]').setAttribute('max', event['Available Places']);
-							modal.querySelector('.shop-input[name="Personen"]').setAttribute('data-value', e.target.getAttribute('data-value'));
-						} else {
-							const personsContainer = document.createElement('div');
-							personsContainer.innerHTML =
-								`
-                                <label class="label" for="Personen">Personen</label>
-                                <input class="shop-input input" type="number" name="Personen" id="Personen" placeholder="Personen" min="1" max="` +
-								event['Available Places'] +
-								`">
-                            `;
-							modal.querySelector('.shop-persons-line').appendChild(personsContainer);
-						}
-
-						modal.querySelector('.shop-input[name="Personen"]').addEventListener('keyup', (input) => {
-							modal.querySelector('.shop-total').innerHTML = '€' + input.target.value * event['Price'];
-						});
-					}
-
-					modal.classList.add('modal-open');
-
-					e.stopPropagation();
-					if (closeTrough !== null) {
-						// Close Modal When Clicked Outside
-						modal.classList.add('close-trough');
-
-						document.addEventListener('click', (event) => {
-							const withinBoundaries = event.composedPath().includes(document.querySelector('.modal-content'));
-
-							if (!withinBoundaries) {
-								modal.classList.remove('modal-open');
-							} else {
-								return;
+						// Disable All Other Tickets
+						document.querySelectorAll('.shop-ticket').forEach((ticket) => {
+							if (ticket.querySelector('h3').innerHTML != eventName) {
+								ticket.classList.add('shop-ticket-disabled');
 							}
 						});
 					}
 				});
 			});
 
-			// Close Modal
-			document.querySelectorAll('.modal-close').forEach((el) => {
+			document.querySelectorAll('.shop-ticket-actions-minus').forEach((el) => {
 				el.addEventListener('click', (e) => {
-					resetModal();
-				});
-			});
-		}
-	});
+					const eventName = e.currentTarget.getAttribute('data-value');
+					const counter = e.currentTarget.parentElement.parentElement.querySelector('.shop-ticket-amount').querySelector('h3');
+					const amount = parseInt(counter.innerHTML);
 
-	// Submit Form
-	document.querySelector('.btn-shop-submit').addEventListener('click', async function () {
-		// Get Event Data To Check If Event Is Still Available
-		postRequest('/api/events/init/public', {}).then((res) => {
-			if (res.status == 200) {
-				const dataEvent = res.data[document.querySelector('.btn-shop-submit').getAttribute('data-value')];
+					counter.innerHTML = amount - 1 < 0 ? 0 : amount - 1;
 
-				// Get Form Data
-				const form = document.querySelector('.shop-form');
-				const EventName = document.querySelector('.btn-shop-submit').getAttribute('data-value');
-				const BtnAdd = document.querySelector('.btn-shop-submit');
-				const FirstName = form.querySelector('[name="Voornaam"]').value.trim();
-				const LastName = form.querySelector('[name="Achternaam"]').value.trim();
-				const Email = form.querySelector('[name="Email"]').value.trim();
-				const Phone = form.querySelector('[name="Telefoonnummer"]').value;
-				const Address = form.querySelector('[name="Adres"]').value.trim();
+					if (counter.innerHTML == '0') {
+						e.currentTarget.parentElement.parentElement.classList.remove('shop-ticket-amount-active');
 
-				BtnAdd.innerHTML = 'Bezig met inschrijven...';
+						const allCounters = document.querySelectorAll('.shop-ticket-amount');
+						let active = false;
 
-				// Create Participant Object
-				const data = {
-					FirstName: FirstName,
-					LastName: LastName,
-					Email: Email,
-					Phone: Phone,
-					Address: Address,
-					PayMethod: 'Niet Betaald',
-					PayDate: '--',
-					CreatedAt: new Date().toISOString().split('T')[0],
-					Event: EventName,
-				};
-
-				// Calculate The Amount, Quantity And The Possible Options
-				switch (dataEvent['Type']) {
-					case 'Quiz':
-						data['Amount'] = parseFloat(dataEvent['Price']);
-						data['Quantity'] = 1;
-						data['Options'] = {};
-
-						Object.keys(dataEvent['Options']).forEach(function (key) {
-							data['Options'][key] = form.querySelector('[name="' + key + '"]').value;
+						allCounters.forEach((el) => {
+							if (el.querySelector('h3').innerHTML != '0') {
+								active = true;
+							}
 						});
 
-						break;
-					case 'Food':
-						let amount = 0;
-						let quantity = 0;
-						data['Options'] = {};
+						if (!active) {
+							document.querySelector('.shop-tickets-next').disabled = true;
 
-						Object.keys(dataEvent['Options']).forEach(function (key) {
-							const value = form.querySelector('[name="' + key + '"]').value ? form.querySelector('[name="' + key + '"]').value : 0;
-							amount += parseInt(value) * parseFloat(dataEvent['Options'][key]);
-							quantity += parseInt(value);
-							data['Options'][key] = value;
-						});
-
-						data['Amount'] = amount;
-						data['Quantity'] = quantity;
-
-						break;
-					default:
-						data['Amount'] = parseFloat(dataEvent['Price']) * parseInt(form.querySelector('[name="Personen"]').value);
-						data['Quantity'] = parseInt(form.querySelector('[name="Personen"]').value);
-						break;
-				}
-
-				console.log(data);
-
-				// Check If Event Is Still Available
-				if (dataEvent['Available Places'] < data['Quantity'] || dataEvent['Available Places'] == 0) {
-					BtnAdd.innerHTML = 'Geen plaatsen meer beschikbaar!';
-					BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
-					return;
-				}
-
-				// Check If All Fields Are Filled In
-				if (FirstName == '' || LastName == '' || Email == '' || Phone == '' || !data['Quantity'] || data['Quantity'] == 0 || Address == '') {
-					BtnAdd.innerHTML = 'Vul alle velden in!';
-					BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
-					return;
-				}
-
-				// Create User Code
-				let UserCode = FirstName[0] + LastName[0] + getRandomIntInclusive(data, 1000, 9999);
-				UserCode = UserCode.toUpperCase();
-				data['UserCode'] = UserCode;
-
-				// Add User To Database
-				postRequest('/api/events/participants/add', { EventName: EventName, Participant: data }).then((res) => {
-					if (res.status === 200) {
-						document.querySelector('.shop-form').style.display = 'none';
-						document.querySelector('.shop-info').style.display = 'none';
-						document.querySelector('.btn-shop-submit').style.display = 'none';
-						document.querySelector('.shop-success-methods').style.display = 'block';
-
-						analytics.log('signup', { event: EventName, user: UserCode });
-
-						// Get Choosed Payment Method
-						document.querySelectorAll('.btn-shop-method').forEach((el) => {
-							el.addEventListener('click', (e) => {
-								const method = e.target.getAttribute('data-method');
-
-								document.querySelector('.shop-success-methods').style.display = 'none';
-								document.querySelector('.shop-success-' + method).style.display = 'block';
-
-								if (method == 'overschrijving') {
-									// Show Info For Overschrijving
-									document.querySelector('.shop-success-overschrijving-price').innerHTML = '€' + dataEvent['Price'] * data['Amount'];
-									document.querySelector('.shop-success-overschrijving-code').innerHTML = UserCode;
-								} else if (method == 'payconiq') {
-									const qrcodeImg = document.querySelector('.shop-success-payconiq-qr');
-									const phoneLink = document.querySelector('.shop-success-payconiq-mobile');
-
-									qrcodeImg.src = '';
-									phoneLink.href = '';
-									document.querySelector('.shop-success-payconiq-timer').innerHTML = '';
-
-									// Create Payconiq QR Code
-									postRequest('/api/payconiq/create', { Amount: dataEvent['Price'] * data['Amount'], Ref: UserCode, Event: EventName }).then((res) => {
-										if (res.status == 200) {
-											let links = JSON.parse(res.response);
-
-											// Open Payconiq App On Mobile
-											if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-												window.open(links['deeplink'], '_blank');
-											}
-
-											qrcodeImg.src = links['qr'];
-											phoneLink.href = links['deeplink'];
-
-											// Start Timer (15 Minutes)
-											const start = Date.now();
-											setInterval(function () {
-												let delta = Date.now() - start;
-												let seconds = Math.floor(delta / 1000);
-												let minutes = Math.floor(seconds / 60);
-												seconds = seconds % 60;
-												minutes = minutes % 60;
-												document.querySelector('.shop-success-payconiq-timer').innerHTML = 14 - minutes + ':' + (60 - seconds);
-
-												if (minutes == 14 && seconds == 59) {
-													document.querySelector('.shop-success-payconiq-timer').innerHTML = 'De tijd is verstreken!';
-													document.querySelector('.shop-success-payconiq-timer').style.color = 'red';
-													clearInterval();
-												}
-											}, 1000);
-										}
-									});
+							// Enable All Other Tickets
+							document.querySelectorAll('.shop-ticket').forEach((ticket) => {
+								if (ticket.querySelector('h3').innerHTML != eventName) {
+									ticket.classList.remove('shop-ticket-disabled');
 								}
 							});
-						});
-					} else if (res.status == 400) {
-						BtnAdd.innerHTML = 'U bent al ingeschreven!';
-						BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
-					} else {
-						BtnAdd.innerHTML = 'Er is iets misgegaan!';
-						BtnAdd.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
+						}
 					}
 				});
-			}
-		});
-	});
+			});
 
-	// Reload Page When Modal Is Closed (Safety Measure)
-	document.querySelector('#modal-signup .modal-close').addEventListener('click', () => {
-		window.location.reload();
-	});
+			document.querySelectorAll('.shop-ticket-actions-add').forEach((el) => {
+				el.addEventListener('click', (e) => {
+					const eventName = e.currentTarget.getAttribute('data-value');
+					el.parentElement.parentElement.classList.toggle('shop-ticket-amount-active');
+					el.parentElement.classList.toggle('shop-ticket-actions-active');
 
-	// Get UserCode From Email
-	document.querySelector('.btn-submit-email').addEventListener('click', (e) => {
-		const BtnSubmit = e.target;
-		const BtnClose = document.querySelector('.btn-close-email');
-		const EmailInput = document.querySelector('.form-check-code').querySelector('[title="email"]');
-		const Email = EmailInput.value;
-		const UserCodeElement = document.querySelector('.UserCode');
+					if (el.parentElement.parentElement.classList.contains('shop-ticket-amount-active')) {
+						el.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+						const counter = el.parentElement.parentElement.querySelector('.shop-ticket-amount').querySelector('h3');
+						counter.innerHTML = '1';
+					} else {
+						el.innerHTML = '<i class="fa-regular fa-circle-check"></i>';
+						const counter = el.parentElement.parentElement.querySelector('.shop-ticket-amount').querySelector('h3');
+						counter.innerHTML = '0';
+					}
 
-		if (Email == '') {
-			BtnSubmit.innerHTML = 'Vul alle velden in!';
-			BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
-			return;
-		}
+					const allCounters = document.querySelectorAll('.shop-ticket-amount');
+					let active = false;
 
-		getRequest('get/email?email=' + Email).then((response) => {
-			if (response.response != 'User not found!' && response.response != '{}') {
-				const data = JSON.parse(response.response);
-				let result = '';
-				Object.keys(data).forEach((key) => {
-					result += key + ' (' + data[key] + ')<br>';
+					allCounters.forEach((el) => {
+						if (el.querySelector('h3').innerHTML != '0') {
+							active = true;
+						}
+					});
+
+					document.querySelector('.shop-tickets-next').disabled = !active;
+
+					if (active) {
+						// Disable All Other Tickets
+						document.querySelectorAll('.shop-ticket').forEach((ticket) => {
+							if (ticket.querySelector('h3').innerHTML != eventName) {
+								ticket.classList.add('shop-ticket-disabled');
+							}
+						});
+					} else {
+						// Enable All Other Tickets
+						document.querySelectorAll('.shop-ticket').forEach((ticket) => {
+							if (ticket.querySelector('h3').innerHTML != eventName) {
+								ticket.classList.remove('shop-ticket-disabled');
+							}
+						});
+					}
+				});
+			});
+
+			// Ticket Next
+			document.querySelector('.shop-tickets-next').addEventListener('click', (e) => {
+				const choosenTicket = document.querySelector('.shop-ticket-amount-active');
+				const eventName = choosenTicket.querySelector('h3').innerHTML;
+				const amount = choosenTicket.querySelector('.shop-ticket-amount h3').innerHTML;
+
+				// Update Request Body
+				requestBody['EventName'] = eventName;
+				requestBody['Participant'] = {
+					Event: eventName,
+					Amount: amount * data[eventName]['Price'],
+					Quantity: parseInt(amount),
+					CreatedAt: new Date().toISOString().split('T')[0],
+					PayMethod: 'Niet Betaald',
+					PayDate: '--',
+				};
+
+				// Hide Tickets
+				document.querySelector('.shop-info').classList.remove('shop-active');
+				document.querySelector('.shop-tickets').classList.add('shop-hidden');
+				// Show Info Form
+				document.querySelector('.shop-info').classList.add('shop-active');
+				document.querySelector('.shop-info').classList.remove('shop-hidden');
+
+				// Check If There Is Saved Data
+				const savedData = JSON.parse(localStorage.getItem('shop-info'));
+				if (savedData != null) {
+					document.querySelector('.shop-info input[name="shop-firstname"]').value = savedData.FirstName;
+					document.querySelector('.shop-info input[name="shop-lastname"]').value = savedData.LastName;
+					document.querySelector('.shop-info input[name="shop-email"]').value = savedData.Email;
+					document.querySelector('.shop-info input[name="shop-phone"]').value = savedData.Phone;
+					document.querySelector('.shop-info input[name="shop-address"]').value = savedData.Address;
+					document.querySelector('.shop-info input[name="shop-info-saved"]').checked = true;
+
+					document.querySelector('.shop-info-next').disabled = false;
+				}
+			});
+
+			// Info Inputs
+			document.querySelectorAll('.shop-info input').forEach((el) => {
+				el.addEventListener('keyup', (e) => {
+					const allInputs = document.querySelectorAll('.shop-info input');
+					let active = true;
+
+					allInputs.forEach((el) => {
+						if (el.value == '') {
+							active = false;
+						}
+					});
+
+					document.querySelector('.shop-info-next').disabled = !active;
+				});
+			});
+
+			// Info Next
+			document.querySelector('.shop-info-next').addEventListener('click', (e) => {
+				// Update Request Body
+				const allInputs = document.querySelectorAll('.shop-info input');
+				requestBody['Participant'] = Object.assign(requestBody['Participant'], {
+					FirstName: allInputs[0].value,
+					LastName: allInputs[1].value,
+					Email: allInputs[2].value,
+					Phone: allInputs[3].value,
+					Address: allInputs[4].value,
+					UserCode: allInputs[0].value[0].toUpperCase() + allInputs[1].value[0].toUpperCase() + getRandomIntInclusive(data, 1000, 9999),
 				});
 
-				UserCodeElement.innerHTML = result;
+				// Save Data In Local Storage If User Chooses To
+				if (document.querySelector('.shop-info input[name="shop-info-saved"]').checked) {
+					localStorage.setItem('shop-info', JSON.stringify(requestBody['Participant']));
+				} else {
+					localStorage.removeItem('shop-info');
+				}
 
-				EmailInput.setAttribute('style', 'display: none !important;');
-				UserCodeElement.setAttribute('style', 'display: block !important;');
-				BtnSubmit.setAttribute('style', 'display: none !important;');
-				BtnClose.setAttribute('style', 'display: block !important;');
-				return;
-			}
+				// Hide Info
+				document.querySelector('.shop-info').classList.remove('shop-active');
+				document.querySelector('.shop-info').classList.add('shop-hidden');
 
-			BtnSubmit.innerHTML = 'Email niet gevonden!';
-			BtnSubmit.setAttribute('style', 'background-color: rgb(211, 115, 89) !important;');
-		});
+				// Check If There Is Need For Additional Info
+				if (data[requestBody['Participant'].Event].Type == 'Quiz' || data[requestBody['Participant'].Event].Type == 'Food') {
+					// Show Additional Info
+					showAdditionalInfo(data[requestBody['Participant'].Event].Options, data[requestBody['Participant'].Event].Type, requestBody['Participant'].Event);
+
+					document.querySelectorAll('.shop-additional input').forEach((el) => {
+						el.addEventListener('input', checkAdditionalInfo);
+					});
+
+					document.querySelector('.shop-additional').classList.add('shop-active');
+					document.querySelector('.shop-additional').classList.remove('shop-hidden');
+				} else {
+					// Show Summary
+					showSummary(requestBody);
+					document.querySelector('.shop-summary').classList.add('shop-active');
+					document.querySelector('.shop-summary').classList.remove('shop-hidden');
+				}
+			});
+
+			// Additional Next
+			document.querySelector('.shop-additional-next').addEventListener('click', (e) => {
+				// Update Request Body
+				const inputs = document.querySelectorAll('.shop-additional input');
+				const eventName = requestBody['Participant'].Event;
+				const type = data[eventName].Type;
+				let event = {};
+				if (type == 'Food') {
+					const options = {};
+					let amount = 0;
+					let quantity = 0;
+					inputs.forEach((input) => {
+						options[input.getAttribute('name')] = input.value;
+						amount += parseInt(input.value) * parseFloat(data[eventName].Options[input.getAttribute('name')]);
+						quantity += parseInt(input.value);
+					});
+
+					event = {
+						Event: eventName,
+						Amount: amount,
+						Quantity: quantity,
+						Options: options,
+					};
+				} else if (type == 'Quiz') {
+					event = {
+						Event: eventName,
+						Amount: data[eventName].Price,
+						Quantity: 1,
+						Options: {
+							[inputs[0].getAttribute('name')]: inputs[0].value,
+						},
+					};
+				} else {
+					event = {
+						Event: eventName,
+						Amount: requestBody['Participant']['Quantity'] * data[eventName]['Price'],
+						Quantity: parseInt(requestBody['Participant']['Quantity']),
+					};
+				}
+
+				requestBody['Participant'] = Object.assign(requestBody['Participant'], event);
+				console.log(requestBody);
+
+				// Hide Additional Info
+				document.querySelector('.shop-additional').classList.remove('shop-active');
+				document.querySelector('.shop-additional').classList.add('shop-hidden');
+
+				// Show Summary
+				showSummary(requestBody);
+				document.querySelector('.shop-summary').classList.add('shop-active');
+				document.querySelector('.shop-summary').classList.remove('shop-hidden');
+			});
+
+			// Summary Next
+			document.querySelector('.shop-summary-next').addEventListener('click', (e) => {
+				postRequest('/api/events/participants/add', requestBody)
+					.then((res) => {
+						// Show Payment
+						showPayment(requestBody);
+						document.querySelector('.shop-summary').classList.remove('shop-active');
+						document.querySelector('.shop-summary').classList.add('shop-hidden');
+						document.querySelector('.shop-payment').classList.add('shop-active');
+						document.querySelector('.shop-payment').classList.remove('shop-hidden');
+					})
+					.catch((err) => {
+						// Hide Summary
+						document.querySelector('.shop-summary').classList.remove('shop-active');
+						document.querySelector('.shop-summary').classList.add('shop-hidden');
+
+						// Show Already Subscribed
+						document.querySelector('.shop-already-subscribed').classList.add('shop-active');
+						document.querySelector('.shop-already-subscribed').classList.remove('shop-hidden');
+					});
+			});
+
+			// Already Subscribed Pay Button
+			document.querySelector('.shop-already-subscribed-pay').addEventListener('click', (e) => {
+				// Hide Already Subscribed
+				document.querySelector('.shop-already-subscribed').classList.remove('shop-active');
+				document.querySelector('.shop-already-subscribed').classList.add('shop-hidden');
+
+				// Show Payment
+				showPayment(requestBody);
+				document.querySelector('.shop-payment').classList.add('shop-active');
+				document.querySelector('.shop-payment').classList.remove('shop-hidden');
+			});
+		}
 	});
 }
 
