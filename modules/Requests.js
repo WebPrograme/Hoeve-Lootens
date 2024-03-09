@@ -1,4 +1,4 @@
-const baseUrl = 'http://localhost:3000';
+const baseUrl = 'https://hoeve-lootens.onrender.com';
 
 async function postRequest(path, data, headers = { 'Content-Type': 'application/json' }, retry = false) {
 	return new Promise((resolve, reject) => {
