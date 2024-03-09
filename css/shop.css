@@ -76,6 +76,10 @@
     transition: all .2s ease-in-out;
 }
 
+.shop-ticket:has(.shop-ticket-actions-add) {
+    cursor: pointer;
+}
+
 .shop-ticket.shop-ticket-sold-out,
 .shop-ticket.shop-ticket-sold-out a,
 .shop-ticket.shop-ticket-disabled,

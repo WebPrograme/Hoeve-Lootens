@@ -320,9 +320,15 @@ if (window.location.pathname == '/pages/shop.html') {
 				});
 			});
 
-			document.querySelectorAll('.shop-ticket-actions-add').forEach((el) => {
-				el.addEventListener('click', (e) => {
-					const eventName = e.currentTarget.getAttribute('data-value');
+			document.querySelectorAll('.shop-ticket-actions-add, .shop-ticket:has(.shop-ticket-actions-add)').forEach((btn) => {
+				btn.addEventListener('click', (e) => {
+					e.stopPropagation();
+					const el = e.currentTarget.classList.contains('shop-ticket-actions-add')
+						? e.currentTarget
+						: e.currentTarget.classList.contains('shop-ticket')
+						? e.currentTarget.querySelector('.shop-ticket-actions-add')
+						: null;
+					const eventName = el.getAttribute('data-value');
 					el.parentElement.parentElement.classList.toggle('shop-ticket-amount-active');
 					el.parentElement.classList.toggle('shop-ticket-actions-active');
 
@@ -339,8 +345,8 @@ if (window.location.pathname == '/pages/shop.html') {
 					const allCounters = document.querySelectorAll('.shop-ticket-amount');
 					let active = false;
 
-					allCounters.forEach((el) => {
-						if (el.querySelector('h3').innerHTML != '0') {
+					allCounters.forEach((counterEl) => {
+						if (counterEl.querySelector('h3').innerHTML != '0') {
 							active = true;
 						}
 					});
@@ -350,14 +356,14 @@ if (window.location.pathname == '/pages/shop.html') {
 					if (active) {
 						// Disable All Other Tickets
 						document.querySelectorAll('.shop-ticket').forEach((ticket) => {
-							if (ticket.querySelector('h3').innerHTML != eventName) {
+							if (ticket.querySelector('.shop-ticket-body h3').innerHTML != eventName) {
 								ticket.classList.add('shop-ticket-disabled');
 							}
 						});
 					} else {
 						// Enable All Other Tickets
 						document.querySelectorAll('.shop-ticket').forEach((ticket) => {
-							if (ticket.querySelector('h3').innerHTML != eventName) {
+							if (ticket.querySelector('.shop-ticket-body h3').innerHTML != eventName) {
 								ticket.classList.remove('shop-ticket-disabled');
 							}
 						});

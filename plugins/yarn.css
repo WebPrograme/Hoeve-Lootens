@@ -1599,8 +1599,8 @@ button {
     color: var(--primary-btn-color);
 }
 
-.btn-primary:focus,
-.btn-primary:active {
+.btn-primary:not(:disabled):focus,
+.btn-primary:not(:disabled):active {
     color: var(--primary-btn-color);
     outline: 4px solid var(--primary-btn-outline-bg);
 }
