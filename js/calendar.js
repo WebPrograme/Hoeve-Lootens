@@ -188,11 +188,11 @@ function showEvents() {
 				dates += `<p class='calendar-boomgaardcafe-dates' data-month='${month}'>${days.join(' / ')} ${dutchMonth.charAt(0).toUpperCase()}${dutchMonth.slice(1)}</p>`;
 			});
 
-			card = `<div class='calendar-card'><h3>Boomgaardcafé</h3><div class='card-content'><p class='highlight-text'>${event.Description || ''}</p>${dates}</div></div>`;
+			card = `<div class='calendar-card'><h3>Boomgaardcafé</h3><div class='card-content'><p>${event.Description || ''}</p>${dates}</div></div>`;
 		} else if (event.Type == 'event') {
 			card = `<div class="calendar-card"><h3>${event.Title}</h3><p class="status" data-month="${event.StartMonth}">${event.StartDay} - ${event.EndDay} ${
 				calendarMonthsDutchShort[calendarMonths.indexOf(event.StartMonth)]
-			} ${year}</p><p class="highlight-text">${event.Description || ''}</p></div>`;
+			} ${year}</p><p>${event.Description || ''}</p></div>`;
 		}
 
 		document.querySelector('.calendar-cards .cards').innerHTML += card;

@@ -155,7 +155,10 @@ nav a:hover {
     .nav-list li a:hover {
         background-color: #fff;
         color: #4A7D44;
-        transform: translateY(-10px);
+    }
+
+    .nav-list li a:not(.nav-list-active):hover {
+        border-bottom: none;
     }
 
     .hamburger {
@@ -400,7 +403,7 @@ nav a:hover {
 }
 
 .cookie {
-    display: flex;
+    display: none;
     justify-content: space-between;
     font-family: adobe-clean, sans-serif;
     box-shadow: 0px 0px 20px 11px rgb(0 0 0 / 10%);
@@ -494,8 +497,7 @@ section .section-header {
     font-family: adobe-clean, sans-serif;
     font-weight: 1100;
     font-size: 36px;
-    word-break: break-all;
-    margin-bottom: 1.5rem;
+    text-wrap: balance;
 }
 
 section .section-header span {
@@ -528,6 +530,20 @@ section ul li {
 
 section .col-6:has(:not(img)) {
     display: grid;
+}
+
+@media(max-width: 576px) {
+    .section-header {
+        font-size: 2rem !important;
+    }
+
+    .contact-card .section-header {
+        font-size: 1.5rem !important;
+    }
+
+    section p {
+        font-size: 1rem;
+    }
 }
 
 main.highlight {
@@ -898,7 +914,7 @@ footer p {
 }
 
 .timeline h2 {
-    font-size: 28px;
+    font-size: 1.5rem;
     font-weight: bold;
 }
 
@@ -1532,11 +1548,15 @@ footer p {
 }
 
 .contact-card h1 {
-    font-size: 30px;
-    margin-top: 14px;
+    font-size: 1.5rem;
+    margin-top: .5rem;
     margin-bottom: 0px;
     font-weight: bold;
     color: #005329;
+}
+
+.contact-card p {
+    font-size: 1rem;
 }
 
 .contact-card-position {

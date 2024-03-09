@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width" />
 		<meta name="discription" content="De maatschappelijke projecten van Hoeve Lootens" />
 		<title>Hoeve Lootens</title>
+   		<script src="/js/analyse.js" type="module"></script>
 		<link href="/plugins/yarn.css" rel="stylesheet" type="text/css" />
 		<link href="/css/style.css" rel="stylesheet" type="text/css" />
 		<link href="/css/forum.css" rel="stylesheet" type="text/css" />
@@ -220,44 +221,55 @@
 			</div>
 
 			<div class="shop-tickets col-10 flex m-inline-auto mt-3 mb-3 justify-center column">
+				<h2 class="shop-title">Tickets</h2>
+				<p class="shop-description mb-2">Kies hieronder de tickets die u wilt bestellen.</p>
+				<div class="shop-tickets-list"></div>
 				<button class="btn btn-primary btn-primary-sm shop-tickets-next" disabled>VOLGENDE <i class="fa-solid fa-angle-right"></i></button>
 			</div>
 
 			<div class="shop-info shop-hidden flex m-inline-auto mt-3 mb-3 justify-center column">
-					<div>
-						<label class="label" for="shop-firstname">Voornaam</label>
-						<input type="text" class="input" placeholder="Voornaam" name="shop-firstname" />
-					</div>
+				<h2 class="shop-title">Info</h2>
+				<p class="shop-description">Vul hieronder uw gegevens in.</p>
 
-					<div>
-						<label class="label" for="shop-lastname">Achternaam</label>
-						<input type="text" class="input" placeholder="Achternaam" name="shop-lastname" />
-					</div>
+				<div>
+					<label class="label" for="shop-firstname">Voornaam</label>
+					<input type="text" class="input" placeholder="Voornaam" name="shop-firstname" />
+				</div>
 
-					<div>
-						<label class="label" for="shop-email">Email</label>
-						<input type="text" class="input" placeholder="Email" name="shop-email" />
-					</div>
+				<div>
+					<label class="label" for="shop-lastname">Achternaam</label>
+					<input type="text" class="input" placeholder="Achternaam" name="shop-lastname" />
+				</div>
 
-					<div>
-						<label class="label" for="shop-telephone">Telefoonnummer</label>
-						<input type="text" class="input" placeholder="Telefoonnummer" name="shop-phone" />
-					</div>
+				<div>
+					<label class="label" for="shop-email">Email</label>
+					<input type="text" class="input" placeholder="Email" name="shop-email" />
+				</div>
 
-					<div>
-						<label class="label" for="shop-address">Adres</label>
-						<input type="text" class="input" placeholder="Adres" name="shop-address" />
-					</div>
+				<div>
+					<label class="label" for="shop-telephone">Telefoonnummer</label>
+					<input type="text" class="input" placeholder="Telefoonnummer" name="shop-phone" />
+				</div>
 
-					<div class="mb-2 shop-info-saved">
-						<input type="checkbox" id="shop-info-saved" class="input" name="shop-info-saved" checked />
-						<label for="shop-info-saved">Bewaar mijn gegevens</label>
-					</div>
+				<div>
+					<label class="label" for="shop-address">Adres</label>
+					<input type="text" class="input" placeholder="Adres" name="shop-address" />
+				</div>
+
+				<div class="mb-2 shop-info-saved">
+					<input type="checkbox" id="shop-info-saved" class="input" name="shop-info-saved" checked />
+					<label for="shop-info-saved">Bewaar mijn gegevens</label>
+				</div>
 
 				<button class="btn btn-primary btn-primary-sm shop-info-next" disabled>VOLGENDE <i class="fa-solid fa-angle-right"></i></button>
 			</div>
 
 			<div class="shop-additional shop-hidden flex m-inline-auto mt-3 mb-3 justify-center column">
+				<h2 class="shop-title">Extra</h2>
+				<p class="shop-description">Vul hieronder de extra informatie in.</p>
+
+				<div class="shop-additional-list"></div>
+
 				<button class="btn btn-primary btn-primary-sm shop-additional-next" disabled>VOLGENDE <i class="fa-solid fa-angle-right"></i></button>
 			</div>
 

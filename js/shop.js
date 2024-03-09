@@ -21,21 +21,6 @@ function getRandomIntInclusive(data, min, max) {
 	}
 }
 
-// Reset Modal
-function resetModal() {
-	const modal = document.querySelector('.modal');
-
-	modal.classList.remove('modal-open');
-	modal.querySelector('.shop-form').style.display = 'block';
-	modal.querySelector('.shop-info').style.display = 'flex';
-	modal.querySelector('.btn-shop-submit').style.display = 'block';
-	modal.querySelector('.btn-shop-submit').style.backgroundColor = '#FCC000';
-	modal.querySelector('.btn-shop-submit').innerHTML = 'Inschrijven';
-	modal.querySelector('.shop-success').style.display = 'none';
-
-	document.querySelector('.shop-success-payconiq-qr').src = '';
-}
-
 // Get Available Events
 function getAvailableEvents() {
 	return new Promise((resolve, reject) => {
@@ -68,15 +53,10 @@ function getAvailableEvents() {
 
 // Show Additional Info
 function showAdditionalInfo(options, type, event) {
-	const container = document.querySelector('.shop-additional');
+	const container = document.querySelector('.shop-additional-list');
 	const group = document.createElement('div');
 	group.dataset.event = event;
 	container.appendChild(group);
-
-	// Create Title
-	const title = document.createElement('h3');
-	title.innerHTML = event;
-	group.appendChild(title);
 
 	// Create Inputs
 	Object.keys(options).forEach((key, index) => {
@@ -209,7 +189,7 @@ if (window.location.pathname == '/pages/shop.html') {
 	postRequest('/api/events/init/public', {}).then((res) => {
 		if (res.status == 200) {
 			data = res.data;
-			const shop = document.querySelector('.shop-tickets');
+			const shop = document.querySelector('.shop-tickets-list');
 			let requestBody = {};
 
 			// Create Tickets
