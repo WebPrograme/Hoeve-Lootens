@@ -32,8 +32,8 @@ function getAvailableEvents() {
 				Object.keys(data).forEach(function (key) {
 					if (data[key]['Available Places'] > 0 && data[key]['Type'] != 'Food') {
 						const now = new Date();
-						const start = data[key]['Start Date'] != undefined ? new Date(data[key]['Start Date']) : null;
-						const end = data[key]['End Date'] != undefined ? new Date(data[key]['End Date']) : null;
+						const start = data[key]['StartDate'] != undefined ? new Date(data[key]['StartDate']) : null;
+						const end = data[key]['EndDate'] != undefined ? new Date(data[key]['EndDate']) : null;
 
 						// Check if Event can be shown
 						if (start != null && now < start) return;
@@ -195,8 +195,8 @@ if (window.location.pathname == '/pages/shop.html') {
 			// Create Tickets
 			Object.keys(data).forEach(function (key) {
 				const now = new Date();
-				const start = data[key]['Start Date'] != undefined ? new Date(data[key]['Start Date']) : null;
-				const end = data[key]['End Date'] != undefined ? new Date(data[key]['End Date']) : null;
+				const start = data[key]['StartDate'] != undefined ? new Date(data[key]['StartDate']) : null;
+				const end = data[key]['EndDate'] != undefined ? new Date(data[key]['EndDate']) : null;
 
 				// Check if Event can be shown
 				if (start != null && now < start) return;
