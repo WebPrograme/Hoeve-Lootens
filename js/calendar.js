@@ -31,7 +31,7 @@ function showMonth(month, year = currentDate.getFullYear()) {
 	const days = new Date(year, monthIndex + 1, 0).getDate();
 	const dates = Array.from(Array(days).keys()).map((x) => ++x);
 	const events = filteredEvents[year][month];
-	const startWeekDay = new Date(year, monthIndex, 1).getDay();
+	let startWeekDay = new Date(year, monthIndex, 1).getDay();
 	let monthContent = '';
 
 	calendarHeader.innerHTML = dutchMonth + ' ' + year;
@@ -53,6 +53,8 @@ function showMonth(month, year = currentDate.getFullYear()) {
 	calendarNextMonth.setAttribute('data-month', calendarMonths[monthIndex == 11 ? 0 : monthIndex + 1]);
 	calendarNextMonth.setAttribute('data-year', month == 'December' ? parseInt(year) + 1 : year);
 	calendarNextMonth.style.cursor = 'pointer';
+
+	if (startWeekDay == 0) startWeekDay = 7;
 
 	// Add Empty Days
 	for (let i = 0; i < startWeekDay - 1; i++) {
