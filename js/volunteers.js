@@ -437,7 +437,7 @@ getRequest('/api/volunteers/init/available', {}).then((res) => {
 				Volunteer: user,
 			}).then((res) => {
 				if (res.status === 200 && res.data.result === 'Success') {
-					analytics('Added Volunteer', { volunteer: `${user.FirstName} ${user.LastName}` });
+					analytics('AddedVolunteer', { volunteer: `${user.FirstName} ${user.LastName}` });
 					localStorage.setItem('volunteer', JSON.stringify(user));
 
 					location.reload();
