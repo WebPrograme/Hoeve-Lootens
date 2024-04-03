@@ -1,4 +1,5 @@
 import { getRequest, postRequest } from '../modules/Requests.js';
+import analytics from './analyse.js';
 
 function putRequest(target, data) {
 	return new Promise((resolve, reject) => {
@@ -435,8 +436,8 @@ getRequest('/api/volunteers/init/available', {}).then((res) => {
 				Shifts: shifts,
 				Volunteer: user,
 			}).then((res) => {
-				console.log(res.data);
 				if (res.status === 200 && res.data.result === 'Success') {
+					analytics('Added Volunteer', { volunteer: `${user.FirstName} ${user.LastName}` });
 					localStorage.setItem('volunteer', JSON.stringify(user));
 
 					location.reload();

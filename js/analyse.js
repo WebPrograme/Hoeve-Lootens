@@ -29,4 +29,4 @@ function log(event, data = {}) {
 	logEvent(analytics, event, data);
 }
 
-export default { log };
+export default log;

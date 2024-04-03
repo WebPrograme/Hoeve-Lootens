@@ -525,6 +525,7 @@ if (window.location.pathname == '/pages/shop.html') {
 			document.querySelector('.shop-summary-next').addEventListener('click', (e) => {
 				postRequest('/api/events/participants/add', requestBody)
 					.then((res) => {
+						analytics('Added Participant', { Event: requestBody['Participant']['Event'], UserCode: requestBody['Participant']['UserCode'] });
 						// Show Payment
 						showPayment(requestBody);
 						document.querySelector('.shop-summary').classList.remove('shop-active');
