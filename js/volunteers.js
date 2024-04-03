@@ -435,10 +435,13 @@ getRequest('/api/volunteers/init/available', {}).then((res) => {
 				Shifts: shifts,
 				Volunteer: user,
 			}).then((res) => {
-				if (res.status === 200) {
+				console.log(res.data);
+				if (res.status === 200 && res.data.result === 'Success') {
 					localStorage.setItem('volunteer', JSON.stringify(user));
 
 					location.reload();
+				} else if (res.data.result === 'Volunteer exists in one or more shifts') {
+					new Toast('Je Bent Al Ingeschreven', 'error').show();
 				} else {
 					new Toast('Er Is Iets Foutgelopen', 'error').show();
 				}
