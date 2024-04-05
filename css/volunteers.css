@@ -42,7 +42,7 @@
 .volunteers-table tbody tr td:first-child {
     width: 1%;
     text-align: left;
-    font-weight: 600;
+    font-weight: 500;
     white-space: nowrap;
     transform: translateY(-50%);
     background: linear-gradient(90deg, #fff 60%, transparent 50%);
@@ -75,9 +75,13 @@
     min-height: 50px;
     border-radius: 0.5rem;
     font-family: "inter", sans-serif;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 600;
     color: #fff;
+}
+
+.volunteers-table-counter {
+    font-size: 1rem !important;
 }
 
 .volunteers-table-full {
@@ -98,6 +102,19 @@
     background-color: #eca807;
 }
 
+.volunteers-table-spots span {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.volunteers-table-spots .fa-ban {
+    display: none;
+}
+
+.volunteers-table-spots .volunteers-table-counter {
+    display: block;
+}
+
 .volunteers-table-signup-selected {
     background-color: #4a7d44;
 }
@@ -112,6 +129,15 @@
 
 .volunteers-table-signup-overlap:hover {
     background-color: #fcc000;
+}
+
+.volunteers-table-signup-overlap .fa-ban {
+    display: block;
+    font-size: 1.25rem;
+}
+
+.volunteers-table-signup-overlap .volunteers-table-counter {
+    display: none;
 }
 
 .volunteers-signup-add-btn {
@@ -216,4 +242,22 @@ label {
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .volunteers-table thead tr th {
+        font-weight: 600;
+    }
+
+    .volunteers-table tbody tr td {
+        font-weight: 600;
+    }
+
+    .volunteers-table tbody tr td:first-child {
+        font-weight: 600;
+    }
+
+    .volunteers-table-spots span {
+        font-weight: 600;
+    }
 }

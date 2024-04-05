@@ -13,6 +13,43 @@ function putRequest(target, data) {
 	});
 }
 
+function exctractShifts(start, end) {
+	let shifts = [];
+
+	let startHours = parseInt(start.split(':')[0]);
+	let startMinutes = parseInt(start.split(':')[1]);
+
+	let endHours = parseInt(end.split(':')[0]);
+	let endMinutes = parseInt(end.split(':')[1]);
+
+	let shiftCount = (endHours - startHours) * 2 + (endMinutes - startMinutes) / 30;
+	let previousShift = start;
+
+	shifts.push(start);
+
+	for (let i = 0; i < shiftCount; i++) {
+		let time = previousShift.split(':');
+		let hours = parseInt(time[0]);
+		let minutes = parseInt(time[1]) + 30;
+
+		if (minutes >= 60) {
+			minutes -= 60;
+			hours++;
+		}
+
+		if (hours < 10) hours = '0' + hours;
+		if (minutes < 10) minutes = '0' + minutes;
+
+		previousShift = hours + ':' + minutes;
+
+		shifts.push(previousShift);
+	}
+
+	shifts.pop();
+
+	return shifts;
+}
+
 function checkOverlap(cell) {
 	let selectedCells = document.querySelectorAll('.volunteers-table-signup-selected');
 	let selectedCellsTimeslots = Array.from(selectedCells).map((selectedCell) => {
@@ -22,6 +59,7 @@ function checkOverlap(cell) {
 	let cellTimeslot = cell.parentNode.getAttribute('data-timeslot');
 	let cellTimeslotStart = cellTimeslot.split(' - ')[0];
 	let cellTimeslotEnd = cellTimeslot.split(' - ')[1];
+	let cellTimeslots = exctractShifts(cellTimeslotStart, cellTimeslotEnd);
 
 	let selectedShifts = [];
 
@@ -29,40 +67,14 @@ function checkOverlap(cell) {
 		let timeslotStart = timeslot.split(' - ')[0];
 		let timeslotEnd = timeslot.split(' - ')[1];
 
-		let timeslotStartHours = parseInt(timeslotStart.split(':')[0]);
-		let timeslotStartMinutes = parseInt(timeslotStart.split(':')[1]);
-
-		let timeslotEndHours = parseInt(timeslotEnd.split(':')[0]);
-		let timeslotEndMinutes = parseInt(timeslotEnd.split(':')[1]);
-
-		let shiftCount = (timeslotEndHours - timeslotStartHours) * 2 + (timeslotEndMinutes - timeslotStartMinutes) / 30;
-		let previousShift = timeslotStart;
-
-		selectedShifts.push(timeslotStart);
-
-		for (let i = 0; i < shiftCount; i++) {
-			let time = previousShift.split(':');
-			let hours = parseInt(time[0]);
-			let minutes = parseInt(time[1]) + 30;
-
-			if (minutes >= 60) {
-				minutes -= 60;
-				hours++;
-			}
-
-			if (hours < 10) hours = '0' + hours;
-			if (minutes < 10) minutes = '0' + minutes;
-
-			previousShift = hours + ':' + minutes;
-
-			selectedShifts.push(previousShift);
-		}
-
-		selectedShifts.pop();
+		selectedShifts = selectedShifts.concat(exctractShifts(timeslotStart, timeslotEnd));
 	});
 
-	if (selectedShifts.includes(cellTimeslotStart)) {
-		return true;
+	// Check if the selected shifts overlap with the cell shifts
+	for (let i = 0; i < cellTimeslots.length; i++) {
+		if (selectedShifts.includes(cellTimeslots[i])) {
+			return true;
+		}
 	}
 
 	return false;
@@ -173,7 +185,9 @@ function showTimeTable(dataFull, date) {
 						timetableBodyCellContent.innerHTML = 'Volzet';
 						timetableBodyCellContent.classList.add('volunteers-table-full');
 					} else {
-						timetableBodyCellContent.innerHTML = `<span>${shiftStart}</span> <i class="fa-solid fa-plus"></i> <span>${shiftEnd.join(':')}</span>`;
+						timetableBodyCellContent.innerHTML = `<span>${shiftStart}</span> <span class="volunteers-table-counter">${volunteersCount}/${volunteersMax}</span> <i class="fa-solid fa-ban"></i> <span>${shiftEnd.join(
+							':'
+						)}</span>`;
 						timetableBodyCellContent.classList.add('volunteers-table-spots');
 
 						timetableBodyCell.setAttribute('data-timeslot', shiftStart + ' - ' + shiftEnd.join(':'));
@@ -288,12 +302,8 @@ getRequest('/api/volunteers/init/available', {}).then((res) => {
 
 				if (cell.classList.contains('volunteers-table-signup-selected')) {
 					cell.classList.remove('volunteers-table-signup-selected');
-
-					icon.classList.replace('fa-check', 'fa-plus');
 				} else {
 					cell.classList.add('volunteers-table-signup-selected');
-
-					icon.classList.replace('fa-plus', 'fa-check');
 				}
 
 				let selectedShifts = document.querySelectorAll('.volunteers-table-signup-selected');
@@ -314,10 +324,8 @@ getRequest('/api/volunteers/init/available', {}).then((res) => {
 
 					if (overlap) {
 						cell.classList.add('volunteers-table-signup-overlap');
-						icon.classList.replace('fa-plus', 'fa-ban');
 					} else {
 						cell.classList.remove('volunteers-table-signup-overlap');
-						icon.classList.replace('fa-ban', 'fa-plus');
 					}
 				});
 			});
