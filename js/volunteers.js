@@ -162,7 +162,9 @@ function showTimeTable(dataFull, date) {
 
 					timetableBodyCell.setAttribute('rowspan', shiftCellHeight);
 
-					let volunteersCount = parseInt(Object.keys(timetable[Object.keys(timetable)[index]]['Volunteers']).length);
+					let volunteersCount = timetable[Object.keys(timetable)[index]].hasOwnProperty('Volunteers')
+						? parseInt(Object.keys(timetable[Object.keys(timetable)[index]]['Volunteers']).length)
+						: 0;
 					let volunteersMax = parseInt(timetable[Object.keys(timetable)[index]]['MaxVolunteers']);
 
 					let timetableBodyCellContent = document.createElement('div');
