@@ -102,14 +102,14 @@ function showAdditionalInfo(options, type, event) {
 
 // Check Additional Info
 function checkAdditionalInfo() {
-	const groups = document.querySelectorAll('.shop-additional>div[data-event]');
+	const groups = document.querySelectorAll('.shop-additional-list>div[data-event]');
 	let valid = true;
 
 	groups.forEach((el) => {
 		const inputs = el.querySelectorAll('.input');
 
 		if (inputs.length == 1) {
-			if (inputs[0].value == '') {
+			if (inputs[0].value == '' || inputs[0].value == '0') {
 				valid = false;
 			}
 		} else {
