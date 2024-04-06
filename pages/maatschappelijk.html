@@ -5,10 +5,11 @@
 		<meta name="viewport" content="width=device-width" />
 		<meta name="theme-color" content="#4A7D44" />
 		<meta name="discription" content="Hoeve Lootens, waar Wondelgem het verleden wil koesteren en de toekomst zal verzekeren" />
-		<title>Hoeve Lootens</title>
+		<title>Hoeve Lootens - Steun Ons</title>
    		<script src="/js/analyse.js" type="module"></script>
 		<link href="/plugins/yarn.css" rel="stylesheet" type="text/css" />
 		<link href="/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="/css/maatschappelijk.css" rel="stylesheet" type="text/css" />
 		<link
 			rel="stylesheet"
 			href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
@@ -43,7 +44,7 @@
 				<li><a href="verbouwing.html">Verbouwingen</a></li>
 				<li><a href="kalender.html">Kalender</a></li>
 				<li><a href="reserveren.html">Reserveren</a></li>
-				<li><a class="nav-list-active nav-link-projects" href="maatschappelijk.html">Maatschappelijke projecten</a></li>
+				<li><a class="nav-list-active nav-link-projects" href="maatschappelijk.html">Steun Ons</a></li>
 				<li><a href="geschiedenis.html">Geschiedenis</a></li>
 				<li><a href="contact.html">Contact</a></li>
 			</ul>
@@ -66,30 +67,32 @@
 			<img class="maatschappelijk-vorm3-smart" src="../images/Contact_Vormen3%20-%20kopie.png" />
 			<div class="top-page">
 				<div>
-					<h1>Maatschappelijke projecten</h1>
+					<h1>Steun Ons</h1>
 					<img class="maatschappelijk-vorm3" src="../images/Contact_Vormen3.png" />
 
-					<div class="text-center col-6 m-auto mt-2">
-						<p>
-							Ook in deze moeilijke Coronatijden proberen we de maatschappelijke rol van de hoeve Lootens waar te maken. Via
-							een beperkt aantal haalbare initiatieven leggen we de basis voor onze toekomstige werking.
-						</p>
-						<p>
-							Zo renoveren we onze hoeve gedeeltelijk in samenwerking met <span>vzw Apart</span> waarbij we jongeren de kans
-							geven om op basis van hun capaciteiten reële werkervaring op te doen en zo hun competenties te versterken.
-							Voorafgaand aan dit project stonden Apart jongeren samen met hun begeleiders al in voor de vervaardiging van een
-							aantal zitelementen waar we op onze schaars toegelaten initiatieven gebruik van konden maken.
-						</p>
-						<p>
-							Daarnaast hebben we een basis <span>educatief programma</span> uitgewerkt rond dieren, bomen en groenten die op
-							de hoeve leven en groeien. Dit programma konden we in de toegelaten periode aanbieden aan kleuters en leerlingen
-							van de basisschool Mariavreugd. Vanzelfsprekend kijken we uit naar tijden waarin we dit programma ruimer kunnen
-							uitrollen.
-						</p>
-						<p>
-							Met enkele andere organisaties zijn geplande ontmoetingen even on hold gezet. Zodra er echt perspectief komt
-							worden ook deze initiatieven concreet aangepakt.
-						</p>
+					<div class="col-8 m-auto mt-2 maatschappelijk-form">
+						<p class="text-center">Laat je gegevens achter en wij nemen zo snel mogelijk contact met je op!</p>
+						<div>
+							<label for="name">Naam</label>
+							<input type="text" class="input" placeholder="Naam" id="name" />
+						</div>
+
+						<div>
+							<label for="email">Email</label>
+							<input type="email" class="input" placeholder="Email" id="email" />
+						</div>
+
+						<div>
+							<label for="phone">Telefoon</label>
+							<input type="tel" class="input" placeholder="Telefoon" id="phone" />
+						</div>
+
+						<a class="btn btn-primary btn-lg" id="submit">Verstuur</a>
+					</div>
+
+					<div class="col-8 m-auto mt-2 maatschappelijk-success hidden">
+						<i class="fa-regular fa-circle-check"></i>
+						<p>Bedankt voor je interesse! We nemen zo snel mogelijk contact met je op.</p>
 					</div>
 				</div>
 			</div>
@@ -161,7 +164,9 @@
 			<p>Deze website is gemaakt door <a href="https://yarnegooris.netlify.app" target="_blank">Yarne Gooris</a></p>
 		</div>
 
+		<script src="https://kit.fontawesome.com/62dc937956.js" crossorigin="anonymous"></script>
 		<script src="/plugins/yarn.js"></script>
 		<script src="/js/main.js" type="module"></script>
+		<script src="/js/maatschappelijk.js" type="module"></script>
 	</body>
 </html>
