@@ -34,13 +34,14 @@
 .volunteers-table tbody tr td:not(:first-child) {
     min-width: 7rem;
     max-width: 7rem;
-    height: 25px;
+    height: 50px;
     text-align: center;
     transition: border-top 0.2s ease-in-out;
 }
 
 .volunteers-table tbody tr td:first-child {
     width: 1%;
+    height: 50px;
     text-align: left;
     font-weight: 500;
     white-space: nowrap;
@@ -48,17 +49,6 @@
     background: linear-gradient(90deg, #fff 60%, transparent 50%);
     color: #999;
     transition: scale 0.2s ease-in-out, color 0.2s ease-in-out, border-top 0.2s ease-in-out;
-}
-
-.volunteers-table tbody tr td:first-child:hover {
-    translate: (0, -50%);
-    scale: 1.1;
-    border-top: 1px solid #999;
-    color: #000;
-}
-
-.volunteers-table tbody tr td:first-child:hover~td {
-    border-top: 1px solid #999;
 }
 
 .volunteers-table tbody tr:first-child td:first-child:first-of-type {
