@@ -311,10 +311,6 @@ getRequest('/api/volunteers/init/available', {}).then((res) => {
 				});
 			});
 
-			console.log(shifts);
-
-			return;
-
 			postRequest('/api/volunteers/add/volunteer', {
 				Shifts: shifts,
 				Volunteer: user,
