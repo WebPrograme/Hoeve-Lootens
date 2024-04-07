@@ -50,29 +50,28 @@ function exctractShifts(start, end) {
 	return shifts;
 }
 
-function checkOverlap(cell) {
-	let selectedCells = document.querySelectorAll('.volunteers-table-signup-selected');
-	let selectedCellsTimeslots = Array.from(selectedCells).map((selectedCell) => {
-		return selectedCell.parentNode.getAttribute('data-timeslot');
+function checkOverlap(shift) {
+	const selectedShifts = document.querySelectorAll('.volunteers-shift-selected');
+	const selectedShiftsTimeslots = Array.from(selectedShifts).map((selectedCell) => {
+		return selectedCell.getAttribute('data-timeslot');
 	});
 
-	let cellTimeslot = cell.parentNode.getAttribute('data-timeslot');
-	let cellTimeslotStart = cellTimeslot.split(' - ')[0];
-	let cellTimeslotEnd = cellTimeslot.split(' - ')[1];
-	let cellTimeslots = exctractShifts(cellTimeslotStart, cellTimeslotEnd);
+	let shiftTimeslot = shift.getAttribute('data-timeslot');
+	let shiftTimeslotStart = shiftTimeslot.split(' - ')[0];
+	let shiftTimeslotEnd = shiftTimeslot.split(' - ')[1];
+	let shiftTimeslots = exctractShifts(shiftTimeslotStart, shiftTimeslotEnd);
 
-	let selectedShifts = [];
-
-	selectedCellsTimeslots.forEach((timeslot) => {
+	let extractedShifts = [];
+	selectedShiftsTimeslots.forEach((timeslot) => {
 		let timeslotStart = timeslot.split(' - ')[0];
 		let timeslotEnd = timeslot.split(' - ')[1];
 
-		selectedShifts = selectedShifts.concat(exctractShifts(timeslotStart, timeslotEnd));
+		extractedShifts = extractedShifts.concat(exctractShifts(timeslotStart, timeslotEnd));
 	});
 
 	// Check if the selected shifts overlap with the cell shifts
-	for (let i = 0; i < cellTimeslots.length; i++) {
-		if (selectedShifts.includes(cellTimeslots[i])) {
+	for (let i = 0; i < shiftTimeslots.length; i++) {
+		if (extractedShifts.includes(shiftTimeslots[i])) {
 			return true;
 		}
 	}
@@ -80,233 +79,92 @@ function checkOverlap(cell) {
 	return false;
 }
 
-function showTimeTable(dataFull, date) {
-	let data = {};
-	data[date] = dataFull[date];
-
-	let table = document.querySelector('.volunteers-table');
-	let allShifts = [];
-	let allShiftsStart = [];
-	let startTime = '08:00';
-	let previousTime = '08:00';
-
-	table.innerHTML = '';
-	table.appendChild(document.createElement('thead'));
-	table.appendChild(document.createElement('tbody'));
-
-	for (let i = 0; i < 32; i++) {
-		let time = previousTime.split(':');
-		let hours = parseInt(time[0]);
-		let minutes = parseInt(time[1]) + 30;
-
-		if (minutes >= 60) {
-			minutes -= 60;
-			hours++;
-		}
-
-		if (hours < 10) hours = '0' + hours;
-		if (minutes < 10) minutes = '0' + minutes;
-
-		startTime = previousTime + ' - ' + hours + ':' + minutes;
-		previousTime = hours + ':' + minutes;
-
-		allShifts.push(startTime);
-		allShiftsStart.push(startTime.split(' - ')[0]);
-	}
-
-	allShifts.forEach((shift) => {
-		let timetableBodyRow = document.createElement('tr');
-		let timetableBodyCell = document.createElement('td');
-
-		timetableBodyCell.innerHTML = shift.split(' - ')[0];
-
-		timetableBodyRow.appendChild(timetableBodyCell);
-		table.querySelector('tbody').appendChild(timetableBodyRow);
-	});
+function showShifts(data) {
+	const container = document.querySelector('.volunteers');
 
 	Object.keys(data).forEach((date) => {
-		let timetableHeader = document.createElement('tr');
-		let timetableHeaderCell = document.createElement('th');
+		const day = document.createElement('div');
+		day.classList.add('volunteers-day');
 
-		timetableHeaderCell.innerHTML = 'Tijdslot';
+		const dateElement = document.createElement('h2');
+		dateElement.classList.add('volunteers-date');
+		dateElement.innerHTML = date;
 
-		timetableHeader.appendChild(timetableHeaderCell);
+		day.appendChild(dateElement);
 
-		Object.keys(data[date]['Tasks']).forEach((task, taskIndex) => {
-			let timetable = data[date]['Tasks'][task];
-			let shiftCellHeight = 0;
-			let timetableShiftsStart = Object.keys(timetable).map((shift) => {
-				return shift.split(' - ')[0];
-			});
+		Object.keys(data[date]['Tasks']).forEach((task) => {
+			const taskElement = document.createElement('div');
+			taskElement.classList.add('volunteers-task');
 
-			let timetableHeaderCell = document.createElement('th');
-			timetableHeaderCell.innerHTML = task;
+			const taskTitle = document.createElement('h3');
+			taskTitle.classList.add('volunteers-task-title');
+			taskTitle.innerHTML = task;
 
-			timetableHeader.appendChild(timetableHeaderCell);
-			table.querySelector('thead').appendChild(timetableHeader);
+			const taskShifts = document.createElement('div');
+			taskShifts.classList.add('volunteers-task-shifts');
 
-			allShifts.forEach((shift, rowIndex) => {
-				let shiftStart = shift.split(' - ')[0];
-				if (shiftCellHeight > 0) {
-					shiftCellHeight--;
-					return;
+			Object.keys(data[date]['Tasks'][task]).forEach((shift) => {
+				const shiftElement = document.createElement('div');
+				shiftElement.classList.add('volunteers-shift');
+				shiftElement.setAttribute('data-date', date);
+				shiftElement.setAttribute('data-task', task);
+				shiftElement.setAttribute('data-timeslot', shift);
+
+				const shiftTime = document.createElement('span');
+				shiftTime.classList.add('volunteers-shift-time');
+				shiftTime.innerHTML = shift;
+
+				const shiftCounter = document.createElement('span');
+				shiftCounter.classList.add('volunteers-shift-counter');
+
+				const shiftVolunteers = parseInt(data[date]['Tasks'][task][shift]['Volunteers']);
+				const shiftMaxVolunteers = parseInt(data[date]['Tasks'][task][shift]['MaxVolunteers']);
+
+				shiftCounter.innerHTML = shiftVolunteers + '/' + shiftMaxVolunteers;
+
+				if (shiftVolunteers >= shiftMaxVolunteers) {
+					shiftElement.classList.add('volunteers-shift-full');
+					shiftCounter.innerHTML = 'Vol';
 				}
 
-				let timetableBodyCell = document.createElement('td');
-				timetableBodyCell.setAttribute('data-task', task);
-				timetableBodyCell.setAttribute('data-time', shift);
-				if (timetableShiftsStart.includes(shiftStart)) {
-					let index = timetableShiftsStart.indexOf(shiftStart);
+				const shiftOverlapIcon = document.createElement('span');
+				shiftOverlapIcon.classList.add('volunteers-shift-overlap-icon');
+				shiftOverlapIcon.innerHTML = '<i class="fas fa-ban"></i>';
 
-					let shiftEnd = Object.keys(timetable)[index].split(' - ')[1];
-					shiftEnd = shiftEnd.split(':');
-					let shiftEndHours = parseInt(shiftEnd[0]);
-					let shiftEndMinutes = parseInt(shiftEnd[1]);
+				shiftElement.appendChild(shiftTime);
+				shiftElement.appendChild(shiftCounter);
+				shiftElement.appendChild(shiftOverlapIcon);
 
-					let shiftStartHours = parseInt(shiftStart.split(':')[0]);
-					let shiftStartMinutes = parseInt(shiftStart.split(':')[1]);
-
-					let shiftDeltaMinutes = (shiftEndHours - shiftStartHours) * 60 + (shiftEndMinutes - shiftStartMinutes);
-					let shiftDeltaHours = Math.floor(shiftDeltaMinutes / 60);
-					let shiftDeltaTime = shiftDeltaHours + ':' + (shiftDeltaMinutes - shiftDeltaHours * 60);
-
-					shiftCellHeight = shiftDeltaMinutes / 30;
-
-					timetableBodyCell.setAttribute('rowspan', shiftCellHeight);
-
-					let volunteersCount = timetable[Object.keys(timetable)[index]].hasOwnProperty('Volunteers')
-						? parseInt(Object.keys(timetable[Object.keys(timetable)[index]]['Volunteers']).length)
-						: 0;
-					let volunteersMax = parseInt(timetable[Object.keys(timetable)[index]]['MaxVolunteers']);
-
-					let timetableBodyCellContent = document.createElement('div');
-
-					if (volunteersCount >= volunteersMax) {
-						timetableBodyCellContent.innerHTML = 'Volzet';
-						timetableBodyCellContent.classList.add('volunteers-table-full');
-					} else {
-						timetableBodyCellContent.innerHTML = `<span>${shiftStart}</span> <span class="volunteers-table-counter">${volunteersCount}/${volunteersMax}</span> <i class="fa-solid fa-ban"></i> <span>${shiftEnd.join(
-							':'
-						)}</span>`;
-						timetableBodyCellContent.classList.add('volunteers-table-spots');
-
-						timetableBodyCell.setAttribute('data-timeslot', shiftStart + ' - ' + shiftEnd.join(':'));
-					}
-
-					timetableBodyCell.appendChild(timetableBodyCellContent);
-
-					shiftCellHeight--;
-				}
-
-				document.querySelector('tbody').children[rowIndex].appendChild(timetableBodyCell);
+				taskShifts.appendChild(shiftElement);
 			});
+
+			taskElement.appendChild(taskTitle);
+			taskElement.appendChild(taskShifts);
+			day.appendChild(taskElement);
 		});
+		container.appendChild(day);
 	});
-
-	let latestTime = Object.keys(data[date]['Tasks'])
-		.map((task) => {
-			return Object.keys(data[date]['Tasks'][task]).map((shift) => {
-				return shift.split(' - ')[1];
-			});
-		})
-		.flat()
-		.sort()
-		.reverse()[0];
-
-	let latestTimeHours = parseInt(latestTime.split(':')[0]);
-	let latestTimeMinutes = latestTime.split(':')[1];
-	latestTimeHours += 2;
-
-	if (latestTimeMinutes == '30') latestTimeMinutes = '00';
-
-	latestTime = latestTimeHours + ':' + latestTimeMinutes;
-
-	if (latestTimeHours < 24) {
-		let rows = document.querySelectorAll('.volunteers-table tbody tr');
-		rows = Array.from(rows).reverse();
-
-		for (let row of rows) {
-			let firstCell = row.children[0];
-			let firstCellTime = firstCell.innerHTML.split(' - ')[0];
-			table.deleteRow(row.rowIndex);
-
-			if (firstCellTime === latestTime) {
-				break;
-			}
-		}
-	}
 }
-
-document.querySelector('.volunteers-select-date').addEventListener('change', (e) => {
-	let selectedDate = e.target.value;
-
-	window.location.href = window.location.href.split('?')[0] + '?date=' + selectedDate;
-});
 
 getRequest('/api/volunteers/init/available', {}).then((res) => {
 	if (res.status === 200) {
-		let data = res.data;
+		const data = res.data;
 
-		let date = window.location.href.indexOf('?date=') > -1 ? window.location.href.split('?date=')[1] : Object.keys(data)[0];
+		showShifts(data);
 
-		Object.keys(data).forEach((dateKey) => {
-			document.querySelector('.volunteers-select-date').innerHTML += '<option value="' + dateKey + '">' + dateKey + '</option>';
-
-			if (date) document.querySelector('.volunteers-select-date').value = date;
-			else document.querySelector('.volunteers-select-date').value = Object.keys(data)[0];
-		});
-
-		showTimeTable(data, date ? date : Object.keys(data)[0]);
-
-		const tableWidth = document.querySelector('.volunteers-table').scrollWidth;
-		const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
-
-		if (tableWidth > viewportWidth) {
-			document.querySelector('.volunteers-nav-icon.fa-angles-right').classList.remove('volunteers-nav-icon-disabled');
-		} else {
-			document.querySelector('.volunteers-nav-icon.fa-angles-right').classList.add('volunteers-nav-icon-disabled');
-		}
-
-		let selectedDate = document.querySelector('.volunteers-select-date').value;
-
-		document.querySelector('.volunteers').addEventListener('scroll', (e) => {
-			const tableLeft = e.target.scrollLeft;
-
-			if (tableLeft > 0) {
-				document.querySelector('.volunteers-nav-icon.fa-angles-left').classList.remove('volunteers-nav-icon-disabled');
-			} else {
-				document.querySelector('.volunteers-nav-icon.fa-angles-left').classList.add('volunteers-nav-icon-disabled');
-			}
-
-			if (e.target.scrollLeft >= e.target.scrollWidth - e.target.offsetWidth) {
-				document.querySelector('.volunteers-nav-icon.fa-angles-right').classList.add('volunteers-nav-icon-disabled');
-			} else {
-				document.querySelector('.volunteers-nav-icon.fa-angles-right').classList.remove('volunteers-nav-icon-disabled');
-			}
-		});
-
-		document.querySelector('.volunteers-nav-icon.fa-angles-left').addEventListener('click', (e) => {
-			document.querySelector('.volunteers').scrollLeft -= 200;
-		});
-
-		document.querySelector('.volunteers-nav-icon.fa-angles-right').addEventListener('click', (e) => {
-			document.querySelector('.volunteers').scrollLeft += 200;
-		});
-
-		document.querySelectorAll('.volunteers-table tbody td[data-task] div:not(.volunteers-table-full)').forEach((cell) => {
+		document.querySelectorAll('.volunteers .volunteers-shift:not(.volunteers-shift-full)').forEach((cell) => {
 			cell.addEventListener('click', (e) => {
-				let cell = e.target.closest('div');
-				let icon = cell.querySelector('i');
+				const shift = e.target.closest('div');
 
-				if (cell.classList.contains('volunteers-table-signup-overlap')) return;
+				if (shift.classList.contains('volunteers-shift-overlap')) return;
 
-				if (cell.classList.contains('volunteers-table-signup-selected')) {
-					cell.classList.remove('volunteers-table-signup-selected');
+				if (shift.classList.contains('volunteers-shift-selected')) {
+					shift.classList.remove('volunteers-shift-selected');
 				} else {
-					cell.classList.add('volunteers-table-signup-selected');
+					shift.classList.add('volunteers-shift-selected');
 				}
 
-				let selectedShifts = document.querySelectorAll('.volunteers-table-signup-selected');
+				const selectedShifts = document.querySelectorAll('.volunteers-shift-selected');
 
 				if (selectedShifts.length > 0) {
 					document.querySelector('.volunteers-signup-add-btn').style.display = 'block';
@@ -314,18 +172,16 @@ getRequest('/api/volunteers/init/available', {}).then((res) => {
 					document.querySelector('.volunteers-signup-add-btn').style.display = 'none';
 				}
 
-				let otherCells = document.querySelectorAll(
-					'.volunteers-table-signup:not(.volunteers-table-signup-selected), .volunteers-table-spots:not(.volunteers-table-signup-selected)'
-				);
+				const shiftDay = shift.closest('.volunteers-day');
+				const otherShifts = shiftDay.querySelectorAll('.volunteers-shift:not(.volunteers-shift-selected, .volunteers-shift-full)');
 
-				otherCells.forEach((cell) => {
-					let overlap = checkOverlap(cell);
-					let icon = cell.querySelector('i');
+				otherShifts.forEach((otherShift) => {
+					const isOverlaping = checkOverlap(otherShift);
 
-					if (overlap) {
-						cell.classList.add('volunteers-table-signup-overlap');
+					if (isOverlaping) {
+						otherShift.classList.add('volunteers-shift-overlap');
 					} else {
-						cell.classList.remove('volunteers-table-signup-overlap');
+						otherShift.classList.remove('volunteers-shift-overlap');
 					}
 				});
 			});
@@ -336,41 +192,54 @@ getRequest('/api/volunteers/init/available', {}).then((res) => {
 
 			document.querySelector('.volunteers-signup-add-btn').style.display = 'none';
 
-			let volunteer = localStorage.getItem('volunteer') ? JSON.parse(localStorage.getItem('volunteer')) : null;
-			let selectedShifts = document.querySelectorAll('.volunteers-table-signup-selected');
+			const volunteer = localStorage.getItem('volunteer') ? JSON.parse(localStorage.getItem('volunteer')) : null;
+			const selectedShifts = document.querySelectorAll('.volunteers-shift-selected');
 			let shifts = {};
 
 			selectedShifts.forEach((shift) => {
-				shifts[shift.closest('td').getAttribute('data-task')] = shifts[shift.closest('td').getAttribute('data-task')] || [];
+				shifts[shift.getAttribute('data-date')] = shifts[shift.getAttribute('data-date')] || {};
+				shifts[shift.getAttribute('data-date')][shift.getAttribute('data-task')] = shifts[shift.getAttribute('data-date')][shift.getAttribute('data-task')] || {};
 
-				shifts[shift.closest('td').getAttribute('data-task')].push({
-					TimeSpan: shift.closest('td').getAttribute('data-timeslot'),
+				shifts[shift.getAttribute('data-date')][shift.getAttribute('data-task')][shift.getAttribute('data-timeslot')] = {
+					TimeSpan: shift.getAttribute('data-timeslot'),
 					Shiftcount: 1,
-				});
+				};
 			});
 
-			document.querySelector('.volunteers-options-date').innerHTML = selectedDate;
-			document.querySelector('.volunteers-options-shifts').innerHTML = '';
+			const shiftsOptions = document.querySelector('.volunteers-options');
+			shiftsOptions.innerHTML = '';
 
-			Object.keys(shifts).forEach((task) => {
-				let taskElement = document.createElement('div');
-				taskElement.classList.add('volunteers-options-shifts-task');
+			Object.keys(shifts).forEach((date) => {
+				const dateElement = document.createElement('label');
+				dateElement.classList.add('volunteers-options-date', 'label');
+				dateElement.innerHTML = date;
 
-				let taskElementTitle = document.createElement('span');
-				taskElementTitle.classList.add('volunteers-options-shifts-task-title');
-				taskElementTitle.innerHTML = task + ': ';
+				const shiftsElement = document.createElement('div');
+				shiftsElement.classList.add('volunteers-options-shifts');
 
-				taskElement.appendChild(taskElementTitle);
+				Object.keys(shifts[date]).forEach((task) => {
+					const taskElement = document.createElement('div');
+					taskElement.classList.add('volunteers-options-shifts-task');
 
-				Object.keys(shifts[task]).forEach((shift) => {
-					let shiftElement = document.createElement('span');
-					shiftElement.classList.add('volunteers-options-shifts-time');
-					shiftElement.innerHTML = shifts[task][shift]['TimeSpan'];
+					const taskElementTitle = document.createElement('span');
+					taskElementTitle.classList.add('volunteers-options-shifts-task-title');
+					taskElementTitle.innerHTML = task + ': ';
 
-					taskElement.appendChild(shiftElement);
+					taskElement.appendChild(taskElementTitle);
+
+					Object.keys(shifts[date][task]).forEach((shift) => {
+						const shiftElement = document.createElement('span');
+						shiftElement.classList.add('volunteers-options-shifts-time');
+						shiftElement.innerHTML = shifts[date][task][shift]['TimeSpan'];
+
+						taskElement.appendChild(shiftElement);
+					});
+
+					shiftsElement.appendChild(taskElement);
 				});
 
-				document.querySelector('.volunteers-options-shifts').appendChild(taskElement);
+				dateElement.appendChild(shiftsElement);
+				shiftsOptions.appendChild(dateElement);
 			});
 
 			if (volunteer) {
@@ -430,17 +299,21 @@ getRequest('/api/volunteers/init/available', {}).then((res) => {
 				Address: address,
 			};
 
-			let selectedShifts = document.querySelectorAll('.volunteers-table-signup-selected');
+			const selectedShifts = document.querySelectorAll('.volunteers-shift-selected');
 			let shifts = [];
 
 			selectedShifts.forEach((shift) => {
 				// Add the shift to the shifts array as an object with the following properties: Day, TaskName, Shift
 				shifts.push({
-					Day: selectedDate,
-					TaskName: shift.closest('td').getAttribute('data-task'),
-					Shift: shift.closest('td').getAttribute('data-timeslot'),
+					Day: shift.getAttribute('data-date'),
+					TaskName: shift.getAttribute('data-task'),
+					Shift: shift.getAttribute('data-timeslot'),
 				});
 			});
+
+			console.log(shifts);
+
+			return;
 
 			postRequest('/api/volunteers/add/volunteer', {
 				Shifts: shifts,
