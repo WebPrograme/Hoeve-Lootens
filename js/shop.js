@@ -523,6 +523,10 @@ if (window.location.pathname == '/pages/shop.html') {
 
 			// Summary Next
 			document.querySelector('.shop-summary-next').addEventListener('click', (e) => {
+				e.currentTarget.innerHTML = 'Even Geduld';
+				e.currentTarget.style.backgroundColor = '#EE7357';
+				e.currentTarget.disabled = true;
+
 				postRequest('/api/events/participants/add', requestBody)
 					.then((res) => {
 						analytics('AddedParticipant', { Event: requestBody['Participant']['Event'], UserCode: requestBody['Participant']['UserCode'] });

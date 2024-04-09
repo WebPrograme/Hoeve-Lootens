@@ -279,6 +279,10 @@ getRequest('/api/volunteers/init/available', {}).then((res) => {
 		});
 
 		document.querySelector('.volunteers-signup-confirm-btn').addEventListener('click', (e) => {
+			e.currentTarget.innerHTML = 'Even Geduld';
+			e.currentTarget.style.backgroundColor = '#EE7357';
+			e.currentTarget.disabled = true;
+
 			let firstName = document.querySelector('.volunteers-input[name="Voornaam"]').value;
 			let lastName = document.querySelector('.volunteers-input[name="Achternaam"]').value;
 			let email = document.querySelector('.volunteers-input[name="Email"]').value;

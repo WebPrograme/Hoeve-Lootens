@@ -713,6 +713,10 @@ main.highlight {
     color: #fff;
 }
 
+.btn:disabled {
+    pointer-events: none;
+}
+
 .back-img-1 {
     background-image: url(/images/child.jpeg);
     border-top-left-radius: 20px;
