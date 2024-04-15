@@ -164,6 +164,7 @@ function showSummary(data) {
 
 // Show Payment
 function showPayment(requestBody) {
+	console.log(requestBody);
 	// Show Payment Info
 	document.querySelector('.shop-payment-total').innerHTML = '€' + requestBody['Participant']['Amount'];
 	document.querySelector('.shop-payment-ref').innerHTML = requestBody['Participant']['UserCode'] + ' - ' + requestBody['Participant']['Event'];
@@ -549,15 +550,18 @@ if (window.location.pathname == '/pages/shop.html') {
 			});
 
 			// Already Subscribed Pay Button
-			document.querySelector('.shop-already-subscribed-pay').addEventListener('click', (e) => {
+			document.querySelector('.shop-already-subscribed-pay').addEventListener('click', async (e) => {
 				// Hide Already Subscribed
 				document.querySelector('.shop-already-subscribed').classList.remove('shop-active');
 				document.querySelector('.shop-already-subscribed').classList.add('shop-hidden');
 
 				// Show Payment
-				showPayment(requestBody);
-				document.querySelector('.shop-payment').classList.add('shop-active');
-				document.querySelector('.shop-payment').classList.remove('shop-hidden');
+				getRequest('/api/events/get/email?Email=' + requestBody['Participant']['Email'] + '&EventName=' + requestBody['Participant']['Event'], {}).then((res) => {
+					requestBody['Participant'] = res.data;
+					showPayment(requestBody);
+					document.querySelector('.shop-payment').classList.add('shop-active');
+					document.querySelector('.shop-payment').classList.remove('shop-hidden');
+				});
 			});
 		}
 	});
