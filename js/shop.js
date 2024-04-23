@@ -115,10 +115,11 @@ function checkAdditionalInfo() {
 		} else {
 			let total = 0;
 			inputs.forEach((el) => {
+				if (el.value == '') el.value = '0';
 				total += parseInt(el.value);
 			});
 
-			if (total == 0) {
+			if (isNaN(total) || total == 0) {
 				valid = false;
 			}
 		}
