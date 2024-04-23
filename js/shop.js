@@ -421,6 +421,14 @@ if (window.location.pathname == '/pages/shop.html') {
 						if (el.value == '') {
 							active = false;
 						}
+
+						// Email regex
+						if (el.name == 'shop-email') {
+							const regex = /\S+@\S+\.\S+/;
+							if (!regex.test(el.value)) {
+								active = false;
+							}
+						}
 					});
 
 					document.querySelector('.shop-info-next').disabled = !active;
