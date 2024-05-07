@@ -4,7 +4,7 @@ TEXT: Tijdens het weekend van 3 tot 5 mei 2024, wanneer de kermiswagens zich ge√
 LINKS: Schrijf je in! || /pages/shop.html
 ==================================================
 Medewerkers gezocht!
-IMAGE: medewerkers.jpg
+IMAGE: https://firebasestorage.googleapis.com/v0/b/hoeve-lootens-497f9.appspot.com/o/Articles%2Fmedewerkers.jpg?alt=media&token=64cb6020-aeec-436a-9595-0e1ab2877e64
 TEXT: Zoals elk jaar zijn we op zoek naar helpende handen tijdens de Meikermis.
 Zie je het zitten om op zaterdag 4 mei en/of zondag 5 mei mee te helpen tijdens onze activiteiten? Klik op onderstaande knop en kies je shift(s). Help je graag mee tijdens het opbouwen op donderdag of vrijdag of op maandag om alles op te ruimen? Geef ons een seintje via mail. Alvast heel erg bedankt!
 LINKS: Help mee! || /pages/volunteers.html
