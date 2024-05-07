@@ -21,7 +21,7 @@
     border: 1px solid #4A7D44;
 }
 
-.maatschappelijk-form .btn {
+.maatschappelijk-form .btn.btn-lg {
     background-color: #4A7D44;
     color: #fff;
     border: none;
@@ -33,15 +33,22 @@
     cursor: pointer;
 }
 
-.maatschappelijk-form .btn:hover {
+.maatschappelijk-form .btn.btn-lg:hover {
     background-color: #3A6D34;
 }
 
-.maatschappelijk-form .btn:focus,
-.maatschappelijk-form .btn:active {
+.maatschappelijk-form .btn.btn-lg:focus,
+.maatschappelijk-form .btn.btn-lg:active {
     background-color: #3A6D34;
     box-shadow: 0 0 0 0.2rem rgba(74, 125, 68, 0.5);
     outline: none;
+}
+
+.maatschappelijk-form .btn.more-info {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    margin-bottom: 1rem;
 }
 
 .maatschappelijk-success {
