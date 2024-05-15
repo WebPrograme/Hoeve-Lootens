@@ -192,9 +192,11 @@ function showEvents() {
 
 			card = `<div class='calendar-card'><h3>Boomgaardcafé</h3><div class='card-content'><p>${event.Description || ''}</p>${dates}</div></div>`;
 		} else if (event.Type == 'event') {
-			card = `<div class="calendar-card"><h3>${event.Title}</h3><p class="status" data-month="${event.StartMonth}">${event.StartDay} - ${event.EndDay} ${
-				calendarMonthsDutchShort[calendarMonths.indexOf(event.StartMonth)]
-			} ${year}</p><p>${event.Description || ''}</p></div>`;
+			const dateStart = `${event.StartDay}${event.StartMonth == event.EndMonth ? '' : ' ' + calendarMonthsDutchShort[calendarMonths.indexOf(event.StartMonth)]}`;
+			const dateEnd = `${event.EndDay} ${calendarMonthsDutchShort[calendarMonths.indexOf(event.EndMonth)]}`;
+			card = `<div class="calendar-card"><h3>${event.Title}</h3><p class="status" data-month="${event.StartMonth}">${dateStart} - ${dateEnd} ${year}</p><p>${
+				event.Description || ''
+			}</p></div>`;
 		}
 
 		document.querySelector('.calendar-cards .cards').innerHTML += card;
