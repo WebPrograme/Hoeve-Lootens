@@ -1,11 +1,8 @@
-Meikermis @ HoeveLootens
-IMAGE: articles/IMG-20240331-WA0004.jpg
-TEXT: Tijdens het weekend van 3 tot 5 mei 2024, wanneer de kermiswagens zich geïnstalleerd hebben rond Vroonstalledries, staat onze poort van de boomgaard terug open voor een volgende editie van Meikermis@HoeveLootens! Op vrijdag 3 mei kan je bij Trappistenbar Wondelgem vzw vanaf 19u genieten van een lekkere trappist of ander drankje. Op zaterdag 4 mei is het vanaf 15u smullen van lekkere wafels en kunnen jongeren hun creativiteit tonen tijdens een graffiti-workshop. Op zondag 5 mei kunnen kinderen hun energie kwijt tijdens de kidsrun en ouders elkaar uitdagen tijdens een kelnerrace! 's Middags kan je genieten van een lekker kermismenu. Het volledige feestprogramma vind je terug bij de inschrijving voor het kermismenu. Klik hiervoor op onderstaande knop. Je inschrijven kan tot en met 2 mei.
-LINKS: Schrijf je in! || /pages/shop.html
-==================================================
-Medewerkers gezocht!
+BOOMGAARDCAFÉ
 IMAGE: https://firebasestorage.googleapis.com/v0/b/hoeve-lootens-497f9.appspot.com/o/Articles%2Fmedewerkers.jpg?alt=media&token=64cb6020-aeec-436a-9595-0e1ab2877e64
-TEXT: Zoals elk jaar zijn we op zoek naar helpende handen tijdens de Meikermis.
-Zie je het zitten om op zaterdag 4 mei en/of zondag 5 mei mee te helpen tijdens onze activiteiten? Klik op onderstaande knop en kies je shift(s). Help je graag mee tijdens het opbouwen op donderdag of vrijdag of op maandag om alles op te ruimen? Geef ons een seintje via mail. Alvast heel erg bedankt!
-LINKS: Help mee! || /pages/volunteers.html
+TEXT: Datum: vrijdag 14/06 - 21/06 - 12/07 - 19/07 - 26/07 - 02/08 - 09/08 - 16/08
+Startuur: 18:00
+Einduur: 23:00
+Locatie: Hoeve Lootens, Vroonstalledries 66 te Wondelgem
+Omschrijving: Gezellig samenzijn en genieten van een heerlijk drankje en hapje op vrijdagavond van 18u tot 23u. 
 ==================================================
