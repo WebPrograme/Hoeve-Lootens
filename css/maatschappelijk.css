@@ -67,3 +67,23 @@
 .hidden {
     display: none;
 }
+
+.maatschappelijk-zonder-vlinder {
+    display: none;
+}
+
+@media (max-width: 992px) {
+    .maatschappelijk-vlinder {
+        display: none;
+    }
+
+    .maatschappelijk-zonder-vlinder {
+        display: block;
+    }
+}
+
+@media (max-width: 768px) {
+    .container:has(.maatschappelijk-vlinder) {
+        max-width: 100%;
+    }
+}
