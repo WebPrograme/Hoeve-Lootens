@@ -178,7 +178,7 @@ let page = path.split('/').pop().split('.')[0] || 'index';
 let file = fileIndex[page];
 
 if (page === 'index') {
-	fetch(`http://localhost:3000/api/website/articles`)
+	fetch(`https://hoeve-lootens.onrender.com/api/website/articles`)
 		.then((response) => response.json())
 		.then((data) => {
 			new AddContent(data, file);
