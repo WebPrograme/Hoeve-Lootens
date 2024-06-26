@@ -98,11 +98,11 @@ class AddContent {
 		let container = document.querySelector('.news');
 		container.innerHTML = '';
 
-		articles.forEach((article) => {
+		Object.values(articles).forEach((article) => {
 			const title = article.Title;
 			const image = article.Image;
-			const text = article.Text;
-			const links = article.Links;
+			const text = article.Content;
+			const button = article.Button;
 
 			let section = document.createElement('section');
 			section.classList.add('container', 'm-auto');
@@ -120,8 +120,8 @@ class AddContent {
 				contentContainer.innerHTML += `<p>${line}</p>`;
 			});
 
-			if (links) {
-				contentContainer.innerHTML += `<a class="btn btn-primary btn-primary-sm" href="${links.Link}">${links.Text}</a>`;
+			if (button) {
+				contentContainer.innerHTML += `<a class="btn btn-primary btn-primary-sm" href="${button.Link}">${button.Text}</a>`;
 			}
 
 			if (type === 'left') {
@@ -177,9 +177,17 @@ let path = window.location.pathname;
 let page = path.split('/').pop().split('.')[0] || 'index';
 let file = fileIndex[page];
 
-fetch(`https://raw.githubusercontent.com/WebPrograme/Hoeve-Lootens/master/MD/${file}.md`)
-	.then((response) => response.text())
-	.then((text) => {
-		let parsed = new Parse(text).parse(file);
-		new AddContent(parsed, file);
-	});
+if (page === 'index') {
+	fetch(`http://localhost:3000/api/website/articles`)
+		.then((response) => response.json())
+		.then((data) => {
+			new AddContent(data, file);
+		});
+} else {
+	fetch(`https://raw.githubusercontent.com/WebPrograme/Hoeve-Lootens/master/MD/${file}.md`)
+		.then((response) => response.text())
+		.then((text) => {
+			let parsed = new Parse(text).parse(file);
+			new AddContent(parsed, file);
+		});
+}
