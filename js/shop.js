@@ -84,20 +84,28 @@ function showAdditionalInfo(options, type, event) {
 
 		div.appendChild(label);
 		div.appendChild(input);
-		if (Object.keys(options).length != 1 || Object.keys(options).length != index + 1) {
-			if (index % 2 == 0) {
-				const row = document.createElement('div');
-				row.classList.add('shop-additional-input-group');
-				group.appendChild(row);
-			}
 
-			group.querySelector('.shop-additional-input-group:last-child').appendChild(div);
+		if (type == 'Food') {
+			if (Object.keys(options).length != 1 || Object.keys(options).length != index + 1) {
+				if (index % 2 == 0) {
+					const row = document.createElement('div');
+					row.classList.add('shop-additional-input-group');
+					group.appendChild(row);
+				}
+
+				group.querySelector('.shop-additional-input-group:last-child').appendChild(div);
+			} else {
+				group.appendChild(div);
+			}
 		} else {
-			group.appendChild(div);
+			const row = document.createElement('div');
+			row.classList.add('shop-additional-input-group');
+			group.appendChild(row);
+			group.querySelector('.shop-additional-input-group:last-child').appendChild(div);
 		}
 	});
 
-	group.querySelector('.shop-additional-input-group:last-child').style.marginBottom = '1rem';
+	document.querySelector('.shop-additional-input-group:last-child').style.marginBottom = '1rem';
 }
 
 // Check Additional Info
@@ -146,7 +154,7 @@ function showSummary(data) {
 				<h4>€${data.Amount}</h4>
 			</div>
 			${
-				data.Options != undefined
+				data.Options != undefined && data.Type == 'Food'
 					? Object.keys(data.Options)
 							.map((key) => {
 								if (data.Options[key] == 0) return;
