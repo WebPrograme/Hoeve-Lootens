@@ -98,43 +98,45 @@ class AddContent {
 		let container = document.querySelector('.news');
 		container.innerHTML = '';
 
-		Object.values(articles).forEach((article) => {
-			const title = article.Title;
-			const image = article.Image;
-			const text = article.Content;
-			const button = article.Button;
+		Object.values(articles)
+			.reverse()
+			.forEach((article) => {
+				const title = article.Title;
+				const image = article.Image;
+				const text = article.Content;
+				const button = article.Button;
 
-			let section = document.createElement('section');
-			section.classList.add('container', 'm-auto');
-			section.innerHTML = `<div class="row"></div>`;
+				let section = document.createElement('section');
+				section.classList.add('container', 'm-auto');
+				section.innerHTML = `<div class="row"></div>`;
 
-			let imageContainer = document.createElement('div');
-			imageContainer.classList.add('col-6');
-			imageContainer.innerHTML = `<img src="${image.startsWith('http') ? image : '../images/' + image}" alt="${title}" class="news-img">`;
+				let imageContainer = document.createElement('div');
+				imageContainer.classList.add('col-6');
+				imageContainer.innerHTML = `<img src="${image.startsWith('http') ? image : '../images/' + image}" alt="${title}" class="news-img">`;
 
-			let contentContainer = document.createElement('div');
-			contentContainer.classList.add('col-6');
-			contentContainer.innerHTML = `<h3 class="section-header">${title}</h3>`;
+				let contentContainer = document.createElement('div');
+				contentContainer.classList.add('col-6');
+				contentContainer.innerHTML = `<h3 class="section-header">${title}</h3>`;
 
-			text.forEach((line) => {
-				contentContainer.innerHTML += `<p>${line}</p>`;
+				text.forEach((line) => {
+					contentContainer.innerHTML += `<p>${line}</p>`;
+				});
+
+				if (button) {
+					contentContainer.innerHTML += `<a class="btn btn-primary btn-primary-sm" href="${button.Link}">${button.Text}</a>`;
+				}
+
+				if (type === 'left') {
+					section.querySelector('.row').appendChild(imageContainer);
+					section.querySelector('.row').appendChild(contentContainer);
+				} else {
+					section.querySelector('.row').appendChild(contentContainer);
+					section.querySelector('.row').appendChild(imageContainer);
+				}
+
+				type = type === 'left' ? 'right' : 'left';
+				container.appendChild(section);
 			});
-
-			if (button) {
-				contentContainer.innerHTML += `<a class="btn btn-primary btn-primary-sm" href="${button.Link}">${button.Text}</a>`;
-			}
-
-			if (type === 'left') {
-				section.querySelector('.row').appendChild(imageContainer);
-				section.querySelector('.row').appendChild(contentContainer);
-			} else {
-				section.querySelector('.row').appendChild(contentContainer);
-				section.querySelector('.row').appendChild(imageContainer);
-			}
-
-			type = type === 'left' ? 'right' : 'left';
-			container.appendChild(section);
-		});
 	}
 
 	VERBOUWING() {
