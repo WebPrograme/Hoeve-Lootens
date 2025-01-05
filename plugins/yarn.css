@@ -961,6 +961,9 @@ body {
 }
 
 /* Visibility */
+.hidden {
+    display: none;
+}
 
 .invisible {
     visibility: hidden;
@@ -2355,13 +2358,13 @@ a {
     transition: all 0.3s ease-in-out;
 }
 
-.modal-open {
+.modal-open, .modal.open {
     opacity: 1;
     visibility: visible;
     transition: all 0.3s ease-in-out, display 0s 0.3s;
 }
 
-.modal-open .modal-content {
+.modal-open .modal-content, .modal.open .modal-content {
     top: 50px;
     transition: all 0.2s ease-in-out;
 }
@@ -2418,6 +2421,15 @@ a {
     max-width: 40%;
 }
 
+.modal-content:has(.modal-body-step) {
+    padding-inline: 0;
+}
+
+.modal-content:has(.modal-body-step) .modal-header,
+.modal-content:has(.modal-body-step) .modal-footer {
+    padding-inline: 1.5rem;
+}
+
 .modal-side-image img {
     width: 100%;
     border-top-left-radius: 0.5rem;
@@ -2468,6 +2480,32 @@ a {
 
 .modal-body {
     margin-bottom: 1rem;
+}
+
+.modal-body:has(.modal-body-step) {
+    --height: 0;
+    position: relative;
+    max-width: 100%;
+    height: var(--height);
+    overflow-x: clip;
+    scrollbar-width: none;
+    transition: all .2s ease-in-out;
+}
+
+.modal-body-step {
+    position: absolute;
+    width: 100%;
+    padding: 0 1.5rem;
+    transform: translateX(100%);
+    transition: all .2s ease-in-out;
+}
+
+.modal-body-step.current {
+    transform: translateX(0);
+}
+
+.modal-body-step.prev {
+    transform: translateX(-100%);
 }
 
 .modal-footer {

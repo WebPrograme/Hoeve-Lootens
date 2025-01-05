@@ -7,26 +7,14 @@
 		<meta name="discription" content="Hoeve Lootens, waar Wondelgem het verleden wil koesteren en de toekomst zal verzekeren" />
 		<title>Hoeve Lootens</title>
    		<script src="/js/analyse.js" type="module"></script>
+		<script src="https://kit.fontawesome.com/62dc937956.js" crossorigin="anonymous"></script>
 		<link href="/plugins/yarn.css" rel="stylesheet" type="text/css" />
 		<link href="/css/style.css" rel="stylesheet" type="text/css" />
-		<link
-			rel="stylesheet"
-			href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-			integrity="sha384-
-		50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
-			crossorigin="anonymous"
-		/>
+		<link href="/css/rent.css" rel="stylesheet" type="text/css" />
 		<link
 			rel="stylesheet"
 			href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css"
 			integrity="sha512-8D+M+7Y6jVsEa7RD6Kv/Z7EImSpNpQllgaEIQAtqHcI0H6F4iZknRj0Nx1DCdB+TwBaS+702BGWYC0Ze2hpExQ=="
-			crossorigin="anonymous"
-			referrerpolicy="no-referrer"
-		/>
-		<link
-			rel="stylesheet"
-			href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css"
-			integrity="sha512-wJgJNTBBkLit7ymC6vvzM1EcSWeM9mmOu+1USHaRBbHkm6W9EgM0HY27+UtUaprntaYQJF75rc8gjxllKs5OIQ=="
 			crossorigin="anonymous"
 			referrerpolicy="no-referrer"
 		/>
@@ -107,7 +95,7 @@
 				<img style="width: 140px" src="../images/Reserveren_Vormen2.png" />
 			</div>
 
-			<section class="container m-auto pb-5">
+			<section class="container m-auto pb-5 rent-prices ">
 				<div class="row">
 					<div class="col-8">
 						<div class="content">
@@ -141,6 +129,181 @@
 					</div>
 				</div>
 			</section>
+
+			<section class="container m-auto pb-5 rent-form">
+				<h3 class="section-header">Aanvraagformulier</h3>
+				<div class="rent-form-section active" id="rent-form-space">
+					<div class="rent-form-header">
+						<h3 class="rent-form-title">Wat wil je reserveren?</h3>
+						<p>Kies de ruimte die u wilt reserveren</p>
+						<span class="rent-form-highlight">Wegens renovatiewerken zijn de polyvalente ruimtes en de vergaderzaal niet beschikbaar in 2025.</span>
+					</div>
+
+					<div class="rent-form-blocks">
+						<div class="rent-form-block">
+							<input type="radio" name="rent-form-block" id="rent-form-space-1" />
+							<label for="rent-form-space-1">
+								<div class="rent-form-block-content">
+									<h4>Boomgaard & Horecablok</h4>
+									<p>Ik wens de boomgaard en de horecablok te gebruiken voor een event/feest dat buiten plaats zal vinden.</p>
+								</div>
+							</label>
+						</div>
+
+						<div class="rent-form-block">
+							<input type="radio" name="rent-form-block" id="rent-form-space-2" />
+							<label for="rent-form-space-2">
+								<div class="rent-form-block-content">
+									<h4>Woonhuis / vergaderzaal</h4>
+									<p>Ik wens het woonhuis en/of de vergaderzaal te gebruiken. Deze ruimtes hebben een maximumcapaciteit van 40 personen (maximum 15 personen in de vergaderzaal).</p>
+								</div>
+							</label>
+						</div>
+
+						<div class="rent-form-block">
+							<input type="radio" name="rent-form-block" id="rent-form-space-3" disabled/>
+							<label for="rent-form-space-3">
+								<div class="rent-form-block-content">
+									<h4>Polyvalente ruimtes</h4>
+									<p>Ik wens de polyvalente ruimtes in de hoeve te gebruiken.
+										Deze ruimtes hebben een maximumcapaciteit van 80 personen.
+										</p>
+								</div>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="rent-form-section" id="rent-form-email">
+					<div class="rent-form-header">
+						<h3 class="rent-form-title">Woonhuis / vergaderzaal</h3>
+
+						<p>Gelieve voor het gebruik van het woonhuis jouw aanvraag te mailen naar <span>info@hoevelootens.be</span>.</p>
+					</div>
+				</div>
+
+				<div class="rent-form-section" id="rent-form-eventType">
+					<div class="rent-form-header">
+						<h3 class="rent-form-title">Type Event</h3>
+						<p>Is uw event een privé of publiek event?</p>
+
+						<a class="rent-form-link" href="../images//Gebruikersovereenkomst 2023.pdf" download="Overeenkomst Hoeve Lootens">Download de overeenkomst</a>
+					</div>
+
+					<div class="rent-form-blocks">
+						<div class="rent-form-block">
+							<input type="radio" name="rent-form-block" id="rent-form-eventType-1" />
+							<label for="rent-form-eventType-1">
+								<div class="rent-form-block-content">
+									<h4>Ik wens de Hoeve Lootens te gebruiken als particulier voor een privéfeest. </h4>
+									<p>Hiervoor kan ik gebruik maken van de boomgaard en de horecablok. Ik verklaar mij tevens akkoord met alle voorwaarden en bepalingen die in de gebruikersovereenkomst staan. Er wordt geen elektronisch versterkte muziek toegestaan op het terrein gedurende de gehele periode van het gebruik.</p>
+								</div>
+							</label>
+						</div>
+
+						<div class="rent-form-block">
+							<input type="radio" name="rent-form-block" id="rent-form-eventType-2" />
+							<label for="rent-form-eventType-2">
+								<div class="rent-form-block-content">
+									<h4>Ik wens de Hoeve Lootens te gebruiken als vereniging voor een openbaar toegankelijk event.</h4>
+									<p>Hiervoor kan ik gebruik maken van de boomgaard en de horecablok. Ik verklaar mij tevens akkoord met alle voorwaarden en bepalingen die in de gebruikersovereenkomst staan. Er wordt maximum 2 maal per maand, met een maximum van 12 keer per jaar, een event toegestaan met elektronisch versterkte muziek, inclusief de activiteiten die door Hoeve Lootens vzw worden georganiseerd.</p>
+								</div>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="rent-form-section" id="rent-form-private-date">
+					<div class="rent-form-header">
+						<h3 class="rent-form-title">Datum van het event</h3>
+					</div>
+
+					<p>Bekijk vooraf de kalender op onze website. Er wordt slechts 1 event per weekend toegestaan. De gebruiker betreedt de terreinen van de hoeve enkel een halve dag vooraf aan de activiteit (vanaf 14u voor de opbouw) en de dag van de activiteit. De dag na de activiteit dient het terrein verlaten te zijn in ordentelijke staat ten laatste om 12u ‘s middags.</p>
+					
+					<div class="rent-form-row mt-2">
+						<input type="date" id="rent-form-private-date-input" class="rent-form-input" />
+						<a class="btn btn-secondary btn-secondary-sm" href="kalender.html" target="_blank">kalender <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+					</div>
+				</div>
+
+				<div class="rent-form-section" id="rent-form-public-date">
+					<div class="rent-form-header">
+						<h3 class="rent-form-title">Datum van het event</h3>
+					</div>
+
+					<p>Bekijk vooraf de kalender op onze website. Er wordt slechts 1 event per weekend toegestaan. De gebruiker betreedt de terreinen van de hoeve enkel een halve dag vooraf aan de activiteit (vanaf 14u voor de opbouw) en de dag van de activiteit. De dag na de activiteit dient het terrein verlaten te zijn in ordentelijke staat ten laatste om 12u ‘s middags.</p>
+					
+					<div class="rent-form-row mt-2">
+						<input type="date" id="rent-form-public-date-input" class="rent-form-input" />
+						<a class="btn btn-secondary btn-secondary-sm" href="kalender.html" target="_blank">kalender <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+					</div>
+				</div>
+
+				<div class="rent-form-section" id="rent-form-private-name">
+					<div class="rent-form-header">
+						<h3 class="rent-form-title">Naam van het event</h3>
+					</div>
+
+					<p>Partijpolitieke activiteiten onder de vorm van een congres, een partijvergadering, de voorstelling van een politiek programma of verkiezingsprogramma, activiteiten die ingaan tegen de openbare orde en goede zeden zijn niet toegestaan. Privéfeesten, activiteiten van verenigingen en scholen, alle activiteiten met respect voor de eigenheid, de neutraliteit en de visie van Hoeve Lootens vzw zijn toegestaan. Deze opsomming geldt als voorbeeld en is niet beperkend.</p>
+					
+					<div class="rent-form-row mt-2">
+						<input type="text" id="rent-form-private-name-input" class="rent-form-input rent-form-input-lg" placeholder="Naam van het event" />
+					</div>
+				</div>
+
+				<div class="rent-form-section" id="rent-form-public-name">
+					<div class="rent-form-header">
+						<h3 class="rent-form-title">Naam van het event</h3>
+					</div>
+
+					<p>Partijpolitieke activiteiten onder de vorm van een congres, een partijvergadering, de voorstelling van een politiek programma of verkiezingsprogramma, activiteiten die ingaan tegen de openbare orde en goede zeden zijn niet toegestaan. Privéfeesten, activiteiten van verenigingen en scholen, alle activiteiten met respect voor de eigenheid, de neutraliteit en de visie van Hoeve Lootens vzw zijn toegestaan. Deze opsomming geldt als voorbeeld en is niet beperkend.</p>
+					
+					<div class="rent-form-row mt-2">
+						<input type="text" id="rent-form-public-name-input" class="rent-form-input rent-form-input-lg" placeholder="Naam van het event" />
+					</div>
+				</div>
+
+				<div class="rent-form-section" id="rent-form-public-participants">
+					<div class="rent-form-header">
+						<h3 class="rent-form-title">Aantal bezoekers</h3>
+						<p>Geef een schatting van het verwacht aantal bezoekers aan het event.</p>
+					</div>
+
+					<p>Wanneer je met je vereniging een openbaar toegankelijk event organiseert ben je verplicht dit te melden aan de politie. Indien je van plan bent na 22u elektronisch versterkte muziek te draaien dien je hiervoor een afwijking van de geluidsnormen aan te vragen.
+						De gebruiker is volledig verantwoordelijk voor schade of ongevallen tijdens de duur of ten gevolge van het gebruik, inclusief de opbouw en de afbouw.
+						
+						<span>Ik ga akkoord met bovenstaande bepalingen en met deze beschreven in de Gebruikersovereenkomst.</span></p>
+					
+					<div class="rent-form-row mt-2">
+						<input type="number" id="rent-form-public-participants-input" class="rent-form-input rent-form-input-lg" placeholder="Geschat aantal bezoekers" />
+					</div>
+				</div>
+				
+				<div class="rent-form-section" id="rent-form-submit">
+					<div class="rent-form-header">
+						<h3 class="rent-form-title">Aanvraag indienen</h3>
+					</div>
+
+					<p>Iemand van het bestuur neemt binnen de 14 dagen contact met je op om je aanvraag te bevestigen. De reservatie is pas definitief na ondertekening van de Gebruikersovereenkomst en het betalen van de verbruikersprijs en waarborg.</p>
+					
+					<div class="rent-form-row mt-2">
+						<div>
+							<label for="rent-form-submit-name">Naam</label>
+							<input type="text" id="rent-form-submit-name" class="rent-form-input" placeholder="Naam van de aanvrager" />
+						</div>
+						<div>
+							<label for="rent-form-submit-email">Email</label>
+							<input type="email" id="rent-form-submit-email" class="rent-form-input" placeholder="Email" />
+						</div>
+						<div>
+							<label for="rent-form-submit-phone">Telefoonnummer</label>
+							<input type="tel" id="rent-form-submit-phone" class="rent-form-input" placeholder="Telefoonnummer" />
+						</div>
+					</div>
+				</div>
+					
+				<a class="btn btn-primary btn-primary-sm rent-form-next" id="rent-form-next">Volgende</a>
+			</section>
 		</main>
 
 		<footer>
@@ -170,6 +333,7 @@
 		</div>
 
 		<script src="/plugins/yarn.js"></script>
+		<script src="/js/rent.js" type="module"></script>
 		<script src="/js/main.js" type="module"></script>
 	</body>
 </html>
