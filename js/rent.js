@@ -5,7 +5,7 @@ const rentFormNext = document.querySelector('.rent-form-next');
 let rentFormValues = {};
 
 // Get next section
-function getNextSection(section) {
+async function getNextSection(section) {
 	const currentSectionID = section.id;
 	let nextSectionID = '';
 
@@ -37,7 +37,8 @@ function getNextSection(section) {
 		nextSectionID = 'rent-form-submit';
 	} else if (currentSectionID === 'rent-form-submit') {
 		// Submit form
-		submitForm();
+		await submitForm();
+		return document.getElementById('rent-form-success');
 	}
 
 	return document.getElementById(nextSectionID);
@@ -76,6 +77,7 @@ function addValuesToRentFormValues(section) {
 	} else if (currentSectionID === 'rent-form-public-participants') {
 		rentFormValues.EstimatedParticipants = section.querySelector('input').value;
 	} else if (currentSectionID === 'rent-form-submit') {
+		rentFormValues.Message = section.querySelector('#rent-form-submit-message').value;
 		rentFormValues.Applicant = {
 			Name: section.querySelector('#rent-form-submit-name').value,
 			Email: section.querySelector('#rent-form-submit-email').value,
@@ -89,17 +91,17 @@ async function submitForm() {
 	// Send rentFormValues to backend
 	console.log(rentFormValues);
 
-	postRequest('/api/events/request', rentFormValues)
-		.then((response) => {
-			if (response.status === 200) {
-				console.log('Success:', response.data);
-			} else {
-				console.log('Error:', response.data);
-			}
-		})
-		.catch((error) => {
-			console.error('Error:', error);
-		});
+	return new Promise((resolve, reject) => {
+		postRequest('/api/events/request', rentFormValues)
+			.then((response) => {
+				console.log(response);
+				resolve(response);
+			})
+			.catch((error) => {
+				console.error(error);
+				reject(error);
+			});
+	});
 }
 
 // Space
@@ -203,7 +205,7 @@ document
 	});
 
 // Next
-rentFormNext.addEventListener('click', function () {
+rentFormNext.addEventListener('click', async function () {
 	if (!rentFormNext.classList.contains('active')) return;
 
 	const activeSection = document.querySelector('.rent-form-section.active');
@@ -211,7 +213,7 @@ rentFormNext.addEventListener('click', function () {
 	// Add values to rentFormValues
 	addValuesToRentFormValues(activeSection);
 
-	const nextSection = getNextSection(activeSection);
+	const nextSection = await getNextSection(activeSection);
 
 	activeSection.classList.remove('active');
 	nextSection.classList.add('active');

@@ -146,7 +146,7 @@
 
 					<p>Bekijk vooraf de kalender op onze website. Er wordt slechts 1 event per weekend toegestaan. De gebruiker betreedt de terreinen van de hoeve enkel een halve dag vooraf aan de activiteit (vanaf 14u voor de opbouw) en de dag van de activiteit. De dag na de activiteit dient het terrein verlaten te zijn in ordentelijke staat ten laatste om 12u ‘s middags.</p>
 					
-					<div class="rent-form-row mt-2">
+					<div class="rent-form-row rent-form-content mt-2">
 						<input type="date" id="rent-form-private-date-input" class="rent-form-input" />
 						<a class="btn btn-secondary btn-secondary-sm" href="kalender.html" target="_blank">kalender <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
 					</div>
@@ -159,7 +159,7 @@
 
 					<p>Bekijk vooraf de kalender op onze website. Er wordt slechts 1 event per weekend toegestaan. De gebruiker betreedt de terreinen van de hoeve enkel een halve dag vooraf aan de activiteit (vanaf 14u voor de opbouw) en de dag van de activiteit. De dag na de activiteit dient het terrein verlaten te zijn in ordentelijke staat ten laatste om 12u ‘s middags.</p>
 					
-					<div class="rent-form-row mt-2">
+					<div class="rent-form-row rent-form-content mt-2">
 						<input type="date" id="rent-form-public-date-input" class="rent-form-input" />
 						<a class="btn btn-secondary btn-secondary-sm" href="kalender.html" target="_blank">kalender <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
 					</div>
@@ -172,7 +172,7 @@
 
 					<p>Partijpolitieke activiteiten onder de vorm van een congres, een partijvergadering, de voorstelling van een politiek programma of verkiezingsprogramma, activiteiten die ingaan tegen de openbare orde en goede zeden zijn niet toegestaan. Privéfeesten, activiteiten van verenigingen en scholen, alle activiteiten met respect voor de eigenheid, de neutraliteit en de visie van Hoeve Lootens vzw zijn toegestaan. Deze opsomming geldt als voorbeeld en is niet beperkend.</p>
 					
-					<div class="rent-form-row mt-2">
+					<div class="rent-form-row rent-form-content mt-2">
 						<input type="text" id="rent-form-private-name-input" class="rent-form-input rent-form-input-lg" placeholder="Naam van het event" />
 					</div>
 				</div>
@@ -184,7 +184,7 @@
 
 					<p>Partijpolitieke activiteiten onder de vorm van een congres, een partijvergadering, de voorstelling van een politiek programma of verkiezingsprogramma, activiteiten die ingaan tegen de openbare orde en goede zeden zijn niet toegestaan. Privéfeesten, activiteiten van verenigingen en scholen, alle activiteiten met respect voor de eigenheid, de neutraliteit en de visie van Hoeve Lootens vzw zijn toegestaan. Deze opsomming geldt als voorbeeld en is niet beperkend.</p>
 					
-					<div class="rent-form-row mt-2">
+					<div class="rent-form-row rent-form-content mt-2">
 						<input type="text" id="rent-form-public-name-input" class="rent-form-input rent-form-input-lg" placeholder="Naam van het event" />
 					</div>
 				</div>
@@ -199,8 +199,8 @@
 						De gebruiker is volledig verantwoordelijk voor schade of ongevallen tijdens de duur of ten gevolge van het gebruik, inclusief de opbouw en de afbouw.
 						
 						<span>Ik ga akkoord met bovenstaande bepalingen en met deze beschreven in de Gebruikersovereenkomst.</span></p>
-					
-					<div class="rent-form-row mt-2">
+						
+					<div class="rent-form-row rent-form-content mt-2">
 						<input type="number" id="rent-form-public-participants-input" class="rent-form-input rent-form-input-lg" placeholder="Geschat aantal bezoekers" />
 					</div>
 				</div>
@@ -211,21 +211,40 @@
 					</div>
 
 					<p>Iemand van het bestuur neemt binnen de 14 dagen contact met je op om je aanvraag te bevestigen. De reservatie is pas definitief na ondertekening van de Gebruikersovereenkomst en het betalen van de verbruikersprijs en waarborg.</p>
-					
-					<div class="rent-form-row mt-2">
-						<div>
-							<label for="rent-form-submit-name">Naam</label>
-							<input type="text" id="rent-form-submit-name" class="rent-form-input" placeholder="Naam van de aanvrager" />
+						
+					<div class="rent-form-content mt-2">
+						<div class="rent-form-row">
+							<div>
+								<label for="rent-form-submit-name">Naam</label>
+								<input type="text" id="rent-form-submit-name" class="rent-form-input" placeholder="Naam van de aanvrager" />
+							</div>
+
+							<div>
+								<label for="rent-form-submit-email">Email</label>
+								<input type="email" id="rent-form-submit-email" class="rent-form-input" placeholder="Email" />
+							</div>
+
+							<div>
+								<label for="rent-form-submit-phone">Telefoonnummer</label>
+								<input type="tel" id="rent-form-submit-phone" class="rent-form-input" placeholder="Telefoonnummer" />
+							</div>
 						</div>
-						<div>
-							<label for="rent-form-submit-email">Email</label>
-							<input type="email" id="rent-form-submit-email" class="rent-form-input" placeholder="Email" />
-						</div>
-						<div>
-							<label for="rent-form-submit-phone">Telefoonnummer</label>
-							<input type="tel" id="rent-form-submit-phone" class="rent-form-input" placeholder="Telefoonnummer" />
+
+						<div class="rent-form-row mt-1">
+							<div>
+								<label for="rent-form-submit-message">Bericht</label>
+								<textarea id="rent-form-submit-message" class="rent-form-input" placeholder="Bericht"></textarea>
+							</div>
 						</div>
 					</div>
+				</div>
+
+				<div class="rent-form-section" id="rent-form-success">
+					<div class="rent-form-header">
+						<h3 class="rent-form-title">Uw aanvraag is verzonden</h3>
+					</div>
+
+					<p>Bedankt voor uw aanvraag. Iemand van het bestuur neemt binnen de 14 dagen contact met je op om je aanvraag te bevestigen. De reservatie is pas definitief na ondertekening van de Gebruikersovereenkomst en het betalen van de verbruikersprijs en waarborg.</p>
 				</div>
 					
 				<a class="btn btn-primary btn-primary-sm rent-form-next" id="rent-form-next">Volgende</a>
