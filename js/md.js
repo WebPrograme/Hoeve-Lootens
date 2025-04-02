@@ -99,7 +99,7 @@ class AddContent {
 		container.innerHTML = '';
 
 		Object.values(articles)
-			.reverse()
+			//.reverse()
 			.forEach((article) => {
 				const title = article.Title;
 				const image = article.Image;
