@@ -51,7 +51,8 @@ function exctractShifts(start, end) {
 }
 
 function checkOverlap(shift) {
-	const selectedShifts = document.querySelectorAll('.volunteers-shift-selected');
+	const shiftDay = shift.closest('.volunteers-day');
+	const selectedShifts = shiftDay.querySelectorAll('.volunteers-shift-selected');
 	const selectedShiftsTimeslots = Array.from(selectedShifts).map((selectedCell) => {
 		return selectedCell.getAttribute('data-timeslot');
 	});
