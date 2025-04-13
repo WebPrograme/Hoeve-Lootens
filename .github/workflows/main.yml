@@ -15,19 +15,20 @@ jobs:
             - name: Add query string to JS references in HTML
               run: |
                   for file in $(find . -name "*.html"); do
-                    echo "Processing $file"
-                    sed -i "s|\(src=['\"]\)\(.*\.js\)\(['\"]\)|\1\2?v=${VERSION}\3|g" "$file"
+                  echo "Processing $file"
+                  sed -i "s|\(src=['\"]\)\(.*\.js\)\(['\"]\)|\1\2?v=${VERSION}\3|g" "$file"
                   done
 
             - name: Add query string to JS files importing other JS (optional)
               run: |
                   for file in $(find . -name "*.js"); do
-                    echo "Processing $file"
-                    sed -i "s|\(import .* from ['\"]\)\(.*\.js\)\(['\"]\)|\1\2?v=${VERSION}\3|g" "$file"
+                  echo "Processing $file"
+                  sed -i "s|\(import .* from ['\"]\)\(.*\.js\)\(['\"]\)|\1\2?v=${VERSION}\3|g" "$file"
                   done
     web-deploy:
         name: 🚀 Deploy
         runs-on: ubuntu-latest
+        needs: bust-cache
         steps:
             - name: 🚚 Get latest code
               uses: actions/checkout@v3
