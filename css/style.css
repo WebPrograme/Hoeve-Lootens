@@ -498,6 +498,8 @@ section .section-header {
     font-weight: 1100;
     font-size: 36px;
     text-wrap: balance;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 section .section-header span {
@@ -661,6 +663,7 @@ main.highlight {
     line-height: 1.5;
     border-radius: .25rem;
     margin: 0;
+    word-wrap: break-word;
 }
 
 .btn-primary {
