@@ -447,6 +447,17 @@ if (window.location.pathname == '/pages/shop.html') {
 			document.querySelector('.shop-info-next').addEventListener('click', (e) => {
 				// Update Request Body
 				const allInputs = document.querySelectorAll('.shop-info input');
+
+				// Cleanup data
+				allInputs.forEach((el) => {
+					if (el.value == '') el.value = null;
+					el.value = el.value.trim();
+				});
+
+				allInputs[0].value = allInputs[0].value.charAt(0).toUpperCase() + allInputs[0].value.slice(1).toLowerCase();
+				allInputs[1].value = allInputs[1].value.charAt(0).toUpperCase() + allInputs[1].value.slice(1).toLowerCase();
+				allInputs[2].value = allInputs[2].value.toLowerCase();
+
 				requestBody['Participant'] = Object.assign(requestBody['Participant'], {
 					FirstName: allInputs[0].value,
 					LastName: allInputs[1].value,
@@ -455,6 +466,8 @@ if (window.location.pathname == '/pages/shop.html') {
 					Address: allInputs[4].value,
 					UserCode: allInputs[0].value[0].toUpperCase() + allInputs[1].value[0].toUpperCase() + getRandomIntInclusive(data, 1000, 9999),
 				});
+
+				console.log(requestBody);
 
 				// Save Data In Local Storage If User Chooses To
 				if (document.querySelector('.shop-info input[name="shop-info-saved"]').checked) {
