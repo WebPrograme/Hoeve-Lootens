@@ -30,7 +30,7 @@ function getAvailableEvents() {
 				let availableEvents = [];
 
 				Object.keys(data).forEach(function (key) {
-					if (data[key]['Available Places'] > 0 && data[key]['Type'] != 'Food') {
+					if (data[key]['AvailablePlaces'] > 0 && data[key]['Type'] != 'Food') {
 						const now = new Date();
 						const start = data[key]['StartDate'] != undefined ? new Date(data[key]['StartDate']) : null;
 						const end = data[key]['EndDate'] != undefined ? new Date(data[key]['EndDate']) : null;
@@ -137,7 +137,7 @@ function checkAdditionalInfo() {
 }
 
 // Show Summary
-function showSummary(data) {
+function showSummary(data, type) {
 	data = data['Participant'];
 	// Show Personal Data
 	document.querySelector('.shop-summary-name').innerHTML = data['FirstName'] + ' ' + data['LastName'];
@@ -146,19 +146,19 @@ function showSummary(data) {
 	document.querySelector('.shop-summary-address').innerHTML = data['Address'];
 
 	// Show Event Data
+	console.log(data);
 	const event = document.createElement('div');
 	event.classList.add('shop-summary-tickets-list-item');
 	event.innerHTML = `
 			<div>
-				<h4>${data.Event} (${data.Quantity}x)</h4>
+				<h4>${data.Event}${type != 'Food' ? ' (' + data.Quantity + ')' : ''}</h4>
 				<h4>€${data.Amount}</h4>
 			</div>
 			${
-				data.Options != undefined && data.Type == 'Food'
+				data.Options != undefined && type == 'Food'
 					? Object.keys(data.Options)
 							.map((key) => {
-								if (data.Options[key] == 0) return;
-								return `<div><p>${key}</p><p>${data.Options[key]}x</p></div>`;
+								if (data.Options[key] != 0) return `<div><p>${key}</p><p>${data.Options[key]}x</p></div>`;
 							})
 							.join('')
 					: ''
@@ -493,7 +493,7 @@ if (window.location.pathname == '/pages/shop.html') {
 					document.querySelector('.shop-additional').classList.remove('shop-hidden');
 				} else {
 					// Show Summary
-					showSummary(requestBody);
+					showSummary(requestBody, data[requestBody['Participant'].Event].Type);
 					document.querySelector('.shop-summary').classList.add('shop-active');
 					document.querySelector('.shop-summary').classList.remove('shop-hidden');
 				}
@@ -506,12 +506,13 @@ if (window.location.pathname == '/pages/shop.html') {
 				const eventName = requestBody['Participant'].Event;
 				const type = data[eventName].Type;
 				let event = {};
+
 				if (type == 'Food') {
 					const options = {};
 					let amount = 0;
 					let quantity = 0;
 					inputs.forEach((input) => {
-						options[input.getAttribute('name')] = input.value;
+						options[input.getAttribute('name')] = parseInt(input.value);
 						amount += parseInt(input.value) * parseFloat(data[eventName].Options[input.getAttribute('name')]);
 						quantity += parseInt(input.value);
 					});
@@ -547,7 +548,7 @@ if (window.location.pathname == '/pages/shop.html') {
 				document.querySelector('.shop-additional').classList.add('shop-hidden');
 
 				// Show Summary
-				showSummary(requestBody);
+				showSummary(requestBody, type);
 				document.querySelector('.shop-summary').classList.add('shop-active');
 				document.querySelector('.shop-summary').classList.remove('shop-hidden');
 			});
@@ -573,9 +574,15 @@ if (window.location.pathname == '/pages/shop.html') {
 						document.querySelector('.shop-summary').classList.remove('shop-active');
 						document.querySelector('.shop-summary').classList.add('shop-hidden');
 
-						// Show Already Subscribed
-						document.querySelector('.shop-already-subscribed').classList.add('shop-active');
-						document.querySelector('.shop-already-subscribed').classList.remove('shop-hidden');
+						if (err.status == 400) {
+							// Show Already Subscribed
+							document.querySelector('.shop-already-subscribed').classList.add('shop-active');
+							document.querySelector('.shop-already-subscribed').classList.remove('shop-hidden');
+						} else if (err.status == 403) {
+							// Show Not Enough Places
+							document.querySelector('.shop-not-enough-places').classList.add('shop-active');
+							document.querySelector('.shop-not-enough-places').classList.remove('shop-hidden');
+						}
 					});
 			});
 
@@ -592,6 +599,11 @@ if (window.location.pathname == '/pages/shop.html') {
 					document.querySelector('.shop-payment').classList.add('shop-active');
 					document.querySelector('.shop-payment').classList.remove('shop-hidden');
 				});
+			});
+
+			// Not Enough Places Pay Button
+			document.querySelector('.shop-not-enough-places-reload').addEventListener('click', (e) => {
+				window.location.reload();
 			});
 		}
 	});

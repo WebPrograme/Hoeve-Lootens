@@ -31,7 +31,8 @@
     padding-inline: 1rem;
 }
 
-.shop-already-subscribed {
+.shop-already-subscribed,
+.shop-not-enough-places {
     max-width: 400px;
     padding-inline: 1rem;
 }
@@ -446,7 +447,8 @@
 }
 
 /* Shop Already Subscribed */
-.shop-already-subscribed {
+.shop-already-subscribed,
+.shop-not-enough-places {
     display: flex;
     flex-direction: column;
 }
