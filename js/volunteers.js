@@ -13,7 +13,7 @@ function putRequest(target, data) {
 	});
 }
 
-function exctractShifts(start, end) {
+function extractShifts(start, end) {
 	let shifts = [];
 
 	let startHours = parseInt(start.split(':')[0]);
@@ -60,14 +60,14 @@ function checkOverlap(shift) {
 	let shiftTimeslot = shift.getAttribute('data-timeslot');
 	let shiftTimeslotStart = shiftTimeslot.split(' - ')[0];
 	let shiftTimeslotEnd = shiftTimeslot.split(' - ')[1];
-	let shiftTimeslots = exctractShifts(shiftTimeslotStart, shiftTimeslotEnd);
+	let shiftTimeslots = extractShifts(shiftTimeslotStart, shiftTimeslotEnd);
 
 	let extractedShifts = [];
 	selectedShiftsTimeslots.forEach((timeslot) => {
 		let timeslotStart = timeslot.split(' - ')[0];
 		let timeslotEnd = timeslot.split(' - ')[1];
 
-		extractedShifts = extractedShifts.concat(exctractShifts(timeslotStart, timeslotEnd));
+		extractedShifts = extractedShifts.concat(extractShifts(timeslotStart, timeslotEnd));
 	});
 
 	// Check if the selected shifts overlap with the cell shifts
@@ -150,6 +150,12 @@ function showShifts(data) {
 getRequest('/api/volunteers/init/available', {}).then((res) => {
 	if (res.status === 200) {
 		const data = res.data;
+
+		// Check if the data is empty
+		if (Object.keys(data).length === 0) {
+			document.querySelector('.volunteers-closed').style.display = 'flex';
+			document.querySelector('.volunteers').style.display = 'none';
+		}
 
 		showShifts(data);
 

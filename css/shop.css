@@ -23,6 +23,7 @@
     margin-bottom: 2rem;
 }
 
+.shop-tickets-unavailable,
 .shop-info,
 .shop-additional,
 .shop-summary,
@@ -37,6 +38,7 @@
     padding-inline: 1rem;
 }
 
+.shop-tickets-unavailable,
 .shop-tickets-next {
     width: min(100%, 300px);
     margin-inline: auto;
@@ -268,6 +270,40 @@
     .shop-ticket .shop-ticket-body .shop-ticket-amount h3 {
         font-size: 1.1rem;
     }
+}
+
+/* Shop Tickets Unavailable */
+.shop-tickets-unavailable {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: min(100%, 300px);
+    margin-inline: auto;
+    border-radius: 5px;
+    padding: 1rem 0;
+}
+
+.shop-tickets-unavailable .shop-tickets-unavailable-icon {
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    stroke: #4A7D44;
+}
+
+.shop-tickets-unavailable h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #000;
+}
+
+.shop-tickets-unavailable p {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #000;
+    text-align: center;
 }
 
 /* Shop Info */

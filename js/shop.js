@@ -1,4 +1,3 @@
-// FILE IN PROGRESS - NOT READY FOR PRODUCTION
 import { postRequest, getRequest } from '../modules/Requests.js';
 import analytics from './analyse.js';
 let data = [];
@@ -263,6 +262,14 @@ if (window.location.pathname == '/pages/shop.html') {
 					shop.appendChild(ticket);
 				}
 			});
+
+			// If No Tickets Available
+			if (shop.children.length == 0) {
+				const ticketsUnavailable = document.querySelector('.shop-tickets-unavailable');
+				ticketsUnavailable.classList.add('shop-active');
+				ticketsUnavailable.classList.remove('shop-hidden');
+				return;
+			}
 
 			// Ticket Actions
 			document.querySelectorAll('.shop-ticket-actions-plus').forEach((el) => {
