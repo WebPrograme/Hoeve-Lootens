@@ -109,6 +109,7 @@ class AddContent {
 				let section = document.createElement('section');
 				section.classList.add('container', 'm-auto');
 				section.innerHTML = `<div class="row"></div>`;
+				section.setAttribute('data-id', article.ID || article.Title);
 
 				let imageContainer = document.createElement('div');
 				imageContainer.classList.add('col-6');
@@ -184,6 +185,19 @@ if (page === 'index') {
 		.then((response) => response.json())
 		.then((data) => {
 			new AddContent(data, file);
+
+			// On article click
+			document.querySelectorAll('.news section').forEach((article) => {
+				article.addEventListener('click', () => {
+					window.parent.postMessage(
+						{
+							type: 'ARTICLE_SELECTED',
+							articleId: article.getAttribute('data-id'),
+						},
+						'*'
+					);
+				});
+			});
 		});
 } else {
 	fetch(`https://raw.githubusercontent.com/WebPrograme/Hoeve-Lootens/master/MD/${file}.md`)
