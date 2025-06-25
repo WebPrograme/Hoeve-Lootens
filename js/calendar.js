@@ -70,7 +70,7 @@ function showMonth(month, year = currentDate.getFullYear()) {
 				monthContent += `<div class='calendar-day calendar-active calendar-event calendar-tooltip calendar-tooltip-event' id='day-${day}'><p>${day}</p><div class='calendar-top'><p>${events[day].Title}</p><i></i></div></div>`;
 			} else if (events[day].Type == 'res') {
 				// Check If Event Is Reservation
-				monthContent += `<div class='calendar-day calendar-active calendar-res calendar-tooltip calendar-tooltip-res'><p>${day}</p><div class='calendar-top'><p>Gerserveerd</p><i></i></div></div>`;
+				monthContent += `<div class='calendar-day calendar-active calendar-res calendar-tooltip calendar-tooltip-res'><p>${day}</p><div class='calendar-top'><p>Gereserveerd</p><i></i></div></div>`;
 			} else if (events[day].Type == 'option') {
 				// Check If Event Is Option
 				monthContent += `<div class='calendar-day calendar-active calendar-option calendar-tooltip calendar-tooltip-option'><p>${day}</p><div class='calendar-top'><p>Optie</p><i></i></div></div>`;
@@ -117,13 +117,15 @@ function showEvents() {
 				if (filteredEventsContent[eventTitle]) continue;
 
 				// Check If Event Is Multiple Days (Same Month)
-				if (filteredEvents[year][month][parseInt(day) + 1]) {
-					const nextDay = filteredEvents[year][month][parseInt(day) + 1];
-
-					if (nextDay.Type == event.Type && nextDay.Title == event.Title) {
-						endDay = parseInt(day) + 1;
-					}
+				let tempDay = parseInt(day);
+				while (
+					filteredEvents[year][month][tempDay + 1] &&
+					filteredEvents[year][month][tempDay + 1].Type == event.Type &&
+					filteredEvents[year][month][tempDay + 1].Title == event.Title
+				) {
+					tempDay++;
 				}
+				endDay = tempDay;
 
 				// Check If Event Is Multiple Days (Different Month)
 				const isLastDayOfMonth = new Date(year, months.indexOf(month) + 1, 0).getDate() == endDay;
@@ -131,13 +133,16 @@ function showEvents() {
 				if (isLastDayOfMonth) {
 					const nextMonth = calendarMonths[calendarMonths.indexOf(month) + 1];
 
-					if (filteredEvents[year][nextMonth][1]) {
-						const nextDay = filteredEvents[year][nextMonth][1];
-
-						if (nextDay.Type == event.Type && nextDay.Title == event.Title) {
-							endMonth = nextMonth;
-							endDay = 1;
-						}
+					let nextDay = 1;
+					while (
+						filteredEvents[year][nextMonth] &&
+						filteredEvents[year][nextMonth][nextDay] &&
+						filteredEvents[year][nextMonth][nextDay].Type == event.Type &&
+						filteredEvents[year][nextMonth][nextDay].Title == event.Title
+					) {
+						endMonth = nextMonth;
+						endDay = nextDay;
+						nextDay++;
 					}
 				}
 
@@ -194,7 +199,17 @@ function showEvents() {
 		} else if (event.Type == 'event') {
 			const dateStart = `${event.StartDay}${event.StartMonth == event.EndMonth ? '' : ' ' + calendarMonthsDutchShort[calendarMonths.indexOf(event.StartMonth)]}`;
 			const dateEnd = `${event.EndDay} ${calendarMonthsDutchShort[calendarMonths.indexOf(event.EndMonth)]}`;
-			card = `<div class="calendar-card"><h3>${event.Title}</h3><p class="status" data-month="${event.StartMonth}">${dateStart} - ${dateEnd} ${year}</p><p>${
+			let dateString = '';
+
+			if (event.StartMonth == event.EndMonth && event.StartDay == event.EndDay) {
+				dateString = `${dateStart} ${calendarMonthsDutchShort[calendarMonths.indexOf(event.StartMonth)]}`;
+			} else if (event.StartMonth == event.EndMonth) {
+				dateString = `${dateStart} - ${dateEnd}`;
+			} else {
+				dateString = `${dateStart} - ${dateEnd} ${event.EndMonth == 'December' ? event.EndMonth : calendarMonthsDutchShort[calendarMonths.indexOf(event.EndMonth)]}`;
+			}
+
+			card = `<div class="calendar-card"><h3>${event.Title}</h3><p class="status" data-month="${event.StartMonth}">${dateString} ${year}</p><p>${
 				event.Description || ''
 			}</p></div>`;
 		}

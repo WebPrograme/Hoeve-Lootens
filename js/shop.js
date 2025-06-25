@@ -104,7 +104,7 @@ function showAdditionalInfo(options, type, event) {
 		}
 	});
 
-	document.querySelector('.shop-additional-input-group:last-child').style.marginBottom = '1rem';
+	if (Object.keys(options).length > 1) group.querySelector('.shop-additional-input-group:last-child').style.marginBottom = '1rem';
 }
 
 // Check Additional Info
