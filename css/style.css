@@ -1,3 +1,19 @@
+:root {
+    --admin-primary-color: rgb(9, 9, 11);
+    --admin-primary-color-90: rgb(9, 9, 11, 0.9);
+    --admin-primary-color-80: rgb(9, 9, 11, 0.8);
+    --admin-primary-color-70: rgb(9, 9, 11, 0.7);
+    --admin-primary-color-60: rgb(9, 9, 11, 0.6);
+    --admin-primary-color-50: rgb(9, 9, 11, 0.5);
+    --admin-primary-color-40: rgb(9, 9, 11, 0.4);
+    --admin-primary-color-30: rgb(9, 9, 11, 0.3);
+    --admin-primary-color-20: rgb(9, 9, 11, 0.2);
+    --admin-primary-color-10: rgb(9, 9, 11, 0.1);
+    --admin-secondary-color: rgb(113, 113, 122);
+    --admin-primary-bg-color: rgb(255, 255, 255);
+    --admin-secondary-bg-color: rgb(246, 246, 247);
+}
+
 body {
     background: #fff;
     scroll-behavior: smooth;
@@ -479,6 +495,16 @@ nav a:hover {
     margin-block: 3rem
 }
 
+.news section.clickable {
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.news section.clickable:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
 section {
     padding: 4rem 0;
 }
@@ -720,6 +746,58 @@ main.highlight {
 
 .btn:disabled {
     pointer-events: none;
+}
+
+/* Admin Button */
+.btn-admin {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    padding: .5rem 1rem;
+    border-radius: calc(.5rem - 2px);
+    font-size: .875rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    height: 2.25rem;
+    box-shadow: var(--admin-btn-shadow);
+    cursor: pointer;
+    text-decoration: none !important;
+    transition: all .15s ease-in-out;
+}
+
+.btn-admin-primary {
+    color: var(--admin-primary-bg-color);
+    background-color: var(--admin-primary-color);
+    border: 1px solid var(--admin-primary-color);
+}
+
+.btn-admin-primary:hover {
+    background-color: rgba(24, 24, 27, 0.9);
+    border: 1px solid rgba(24, 24, 27 0.9);
+}
+
+.btn-admin-secondary {
+    color: var(--admin-primary-color);
+    background-color: var(--admin-primary-bg-color);
+    border: 1px solid rgb(228, 228, 231);
+}
+
+.btn-admin-secondary:hover {
+    background-color: rgb(244, 244, 245);
+}
+
+.add-news-article {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    text-align: center;
+    width: 100%;
+    height: 60px;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .back-img-1 {

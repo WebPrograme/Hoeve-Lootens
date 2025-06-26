@@ -186,17 +186,37 @@ if (page === 'index') {
 		.then((data) => {
 			new AddContent(data, file);
 
-			// On article click
+			const inIframe = window.self !== window.top;
+
 			document.querySelectorAll('.news section').forEach((article) => {
-				article.addEventListener('click', () => {
-					window.parent.postMessage(
-						{
-							type: 'ARTICLE_SELECTED',
-							articleId: article.getAttribute('data-id'),
-						},
-						'*'
-					);
-				});
+				if (inIframe) {
+					// If in an iframe, add a class to make it clickable
+					article.classList.add('clickable');
+
+					// On article click
+					article.addEventListener('click', () => {
+						window.parent.postMessage(
+							{
+								type: 'ARTICLE_SELECTED',
+								articleId: article.getAttribute('data-id'),
+							},
+							'*'
+						);
+					});
+
+					// Show add article button if in iframe
+					document.querySelector('.add-news-article').style.display = 'flex';
+
+					// On add article button click
+					document.querySelector('.add-news-article').addEventListener('click', () => {
+						window.parent.postMessage(
+							{
+								type: 'ARTICLE_ADD',
+							},
+							'*'
+						);
+					});
+				}
 			});
 		});
 } else {
