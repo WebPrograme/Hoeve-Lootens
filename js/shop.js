@@ -2,6 +2,15 @@ import { postRequest, getRequest } from '../modules/Requests.js';
 import analytics from './analyse.js';
 let data = [];
 
+const ws = new WebSocket('wss://hoeve-lootens.onrender.com');
+
+ws.onmessage = (event) => {
+	const data = JSON.parse(event.data);
+	if (data.type === 'payment') {
+		window.location.href = '/success.html?usercode=' + data.usercode + '&event=' + data.event;
+	}
+};
+
 // Create User Code
 function getRandomIntInclusive(data, min, max) {
 	let UserCodes = [];
@@ -189,6 +198,12 @@ function showPayment(requestBody) {
 			const links = paymentRes.data;
 			document.querySelector('.shop-payment-qr').src = links['qr'];
 			document.querySelector('.shop-payment-mobile').href = links['deeplink'];
+
+			// Open WebSocket Connection
+			ws.onopen = () => {
+				// Register this client with a unique ID
+				ws.send(JSON.stringify({ type: 'register', id: requestBody['Participant']['UserCode'] + ' - ' + requestBody['Participant']['Event'] }));
+			};
 		}
 	});
 }
