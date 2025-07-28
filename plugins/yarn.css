@@ -2141,7 +2141,7 @@ a {
 }
 
 .input-error {
-    outline: 2px solid var(--error-color);
+    outline: 2px solid var(--error-color) !important;
 }
 
 .input-line label {

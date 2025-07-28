@@ -361,6 +361,12 @@
     flex-direction: column;
 }
 
+.shop-email-error {
+    color: #EE7357;
+    font-size: 0.875rem;
+    margin-bottom: 0;
+}
+
 /* Shop Additional */
 .shop-additional {
     margin-inline: auto;

@@ -454,9 +454,15 @@ if (window.location.pathname == '/pages/shop.html') {
 
 						// Email regex
 						if (el.name == 'shop-email') {
-							const regex = /\S+@\S+\.\S+/;
-							if (!regex.test(el.value)) {
+							const email = el.value.trim();
+							const regex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+							if (!regex.test(email)) {
 								active = false;
+								el.classList.add('input-error');
+								document.querySelector('.shop-email-error').classList.remove('shop-hidden');
+							} else {
+								el.classList.remove('input-error');
+								document.querySelector('.shop-email-error').classList.add('shop-hidden');
 							}
 						}
 					});
