@@ -1,5 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js';
 import { getAnalytics, logEvent } from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-analytics.js';
+import { getPerformance } from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-performance.js';
 
 const cookiesAgree = localStorage.getItem('cookiesAgree');
 let analytics;
@@ -20,6 +21,7 @@ if (cookiesAgree === 'true') {
 	// Initialize Firebase
 	const app = initializeApp(firebaseConfig);
 	analytics = getAnalytics(app);
+	performance = getPerformance(app);
 } else {
 	document.querySelector('.cookie').style.display = 'block';
 }
