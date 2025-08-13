@@ -3,9 +3,9 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
-		<meta name="discription" content="De maatschappelijke projecten van Hoeve Lootens" />
+		<meta name="description" content="De maatschappelijke projecten van Hoeve Lootens" />
 		<title>Hoeve Lootens</title>
-   		<script src="/js/analyse.js" type="module"></script>
+		<script src="/js/analyse.js" type="module"></script>
 		<link href="/plugins/yarn.css" rel="stylesheet" type="text/css" />
 		<link href="/css/style.css" rel="stylesheet" type="text/css" />
 		<link href="/css/forum.css" rel="stylesheet" type="text/css" />
@@ -40,13 +40,14 @@
 		<div class="cookie">
 			<div class="cookie-txt">
 				<p>
-					Door deze website te gebruiken,<br>
-					accepteert u de Cookies.</a>
+					Door deze website te gebruiken,<br />
+					accepteert u de Cookies.
 				</p>
 			</div>
 			<div class="accept-div">
-				<a class="btn btn-primary btn-primary-sm"
-					onclick="localStorage.setItem('cookiesAgree', 'true'); document.querySelector('.cookie').style.display = 'none';">Accept</a>
+				<a class="btn btn-primary btn-primary-sm" onclick="localStorage.setItem('cookiesAgree', 'true'); document.querySelector('.cookie').style.display = 'none';"
+					>Accept</a
+				>
 			</div>
 		</div>
 
@@ -57,6 +58,23 @@
 				<p>Uw inschrijving is voltooid. U ontvangt een bevestiging email.</p>
 
 				<a class="btn btn-primary btn-primary-sm" href="../index.html">Terug naar home</a>
+			</div>
+
+			<div class="review">
+				<h3>Wat vond u van het inschrijvingsproces?</h3>
+				<div class="review-stars">
+					<i class="fa-regular fa-star" id="review-star-1"></i>
+					<i class="fa-regular fa-star" id="review-star-2"></i>
+					<i class="fa-regular fa-star" id="review-star-3"></i>
+					<i class="fa-regular fa-star" id="review-star-4"></i>
+					<i class="fa-regular fa-star" id="review-star-5"></i>
+				</div>
+				<textarea placeholder="Laat hier uw feedback achter (optioneel)..." rows="4"></textarea>
+				<button type="button" class="btn btn-primary btn-primary-sm review-submit">Verstuur</button>
+			</div>
+
+			<div class="review-submitted">
+				<p>Bedankt voor uw feedback!</p>
 			</div>
 		</main>
 

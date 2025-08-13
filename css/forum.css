@@ -411,7 +411,6 @@ input[type=tel] {
 }
 
 /* Success Page */
-
 .payment-success {
     min-height: 60vh;
     display: flex;
@@ -426,4 +425,45 @@ input[type=tel] {
     font-size: 5rem;
     color: #4A7D44;
     margin-bottom: 1rem;
+}
+
+.review,
+.review-submitted {
+    display: flex;
+    flex-direction: column;
+    margin-block: 1rem 2rem;
+    margin-inline: 1rem;
+    align-items: center;
+}
+
+.review-stars {
+    margin: 1rem 0;
+}
+
+.review-stars i {
+    font-size: 1.5rem;
+    color: #FFD700;
+    cursor: pointer;
+}
+
+.review h3 {
+    text-align: center;
+}
+
+.review textarea {
+    width: 300px;
+    max-width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0.5rem;
+    font-size: 1rem;
+    font-family: var(--font-family, adobe-clean, sans-serif);
+}
+
+.review-submit {
+    margin-top: 1rem;
+}
+
+.review-submitted {
+    display: none;
 }
