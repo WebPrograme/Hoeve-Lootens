@@ -610,6 +610,10 @@ if (window.location.pathname == '/pages/shop.html') {
 							// Show Not Enough Places
 							document.querySelector('.shop-not-enough-places').classList.add('shop-active');
 							document.querySelector('.shop-not-enough-places').classList.remove('shop-hidden');
+						} else {
+							// Show Generic Error
+							document.querySelector('.shop-generic-error').classList.add('shop-active');
+							document.querySelector('.shop-generic-error').classList.remove('shop-hidden');
 						}
 					});
 			});
