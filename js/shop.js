@@ -358,8 +358,8 @@ if (window.location.pathname == '/pages/shop.html') {
 					const el = e.currentTarget.classList.contains('shop-ticket-actions-add')
 						? e.currentTarget
 						: e.currentTarget.classList.contains('shop-ticket')
-						? e.currentTarget.querySelector('.shop-ticket-actions-add')
-						: null;
+							? e.currentTarget.querySelector('.shop-ticket-actions-add')
+							: null;
 					const eventName = el.getAttribute('data-value');
 					el.parentElement.parentElement.classList.toggle('shop-ticket-amount-active');
 					el.parentElement.classList.toggle('shop-ticket-actions-active');
