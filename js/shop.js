@@ -11,6 +11,53 @@ ws.onmessage = (event) => {
 	}
 };
 
+// Show Articles
+function AddArticles(articles, container) {
+	let type = 'left';
+	container.innerHTML = '';
+
+	const sortedArticles = Object.values(articles).sort((a, b) => a.Order - b.Order);
+
+	sortedArticles.forEach((article) => {
+		const title = article.Title;
+		const image = article.Image;
+		const text = article.Content;
+		const button = article.Button;
+
+		let section = document.createElement('section');
+		section.classList.add('container', 'm-auto');
+		section.innerHTML = `<div class="row"></div>`;
+		section.setAttribute('data-id', article.ID || article.Title);
+
+		let imageContainer = document.createElement('div');
+		imageContainer.classList.add('col-6');
+		imageContainer.innerHTML = `<img src="../images/programma_${image.Day.toLowerCase()}.png" alt="${title}" class="fluid-img">`;
+
+		let contentContainer = document.createElement('div');
+		contentContainer.classList.add('col-6');
+		contentContainer.innerHTML = `<h3 class="section-header">${title}</h3>`;
+
+		text.forEach((line) => {
+			contentContainer.innerHTML += `<p>${line}</p>`;
+		});
+
+		if (button) {
+			contentContainer.innerHTML += `<a class="btn btn-primary btn-primary-sm" href="${button.Link}">${button.Text}</a>`;
+		}
+
+		if (type === 'left') {
+			section.querySelector('.row').appendChild(imageContainer);
+			section.querySelector('.row').appendChild(contentContainer);
+		} else {
+			section.querySelector('.row').appendChild(contentContainer);
+			section.querySelector('.row').appendChild(imageContainer);
+		}
+
+		type = type === 'left' ? 'right' : 'left';
+		container.appendChild(section);
+	});
+}
+
 // Create User Code
 function getRandomIntInclusive(data, min, max) {
 	let UserCodes = [];
@@ -210,6 +257,25 @@ function showPayment(requestBody) {
 
 // Get All Events
 if (window.location.pathname == '/pages/shop.html') {
+	// Get Shop Title
+	getRequest('/api/website/shop/title')
+		.then((response) => {
+			document.querySelector('.shop-title').innerHTML = response.data.Title;
+		})
+		.catch((error) => {
+			console.error('Error loading shop title:', error);
+		});
+
+	// Get Shop Articles
+	getRequest('/api/website/shop/articles')
+		.then((response) => {
+			AddArticles(response.data, document.querySelector('.shop-articles'));
+		})
+		.catch((error) => {
+			console.error('Error loading shop articles:', error);
+		});
+
+	// Get Available Events
 	postRequest('/api/events/init/public', {}).then((res) => {
 		if (res.status == 200) {
 			data = res.data;
