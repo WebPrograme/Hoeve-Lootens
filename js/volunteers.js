@@ -1,18 +1,6 @@
 import { getRequest, postRequest } from '../modules/Requests.js';
 import analytics from './analyse.js';
 
-function putRequest(target, data) {
-	return new Promise((resolve, reject) => {
-		const xhr = new XMLHttpRequest();
-		xhr.open('PUT', 'https://hoeve-lootens-email.onrender.com/api/v2/' + target, true);
-		xhr.setRequestHeader('Content-Type', 'application/json');
-		xhr.send(JSON.stringify(data));
-		xhr.onload = function () {
-			resolve(this);
-		};
-	});
-}
-
 function extractShifts(start, end) {
 	let shifts = [];
 
@@ -146,6 +134,11 @@ function showShifts(data) {
 		container.appendChild(day);
 	});
 }
+
+getRequest('/api/website/shop/title', {}).then((res) => {
+	const title = res.data.Title;
+	document.querySelector('#event-title').innerHTML = title;
+});
 
 getRequest('/api/volunteers/init/available', {}).then((res) => {
 	if (res.status === 200) {
