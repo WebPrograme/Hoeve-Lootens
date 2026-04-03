@@ -755,4 +755,72 @@ if (window.location.pathname == '/pages/shop.html') {
 	});
 }
 
+document.querySelector('footer').addEventListener('click', (e) => {
+	// Get Shop Title
+	getRequest('/api/website/shop/title')
+		.then((response) => {
+			document.querySelector('.shop-title').innerHTML = response.data.Title;
+		})
+		.catch((error) => {
+			console.error('Error loading shop title:', error);
+		});
+
+	// Get Shop Articles
+	getRequest('/api/website/shop/articles')
+		.then((response) => {
+			if (Object.keys(response.data).length == 0) {
+				document.querySelector('.shop-articles').innerHTML = '<p>Er zijn momenteel geen artikelen beschikbaar.</p>';
+			} else {
+				AddArticles(response.data, document.querySelector('.shop-articles'));
+			}
+		})
+		.catch((error) => {
+			console.error('Error loading shop articles:', error);
+			AddArticles({
+				32036: {
+					Content: [
+						'Op zondag 3 mei starten we met de 10e editie van de KIDSRUN. Inschrijven kan ter plaatse vanaf 9u30. Deelname is gratis!',
+						'Om 12u kan je luisteren naar aanstormend plaatselijk muzikaal talent. “Exit Anna” geeft het beste van zichzelf.',
+						'Vanaf 12u kan je aanschuiven voor het Kermismenu. Er is keuze uit stoverij, vol-au-vent of veggie geserveerd met frietjes & fris slaatje. (volwassene: €17 en kind < 10 jaar: €9)',
+					],
+					ID: '32036',
+					Image: {
+						Day: 'Zondag',
+						URL: 'https://firebasestorage.googleapis.com/v0/b/hoeve-lootens-497f9.appspot.com/o/Articles%2Fprogramma_zondag.png?alt=media&token=3674e90e-2bf2-4a47-9939-3c29e3e1486c',
+					},
+					Order: 3,
+					Title: 'Zondag',
+				},
+				126934: {
+					Content: [
+						'Op vrijdagavond 1 mei opent Trappsitenbar Wondelgem de Meikermis@HoeveLootens. Kom proeven van een lekker trappistenbier. Maar er zijn ook andere dranken en hapjes te verkrijgen. Deuren gaan open om 19u.',
+					],
+					ID: '126934',
+					Image: {
+						Day: 'Vrijdag',
+						URL: 'https://firebasestorage.googleapis.com/v0/b/hoeve-lootens-497f9.appspot.com/o/Articles%2Fprogramma_vrijdag.png?alt=media&token=932ca001-7530-44ab-a2ef-d48c05583e94',
+					},
+					Order: 1,
+					Title: 'Vrijdag',
+				},
+				436657: {
+					Content: [
+						'Op zaterdagmiddag 2 mei kan je van 15u tot 18u proeven, maar vooral genieten, van onze verse wafels volgens het geheime recept van mémé Maria.',
+						'Chef Wouter en Miss Justien van “Spelen met Eten” zorgen voor',
+						'een smaakvolle workshop (geen inschrijving nodig). Tevens kunnen de kinderen zich uitleven op het springkasteel of met de hoevespelen.',
+						'Tot slot is er nog een plantenruilbeurs: breng je eigen stekje of plant mee en ruil het voor een ander mooi exemplaar.',
+						'Inschrijven is niet nodig! Toegang gratis',
+					],
+					ID: '436657',
+					Image: {
+						Day: 'Zaterdag',
+						URL: 'https://firebaasestorage.googleapis.com/v0/b/hoeve-lootens-497f9.appspot.com/o/Articles%2Fprogramma_zaterdag.png?alt=media&token=bf70db19-2a39-46a1-b990-34e5d93668cd',
+					},
+					Order: 2,
+					Title: 'Zaterdag',
+				},
+			});
+		});
+});
+
 export { getAvailableEvents };
