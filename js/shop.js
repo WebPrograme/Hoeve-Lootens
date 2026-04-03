@@ -264,15 +264,19 @@ if (window.location.pathname == '/pages/shop.html') {
 		})
 		.catch((error) => {
 			console.error('Error loading shop title:', error);
-			alert(error);
 		});
 
 	// Get Shop Articles
 	getRequest('/api/website/shop/articles')
 		.then((response) => {
-			AddArticles(response.data, document.querySelector('.shop-articles'));
+			if (Object.keys(response.data).length == 0) {
+				document.querySelector('.shop-articles').innerHTML = '<p>Er zijn momenteel geen artikelen beschikbaar.</p>';
+			} else {
+				AddArticles(response.data, document.querySelector('.shop-articles'));
+			}
 		})
 		.catch((error) => {
+			console.error('Error loading shop articles:', error);
 			AddArticles({
 				32036: {
 					Content: [
@@ -317,7 +321,6 @@ if (window.location.pathname == '/pages/shop.html') {
 					Title: 'Zaterdag',
 				},
 			});
-			alert(error);
 		});
 
 	// Get Available Events
