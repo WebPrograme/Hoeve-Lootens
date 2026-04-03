@@ -264,6 +264,7 @@ if (window.location.pathname == '/pages/shop.html') {
 		})
 		.catch((error) => {
 			console.error('Error loading shop title:', error);
+			alert(error);
 		});
 
 	// Get Shop Articles
@@ -316,6 +317,7 @@ if (window.location.pathname == '/pages/shop.html') {
 					Title: 'Zaterdag',
 				},
 			});
+			alert(error);
 		});
 
 	// Get Available Events
