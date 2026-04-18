@@ -569,7 +569,7 @@ if (window.location.pathname == '/pages/shop.html') {
 						// Email regex
 						if (el.name == 'shop-email') {
 							const email = el.value.trim();
-							const regex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+							const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 							if (!regex.test(email)) {
 								active = false;
 								el.classList.add('input-error');
