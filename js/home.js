@@ -1,6 +1,6 @@
 import { getRequest } from '../modules/Requests.js';
 
-getRequest('/api/website/articles/home')
+getRequest('/api/website/home/articles')
 	.then((response) => {
 		AddArticles(response.data, document.querySelector('.news'));
 	})

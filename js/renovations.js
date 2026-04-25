@@ -1,6 +1,6 @@
 import { getRequest } from '../modules/Requests.js';
 
-getRequest('/api/website/articles/renovations')
+getRequest('/api/website/renovations/articles')
 	.then((response) => {
 		AddArticles(response.data, document.querySelector('.timeline'));
 	})
