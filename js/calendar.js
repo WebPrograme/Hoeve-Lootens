@@ -63,6 +63,7 @@ function showMonth(month, year = currentDate.getFullYear()) {
 
 	// Add Days
 	for (const day of dates) {
+		// console.log(events[day], day);
 		if (events[day]) {
 			// Check If Day Has Event
 			// Check If Event Is Event
@@ -176,11 +177,6 @@ function showEvents() {
 		}
 	}
 
-	for (const event of Object.keys(filteredEventsContent)) {
-		if (filteredEventsContent[event].Type == 'boomgaardcafe') {
-		}
-	}
-
 	// Build Calendar Cards (Boomgaardcafe, Events)
 	Object.values(filteredEventsContent).forEach((event) => {
 		let card = '';
@@ -249,7 +245,7 @@ function parseEvents(events) {
 		let title = event['summary'];
 		let description = '';
 
-		if (event['summary'].toLowerCase().includes('reservering')) {
+		if (event['summary'].toLowerCase().includes('reservering') || event['summary'].toLowerCase().includes('reservatie')) {
 			type = 'res';
 			title = event['summary'].replace('Reservering', '').replace('reservering', '').trim();
 		} else if (event['summary'].toLowerCase().includes('optie')) {
@@ -261,6 +257,8 @@ function parseEvents(events) {
 		} else if (event['summary'] == 'Boomgaardcafé') {
 			type = 'boomgaardcafe';
 			title = event['summary'].trim();
+		} else {
+			console.log('Unknown event type: ' + event['summary']);
 		}
 
 		if (event['description'] != undefined) description = event['description'];
