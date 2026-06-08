@@ -107,6 +107,7 @@ function showEvents() {
 				// Get Event Variables
 				const event = filteredEvents[year][month][day];
 				const eventTitle = event.Title;
+				const eventID = event.ID;
 				const eventDescription = event.Description;
 				const startMonth = month;
 				const startDay = parseInt(day);
@@ -115,7 +116,7 @@ function showEvents() {
 				let endDay = parseInt(day);
 
 				// Check If Event Is Already Added
-				if (filteredEventsContent[eventTitle]) continue;
+				if (filteredEventsContent[eventID]) continue;
 
 				// Check If Event Is Multiple Days (Same Month)
 				let tempDay = parseInt(day);
@@ -148,7 +149,7 @@ function showEvents() {
 				}
 
 				// Add Event To Calendar Events Content
-				filteredEventsContent[eventTitle] = {
+				filteredEventsContent[eventID] = {
 					Title: eventTitle,
 					Description: eventDescription,
 					StartMonth: startMonth,
@@ -176,6 +177,8 @@ function showEvents() {
 			}
 		}
 	}
+
+	console.log(filteredEventsContent);
 
 	// Build Calendar Cards (Boomgaardcafe, Events)
 	Object.values(filteredEventsContent).forEach((event) => {
@@ -244,6 +247,8 @@ function parseEvents(events) {
 		let type = 'Not public';
 		let title = event['summary'];
 		let description = '';
+		let id = event['id'];
+		console.log(id);
 
 		if (event['summary'].toLowerCase().includes('reservering') || event['summary'].toLowerCase().includes('reservatie')) {
 			type = 'res';
@@ -267,6 +272,7 @@ function parseEvents(events) {
 			type: type,
 			title: title,
 			description: description,
+			ID: id,
 		};
 	};
 
@@ -308,18 +314,19 @@ function parseEvents(events) {
 		if (events[i]['summary'] != undefined) {
 			if (month == endMonth && year >= currentYear) {
 				// If Event Is In Same Month
-				const { type, title, description } = getEventInfo(events[i]);
+				const { type, title, description, ID } = getEventInfo(events[i]);
 
 				for (let j = parseInt(day); j < parseInt(endDay); j++) {
 					filteredEvents[year][Object.keys(filteredEvents[year])[month - 1]][j] = {
 						Type: type,
 						Title: title,
 						Description: description,
+						ID: ID,
 					};
 				}
 			} else if (year >= currentYear) {
 				// If Event Is In Different Month
-				const { type, title, description } = getEventInfo(events[i]);
+				const { type, title, description, ID } = getEventInfo(events[i]);
 
 				for (let j = month; j <= endMonth; j++) {
 					if (j == month) {
@@ -328,6 +335,7 @@ function parseEvents(events) {
 								Type: type,
 								Title: title,
 								Description: description,
+								ID: ID,
 							};
 						}
 					} else if (j == endMonth) {
@@ -336,6 +344,7 @@ function parseEvents(events) {
 								Type: type,
 								Title: title,
 								Description: description,
+								ID: ID,
 							};
 						}
 					}
