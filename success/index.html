@@ -1,15 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
-		<meta name="discription" content="De maatschappelijke projecten van Hoeve Lootens" />
+		<meta name="description" content="De maatschappelijke projecten van Hoeve Lootens" />
 		<title>Hoeve Lootens</title>
+		<script src="/js/analyse.js" type="module"></script>
 		<link href="/plugins/yarn.css" rel="stylesheet" type="text/css" />
 		<link href="/css/style.css" rel="stylesheet" type="text/css" />
 		<link href="/css/forum.css" rel="stylesheet" type="text/css" />
-		<link href="/css/albums.css" rel="stylesheet" type="text/css" />
-		<link rel="icon" href="../images/page image transparent.png" />
+		<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
 		<link
 			rel="stylesheet"
 			href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
@@ -27,58 +28,61 @@
 				<span class="bar"></span>
 			</label>
 			<ul class="nav-list">
-				<li><a href="../index.html">Home</a></li>
-				<li><a href="verbouwing.html">Verbouwingen</a></li>
-				<li><a href="kalender.html">Evenementen</a></li>
-				<li><a href="reserveren.html">Reserveren</a></li>
-				<li><a href="maatschappelijk.html" class="nav-link-projects">Steun Ons</a></li>
-				<li><a href="geschiedenis.html">Geschiedenis</a></li>
-				<li><a href="contact.html">Contact</a></li>
+				<li><a href="../">Home</a></li>
+				<li><a href="../verbouwingen/">Verbouwingen</a></li>
+				<li><a href="../evenementen/">Evenementen</a></li>
+				<li><a href="../reserveren/">Reserveren</a></li>
+				<li><a href="../steun-ons/" class="nav-link-projects">Steun Ons</a></li>
+				<li><a href="../geschiedenis/">Geschiedenis</a></li>
+				<li><a href="../contact/">Contact</a></li>
 			</ul>
 		</nav>
-		
+
 		<div class="cookie">
 			<div class="cookie-txt">
 				<p>
-					Door deze website te gebruiken,<br>
-					accepteert u de Cookies.</a>
+					Door deze website te gebruiken,<br />
+					accepteert u de Cookies.
 				</p>
 			</div>
 			<div class="accept-div">
-				<a class="btn btn-primary btn-primary-sm"
-					onclick="localStorage.setItem('cookiesAgree', 'true'); document.querySelector('.cookie').style.display = 'none';">Accept</a>
+				<a
+					class="btn btn-primary btn-primary-sm"
+					onclick="
+						localStorage.setItem('cookiesAgree', 'true');
+						document.querySelector('.cookie').style.display = 'none';
+					"
+					>Accept</a
+				>
 			</div>
 		</div>
 
 		<main>
-			<div class="top-page">
-				<div>
-					<h1>Albums</h1>
-					<img class="maatschappelijk-vorm3" src="../images/Contact_Vormen3.png" />
+			<div class="payment-success">
+				<i class="fa-solid fa-circle-check"></i>
+				<h2>Uw betaling is gelukt!</h2>
+				<p>Uw inschrijving is voltooid. U ontvangt een bevestiging email.</p>
 
-					<div class="text-center col-6 m-auto mt-2">
-						<p>Op deze pagina kan je de foto's van evenementen en projecten bekijken. Klik op een album om de foto's te bekijken.</p>
-						<a class="btn btn-primary btn-primary-sm" href="/pages/albums.html">Terug naar albums</a>
-					</div>
-				</div>
+				<a class="btn btn-primary btn-primary-sm" href="../">Terug naar home</a>
 			</div>
 
-			<div class="albums col-10 flex m-inline-auto mt-3 mb-3 justify-center"></div>
-			<div class="images col-11 flex m-inline-auto mt-3 mb-3 justify-center"></div>
+			<div class="review">
+				<h3>Wat vond u van het inschrijvingsproces?</h3>
+				<div class="review-stars">
+					<i class="fa-regular fa-star" id="review-star-1"></i>
+					<i class="fa-regular fa-star" id="review-star-2"></i>
+					<i class="fa-regular fa-star" id="review-star-3"></i>
+					<i class="fa-regular fa-star" id="review-star-4"></i>
+					<i class="fa-regular fa-star" id="review-star-5"></i>
+				</div>
+				<textarea placeholder="Laat hier uw feedback achter (optioneel)..." rows="4"></textarea>
+				<button type="button" class="btn btn-primary btn-primary-sm review-submit">Verstuur</button>
+			</div>
+
+			<div class="review-submitted">
+				<p>Bedankt voor uw feedback!</p>
+			</div>
 		</main>
-
-		<div class="image-modal">
-			<div class="image-modal-overlay"></div>
-			<div class="image-modal-content">
-				<a class="image-modal-close"><i class="fas fa-times"></i></a>
-				<div class="image-modal-body">
-					<img
-						class="image-modal-image"
-						src="https://firebasestorage.googleapis.com/v0/b/hoeve-lootens-497f9.appspot.com/o/Albums%2FVerbouwing_Jan_2024.jpg?alt=media&token=ecb8d919-0a3e-4e9b-81b2-a12c266b75e0"
-					/>
-				</div>
-			</div>
-		</div>
 
 		<footer>
 			<div class="footer-first">
@@ -112,8 +116,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.7.2/angular-translate.js"></script>
 		<script src="https://kit.fontawesome.com/62dc937956.js" crossorigin="anonymous"></script>
 		<script src="/plugins/yarn.js"></script>
-   		<script src="/js/analyse.js" type="module"></script>
-		<script src="/js/albums.js" type="module"></script>
+		<script src="/js/success.js" type="module"></script>
 		<script src="/js/main.js" type="module"></script>
 	</body>
 </html>

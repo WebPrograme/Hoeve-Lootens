@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="nl">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="description" content="Fotowall van Hoeve Lootens" />
+		<title>Hoeve Lootens - Fotowall</title>
+		<link href="/plugins/yarn.css" rel="stylesheet" type="text/css" />
+		<link href="/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="/css/photowall.css" rel="stylesheet" type="text/css" />
+		<link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="../images/favicon-16x16.png" />
+		<link
+			rel="stylesheet"
+			href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+			integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+			crossorigin="anonymous"
+		/>
+	</head>
+
+	<body class="photowall-body">
+		<div id="setup-screen">
+			<div class="setup-card">
+				<div class="setup-logo">
+					<img src="../images/HoeveLootens_Logo_Wit.png" alt="Hoeve Lootens" />
+				</div>
+				<h1 class="setup-title">Fotowall</h1>
+				<p class="setup-sub">Stel de diavoorstelling in naar wens</p>
+
+				<div class="setup-fields">
+					<div class="setup-field">
+						<label for="interval">Tijd per foto</label>
+						<div class="setup-slider-row">
+							<input type="range" id="interval" min="2" max="30" value="5" step="1" />
+							<span class="setup-slider-val"><span id="interval-val">5</span>s</span>
+						</div>
+					</div>
+
+					<div class="setup-field setup-field-toggle">
+						<label for="captions">Bijschriften tonen</label>
+						<label class="toggle">
+							<input type="checkbox" id="captions" checked />
+							<span class="toggle-track"><span class="toggle-thumb"></span></span>
+						</label>
+					</div>
+
+					<div class="setup-field setup-field-toggle">
+						<label for="fullscreen-opt">Volledig scherm starten</label>
+						<label class="toggle">
+							<input type="checkbox" id="fullscreen-opt" checked />
+							<span class="toggle-track"><span class="toggle-thumb"></span></span>
+						</label>
+					</div>
+				</div>
+
+				<button id="start-btn" class="setup-start"><i class="fas fa-play"></i> Starten</button>
+			</div>
+		</div>
+
+		<main id="slideshow-screen" class="hidden">
+			<div class="photowall" id="photowall">
+				<img src="" alt="Fotowall" id="photowall-image" />
+				<img src="" alt="Fotowall next" id="photowall-image-next" class="pw-next" />
+				<div class="photowall-caption" id="photowall-caption">
+					<p class="photowall-caption-text" id="caption-text"></p>
+				</div>
+				<div class="photowall-progress" id="progress-bar"></div>
+				<button class="pw-exit-btn" id="exit-btn" title="Terug naar instellingen">
+					<i class="fas fa-times"></i>
+				</button>
+			</div>
+		</main>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<script src="https://kit.fontawesome.com/62dc937956.js" crossorigin="anonymous"></script>
+		<script src="/plugins/yarn.js"></script>
+		<script src="/js/photowall.js" type="module"></script>
+		<script src="/js/main.js" type="module"></script>
+	</body>
+</html>

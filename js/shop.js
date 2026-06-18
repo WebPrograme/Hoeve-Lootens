@@ -7,7 +7,7 @@ const ws = new WebSocket('wss://hoeve-lootens.onrender.com');
 ws.onmessage = (event) => {
 	const data = JSON.parse(event.data);
 	if (data.type === 'payment') {
-		window.location.href = '/success.html?usercode=' + data.usercode + '&event=' + data.event;
+		window.location.href = '/success/?usercode=' + data.usercode + '&event=' + data.event;
 	}
 };
 
@@ -256,7 +256,7 @@ function showPayment(requestBody) {
 }
 
 // Get All Events
-if (window.location.pathname == '/pages/shop.html') {
+if (window.location.pathname == '/shop/' || window.location.pathname == '/shop/index.html' || window.location.pathname == '/shop') {
 	// Get Shop Title
 	getRequest('/api/website/shop/title')
 		.then((response) => {
