@@ -199,7 +199,7 @@
 	transform: translateX(20px);
 }
 
-.setup-start {
+.setup-btn {
 	width: 100%;
 	padding: 0.9rem 1rem;
 	background: #faf8ec;
@@ -222,12 +222,12 @@
 	gap: 0.6rem;
 }
 
-.setup-start:hover {
+.setup-btn:hover {
 	box-shadow: 0 6px 28px rgba(74, 125, 68, 0.55);
 	transform: translateY(-1px);
 }
 
-.setup-start:active {
+.setup-btn:active {
 	transform: translateY(0);
 }
 
@@ -299,4 +299,15 @@
 	width: 0%;
 	background: #c8934a;
 	z-index: 11;
+}
+
+/* Upload */
+.setup-preview {
+	display: block;
+	width: 100%;
+	height: auto;
+	max-height: 300px;
+	object-fit: contain;
+	margin-bottom: 1rem;
+	border-radius: 12px;
 }

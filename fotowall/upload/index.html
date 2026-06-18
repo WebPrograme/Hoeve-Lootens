@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="nl">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="description" content="Fotowall van Hoeve Lootens" />
+		<title>Hoeve Lootens - Fotowall</title>
+		<link href="/plugins/yarn.css" rel="stylesheet" type="text/css" />
+		<link href="/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="/css/photowall.css" rel="stylesheet" type="text/css" />
+		<link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="../images/favicon-16x16.png" />
+		<link
+			rel="stylesheet"
+			href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+			integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+			crossorigin="anonymous"
+		/>
+	</head>
+
+	<body class="photowall-body">
+		<div id="setup-screen">
+			<div class="setup-card">
+				<div class="setup-logo">
+					<img src="../../images/HoeveLootens_Logo_Wit.png" alt="Hoeve Lootens" />
+				</div>
+				<h1 class="setup-title">Fotowall</h1>
+				<p class="setup-sub">Upload een foto voor de fotowall</p>
+
+				<input type="file" id="file-input" accept="image/*" style="display: none" capture="environment" />
+
+				<img class="setup-preview" id="preview-image" src="" alt="Preview" style="display: none" />
+
+				<button id="upload-btn" class="setup-btn" data-state="upload"><i class="fas fa-camera"></i> Open Camera</button>
+			</div>
+		</div>
+
+		<main></main>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<script src="https://kit.fontawesome.com/62dc937956.js" crossorigin="anonymous"></script>
+		<script src="../../plugins/yarn.js"></script>
+		<script src="../../js/photowall-upload.js" type="module"></script>
+	</body>
+</html>
