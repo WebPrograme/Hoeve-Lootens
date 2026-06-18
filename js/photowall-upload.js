@@ -1,5 +1,5 @@
 import { postRequest } from '../modules/Requests.js';
-import Upload from '../modules/Upload.js';
+import Upload from '../../modules/Upload.js';
 
 const imageInput = document.getElementById('file-input');
 const uploadBtn = document.getElementById('upload-btn');
