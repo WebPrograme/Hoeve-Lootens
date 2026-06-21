@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="nl">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="description" content="Fotowall van Hoeve Lootens" />
+		<title>Hoeve Lootens - Fotowall</title>
+		<link href="/plugins/yarn.css" rel="stylesheet" type="text/css" />
+		<link href="/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="/css/photowall.css" rel="stylesheet" type="text/css" />
+		<link rel="icon" type="image/png" sizes="32x32" href="../../images/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="../../images/favicon-16x16.png" />
+		<link
+			rel="stylesheet"
+			href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+			integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+			crossorigin="anonymous"
+		/>
+	</head>
+
+	<body class="photowall-body">
+		<main>
+			<div class="photos-management">
+				<h1>Overzicht van de foto's</h1>
+				<p>Hieronder vind je een overzicht van alle foto's die zijn geüpload naar de fotowall. Je kan ze ook downloaden of verwijderen.</p>
+				<div class="photos-management-buttons">
+					<a href="../" id="slideshow-button" class="management-btn"><i class="fas fa-play"></i> Slideshow</a>
+					<button id="empty-button" class="management-btn" data-action="empty"><i class="fas fa-trash-alt"></i> Verwijder alle foto's</button>
+					<button id="download-all-button" class="management-btn"><i class="fas fa-download"></i> Download alle foto's</button>
+				</div>
+
+				<div id="photos-grid" class="photos-grid"></div>
+				<div id="no-photos-message" class="no-photos-message">
+					<p>Er zijn momenteel geen foto's beschikbaar.</p>
+				</div>
+				<div id="loading-message" class="loading-message">
+					<p><i class="fas fa-spinner fa-spin"></i> Bezig met laden van foto's...</p>
+				</div>
+				<div id="error-message" class="error-message">
+					<p><i class="fas fa-exclamation-triangle"></i> Er is een fout opgetreden bij het laden van de foto's. Probeer het later opnieuw.</p>
+				</div>
+			</div>
+		</main>
+
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
+			integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		></script>
+		<script src="https://kit.fontawesome.com/62dc937956.js" crossorigin="anonymous"></script>
+		<script src="../../plugins/yarn.js"></script>
+		<script src="../../js/photowall-management.js" type="module"></script>
+	</body>
+</html>
