@@ -31,12 +31,15 @@ jobs:
         needs: bust-cache
         steps:
             - name: 🚚 Get latest code
-              uses: actions/checkout@v3
+              uses: actions/checkout@v6
 
             - name: 📂 Sync files
-              uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+              uses: SamKirkland/FTP-Deploy-Action@v4.4.0
               with:
                   server: www.it4pro-server3.be
                   username: hoeveloo
                   password: ${{ secrets.PROD_FTP_PWD }}
                   server-dir: domains/hoevelootens.be/public_html/
+                  protocol: ftps
+                  port: 21
+                  log-level: verbose
