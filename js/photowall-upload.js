@@ -31,7 +31,7 @@ uploadBtn.addEventListener('click', (e) => {
 	uploadBtn.disabled = true;
 	uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
 
-	Upload.UploadImage('photowall', file, uploadBtn).then((result) => {
+	Upload.UploadImage('PhotoWall', file, uploadBtn).then((result) => {
 		postRequest('/api/photowall/upload', {
 			URL: result.url,
 			Filename: result.filename,
@@ -45,7 +45,7 @@ uploadBtn.addEventListener('click', (e) => {
 					}, 2000);
 				} else {
 					uploadBtn.innerHTML = '<i class="fas fa-times"></i> Upload Gefaald!';
-					Upload.UndoUpload('photowall', result.filename).then(() => {
+					Upload.UndoUpload('PhotoWall', result.filename).then(() => {
 						reset();
 					});
 				}
@@ -53,7 +53,7 @@ uploadBtn.addEventListener('click', (e) => {
 			.catch((error) => {
 				console.error('Error posting to server:', error);
 				uploadBtn.innerHTML = '<i class="fas fa-times"></i> Upload Gefaald!';
-				Upload.UndoUpload('photowall', result.filename).then(() => {
+				Upload.UndoUpload('PhotoWall', result.filename).then(() => {
 					reset();
 				});
 			});
