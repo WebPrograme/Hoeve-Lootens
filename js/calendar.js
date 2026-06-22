@@ -1,364 +1,153 @@
-// VERSION: 1.0
-
-// Variables
-const currentDate = new Date();
-const currentYear = currentDate.getFullYear();
 const calendar = document.querySelector('.calendar-content');
 const calendarHeader = document.querySelector('.calendar-header-name');
 const calendarHeaderSkeleton = document.querySelector('.skeleton-header-name');
 const calendarPrevMonth = document.querySelector('.fa-chevron-left');
 const calendarNextMonth = document.querySelector('.fa-chevron-right');
-const calendarMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']; // English
-const calendarMonthsDutch = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december']; // Dutch
-const calendarMonthsDutchShort = ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec']; // Dutch Short
 
-let filteredEvents = {};
-let filteredEventsContent = {};
+const optionDayElementTemplate = `<div class='calendar-day calendar-active calendar-option calendar-tooltip calendar-tooltip-option'><p>1</p><div class='calendar-top'><p>Optie</p><i></i></div></div>`;
+const reservationDayElementTemplate = `<div class='calendar-day calendar-active calendar-res calendar-tooltip calendar-tooltip-res'><p>1</p><div class='calendar-top'><p>Gereserveerd</p><i></i></div></div>`;
+const eventDayElementTemplate = `<div class='calendar-day calendar-active calendar-event calendar-tooltip calendar-tooltip-event'><p>1</p><div class='calendar-top'><p>Evenement</p><i></i></div></div>`;
+const boomgaardcafeDayElementTemplate = `<div class='calendar-day calendar-active calendar-boomgaardcafe calendar-tooltip calendar-tooltip-boomgaardcafe'><p>1</p><div class='calendar-top'><p>Boomgaardcafé</p><i></i></div></div>`;
+
+const cachedYearsData = new Map();
+const currentDate = new Date();
+let currentActiveYear = currentDate.getFullYear();
+let currentActiveMonth = currentDate.getMonth() + 1;
 
 // Get Google Calendar
-async function fetchCalendar() {
-	const response = await fetch('https://www.googleapis.com/calendar/v3/calendars/planning.hoevelootens@gmail.com/events?key=AIzaSyA4R3_Qmo2k4LyMtXs86xTkHtx9tIM8VoA', {
-		method: 'GET',
-	});
+const fetchCalendar = async (year) => {
+	const minTime = new Date(year, 0, 1);
+	const maxTime = new Date(year, 11, 31, 23, 59, 59);
+
+	const response = await fetch(
+		`https://www.googleapis.com/calendar/v3/calendars/planning.hoevelootens@gmail.com/events?key=AIzaSyA4R3_Qmo2k4LyMtXs86xTkHtx9tIM8VoA&timeMin=${minTime.toISOString()}&timeMax=${maxTime.toISOString()}`,
+		{
+			method: 'GET',
+		},
+	);
 	return response.json();
-}
+};
 
-// Show Month
-function showMonth(month, year = currentDate.getFullYear()) {
-	// Get Variables Based On Month
-	const dutchMonth = calendarMonthsDutch[calendarMonths.indexOf(month)].charAt(0).toUpperCase() + calendarMonthsDutch[calendarMonths.indexOf(month)].slice(1);
-	const monthIndex = calendarMonths.indexOf(month);
-	const days = new Date(year, monthIndex + 1, 0).getDate();
-	const dates = Array.from(Array(days).keys()).map((x) => ++x);
-	const events = filteredEvents[year][month];
-	let startWeekDay = new Date(year, monthIndex, 1).getDay();
-	let monthContent = '';
-
-	calendarHeader.innerHTML = dutchMonth + ' ' + year;
-	calendarHeader.setAttribute('data-year', year);
-
-	// Change Prev Button
-	if (monthIndex == 0 && year == currentYear) {
-		calendarPrevMonth.style.color = '#F5F5F5';
-		calendarPrevMonth.style.cursor = 'default';
-	} else {
-		calendarPrevMonth.style.color = '#FCC000';
-		calendarPrevMonth.setAttribute('data-month', calendarMonths[monthIndex == 0 ? 11 : monthIndex - 1]);
-		calendarPrevMonth.setAttribute('data-year', month == 'January' ? parseInt(year) - 1 : year);
-		calendarPrevMonth.style.cursor = 'pointer';
-	}
-
-	// Change Next Button
-	calendarNextMonth.style.color = '#FCC000';
-	calendarNextMonth.setAttribute('data-month', calendarMonths[monthIndex == 11 ? 0 : monthIndex + 1]);
-	calendarNextMonth.setAttribute('data-year', month == 'December' ? parseInt(year) + 1 : year);
-	calendarNextMonth.style.cursor = 'pointer';
-
-	if (startWeekDay == 0) startWeekDay = 7;
-
-	// Add Empty Days
-	for (let i = 0; i < startWeekDay - 1; i++) {
-		monthContent += "<div class='calendar-day'><p></p></div>";
-	}
-
-	// Add Days
-	for (const day of dates) {
-		// console.log(events[day], day);
-		if (events[day]) {
-			// Check If Day Has Event
-			// Check If Event Is Event
-			if (events[day].Type == 'event') {
-				monthContent += `<div class='calendar-day calendar-active calendar-event calendar-tooltip calendar-tooltip-event' id='day-${day}'><p>${day}</p><div class='calendar-top'><p>${events[day].Title}</p><i></i></div></div>`;
-			} else if (events[day].Type == 'res') {
-				// Check If Event Is Reservation
-				monthContent += `<div class='calendar-day calendar-active calendar-res calendar-tooltip calendar-tooltip-res'><p>${day}</p><div class='calendar-top'><p>Gereserveerd</p><i></i></div></div>`;
-			} else if (events[day].Type == 'option') {
-				// Check If Event Is Option
-				monthContent += `<div class='calendar-day calendar-active calendar-option calendar-tooltip calendar-tooltip-option'><p>${day}</p><div class='calendar-top'><p>Optie</p><i></i></div></div>`;
-			} else if (events[day].Type == 'boomgaardcafe') {
-				// Check If Event Is Boomgaardcafe
-				monthContent += `<div class='calendar-day calendar-active calendar-boomgaardcafe calendar-tooltip calendar-tooltip-boomgaardcafe'><p>${day}</p><div class='calendar-top'><p>Boomgaardcafé</p><i></i></div></div>`;
-			}
-		} else {
-			// If Day Has No Event
-			monthContent += "<div class='calendar-day'><p>" + day + '</p></div>';
-		}
-	}
-
-	// Add Calendar Content
-	calendar.innerHTML = monthContent;
-	calendarHeaderSkeleton.style.display = 'none';
-	calendarHeader.style.display = 'block';
-}
-
-// Show Events
-function showEvents() {
-	const year = currentDate.getFullYear();
-	const calendarCards = document.querySelector('.calendar-cards .cards');
-	const months = Object.keys(filteredEvents[year]);
-
-	// Loop Through Months
-	for (const month of months) {
-		const days = Object.keys(filteredEvents[year][month]);
-
-		// Loop Through Days
-		for (const day of days) {
-			if (filteredEvents[year][month][day].Type != 'boomgaardcafe') {
-				// Get Event Variables
-				const event = filteredEvents[year][month][day];
-				const eventTitle = event.Title;
-				const eventID = event.ID;
-				const eventDescription = event.Description;
-				const startMonth = month;
-				const startDay = parseInt(day);
-
-				let endMonth = month;
-				let endDay = parseInt(day);
-
-				// Check If Event Is Already Added
-				if (filteredEventsContent[eventID]) continue;
-
-				// Check If Event Is Multiple Days (Same Month)
-				let tempDay = parseInt(day);
-				while (
-					filteredEvents[year][month][tempDay + 1] &&
-					filteredEvents[year][month][tempDay + 1].Type == event.Type &&
-					filteredEvents[year][month][tempDay + 1].Title == event.Title
-				) {
-					tempDay++;
-				}
-				endDay = tempDay;
-
-				// Check If Event Is Multiple Days (Different Month)
-				const isLastDayOfMonth = new Date(year, months.indexOf(month) + 1, 0).getDate() == endDay;
-
-				if (isLastDayOfMonth) {
-					const nextMonth = calendarMonths[calendarMonths.indexOf(month) + 1];
-
-					let nextDay = 1;
-					while (
-						filteredEvents[year][nextMonth] &&
-						filteredEvents[year][nextMonth][nextDay] &&
-						filteredEvents[year][nextMonth][nextDay].Type == event.Type &&
-						filteredEvents[year][nextMonth][nextDay].Title == event.Title
-					) {
-						endMonth = nextMonth;
-						endDay = nextDay;
-						nextDay++;
-					}
-				}
-
-				// Add Event To Calendar Events Content
-				filteredEventsContent[eventID] = {
-					Title: eventTitle,
-					Description: eventDescription,
-					StartMonth: startMonth,
-					StartDay: startDay,
-					EndMonth: endMonth,
-					EndDay: endDay,
-					Type: event.Type,
-				};
-			} else {
-				// Add Boomgaardcafe Event To Boomgaardcafe Events Content
-				if (!filteredEventsContent['Boomgaardcafé']) {
-					filteredEventsContent['Boomgaardcafé'] = {
-						Type: 'boomgaardcafe',
-						Description: filteredEvents[year][month][day].Description || undefined,
-						Dates: {},
-					};
-				}
-
-				filteredEventsContent['Boomgaardcafé']['Dates'][month] = [...(filteredEventsContent['Boomgaardcafé']['Dates'][month] || []), day];
-
-				// Check If Boomgaardcafe Event Already Has A Description, If Not, Add Description
-				if (filteredEventsContent['Boomgaardcafé']['Description'] == undefined) {
-					filteredEventsContent['Boomgaardcafé']['Description'] = filteredEvents[year][month][day].Description || undefined;
-				}
-			}
-		}
-	}
-
-	console.log(filteredEventsContent);
-
-	// Build Calendar Cards (Boomgaardcafe, Events)
-	Object.values(filteredEventsContent).forEach((event) => {
-		let card = '';
-
-		if (event.Type == 'boomgaardcafe') {
-			let dates = '';
-
-			Object.keys(event.Dates).forEach((month) => {
-				const days = event.Dates[month];
-				const dutchMonth = calendarMonthsDutch[calendarMonths.indexOf(month)];
-
-				dates += `<p class='calendar-boomgaardcafe-dates' data-month='${month}'>${days.join(' / ')} ${dutchMonth.charAt(0).toUpperCase()}${dutchMonth.slice(1)}</p>`;
-			});
-
-			card = `<div class='calendar-card'><h3>Boomgaardcafé</h3><div class='card-content'><p>${event.Description || ''}</p>${dates}</div></div>`;
-		} else if (event.Type == 'event') {
-			const dateStart = `${event.StartDay}${event.StartMonth == event.EndMonth ? '' : ' ' + calendarMonthsDutchShort[calendarMonths.indexOf(event.StartMonth)]}`;
-			const dateEnd = `${event.EndDay} ${calendarMonthsDutchShort[calendarMonths.indexOf(event.EndMonth)]}`;
-			let dateString = '';
-
-			if (event.StartMonth == event.EndMonth && event.StartDay == event.EndDay) {
-				dateString = `${dateStart} ${calendarMonthsDutchShort[calendarMonths.indexOf(event.StartMonth)]}`;
-			} else if (event.StartMonth == event.EndMonth) {
-				dateString = `${dateStart} - ${dateEnd}`;
-			} else {
-				dateString = `${dateStart} - ${dateEnd} ${event.EndMonth == 'December' ? event.EndMonth : calendarMonthsDutchShort[calendarMonths.indexOf(event.EndMonth)]}`;
-			}
-
-			card = `<div class="calendar-card"><h3>${event.Title}</h3><p class="status" data-month="${event.StartMonth}">${dateString} ${year}</p><p>${
-				event.Description || ''
-			}</p></div>`;
-		}
-
-		document.querySelector('.calendar-cards .cards').innerHTML += card;
-	});
-
-	// Add Calendar Cards Content To Calendar Cards
-	if (document.querySelectorAll('.calendar-card').length == 0) {
-		calendarCards.innerHTML = '<h4 class="highlight-text">Geen evenementen gevonden</h4>';
-	} else {
-		document.querySelectorAll('.calendar-card-skeleton').forEach((element) => {
-			element.style.display = 'none';
-		});
-	}
-
-	calendarCards.style.marginTop = '20px';
-
-	// Update Calendar When Clicking On Event Date
-	document.querySelectorAll('.calendar-boomgaardcafe-dates, .status').forEach((element) => {
-		element.addEventListener('click', function () {
-			let month = element.getAttribute('data-month');
-
-			calendar.innerHTML = '';
-			showMonth(month);
-			tooltip();
-
-			scrollTo(0, 0);
-		});
-	});
-}
-
-function parseEvents(events) {
-	// Get Event Type, Title And Description
+// Parse Google Calendar events
+const parseEvents = (events) => {
+	const parsedEvents = {};
 	const getEventInfo = (event) => {
-		let type = 'Not public';
-		let title = event['summary'];
-		let description = '';
-		let id = event['id'];
-		console.log(id);
+		const id = event.id;
+		const startDate = new Date(event.start.dateTime || event.start.date);
+		const endDate = new Date(event.end.dateTime || event.end.date);
+		let type;
+		let title = event.summary;
+		const description = event.description || '';
 
-		if (event['summary'].toLowerCase().includes('reservering') || event['summary'].toLowerCase().includes('reservatie')) {
-			type = 'res';
-			title = event['summary'].replace('Reservering', '').replace('reservering', '').trim();
-		} else if (event['summary'].toLowerCase().includes('optie')) {
-			type = 'option';
-			title = event['summary'].replace('Optie', '').replace('optie', '').trim();
-		} else if (event['summary'].toLowerCase().includes('event')) {
-			type = 'event';
-			title = event['summary'].replace('Event', '').replace('event', '').trim();
-		} else if (event['summary'] == 'Boomgaardcafé') {
-			type = 'boomgaardcafe';
-			title = event['summary'].trim();
+		// Determine event type based on title keywords
+		if (title.toLowerCase().includes('optie')) {
+			type = 'Option';
+			title = title.replace(/Optie\s*/i, '').trim();
+		} else if (title.toLowerCase().includes('reservering') || title.toLowerCase().includes('reservatie')) {
+			type = 'Reservation';
+			title = title.replace(/Reservering\s*/i, '').trim();
+			title = title.replace(/Reservatie\s*/i, '').trim();
+		} else if (title.toLowerCase().includes('evenement') || title.toLowerCase().includes('event')) {
+			type = 'Event';
+			title = title.replace(/Evenement\s*/i, '').trim();
+			title = title.replace(/Event\s*/i, '').trim();
+		} else if (title.toLowerCase() === 'boomgaardcafé') {
+			type = 'Boomgaardcafé';
+			title = 'Boomgaardcafé';
 		} else {
-			console.log('Unknown event type: ' + event['summary']);
+			type = 'Other';
 		}
 
-		if (event['description'] != undefined) description = event['description'];
+		// Determine if its a single day or multi-day event
+		const timeDiff = endDate.getTime() - startDate.getTime();
+		const isSingleDay = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) === 1;
 
 		return {
+			id: id,
 			type: type,
 			title: title,
 			description: description,
-			ID: id,
+			startDateObject: startDate,
+			endDateObject: endDate,
+			startMonth: startDate.getMonth(),
+			startDay: startDate.getDate(),
+			endMonth: endDate.getMonth(),
+			endDay: endDate.getDate() - 1, // Subtract 1 day to get the correct end date
+			isSingleDay: isSingleDay,
 		};
 	};
 
-	for (let i = 0; i < events.length; i++) {
-		const startTime = events[i]['start']['dateTime'] || events[i]['start']['date'];
-		const endTime = events[i]['end']['dateTime'] || events[i]['end']['date'];
+	Object.values(events).forEach((event) => {
+		const eventInfo = getEventInfo(event);
 
-		let date = startTime.split('T')[0];
-		let year = date.split('-')[0];
-		let month = date.split('-')[1];
-		let day = date.split('-')[2];
+		// Use actual JS Date objects to handle multi-month spans correctly
+		const currentCursor = new Date(eventInfo.startDateObject);
+		const endDate = new Date(eventInfo.endDateObject);
+		endDate.setDate(endDate.getDate() - 1); // Adjust end date to be inclusive
 
-		let endDate = endTime.split('T')[0];
-		let endMonth = endDate.split('-')[1];
-		let endDay = endDate.split('-')[2];
+		// Loop through each day from start to end (inclusive)
+		while (currentCursor <= endDate) {
+			const currentMonth = currentCursor.getMonth() + 1; // Months are 0-indexed in JS Date
+			const currentDay = currentCursor.getDate();
 
-		if (day[0] == '0') day = day.split('0')[1];
+			parsedEvents[currentMonth] ??= {};
+			parsedEvents[currentMonth][currentDay] ??= eventInfo;
 
-		if (endDay[0] == '0') endDay = endDay.split('0')[1];
-
-		// Check If Year Exists
-		if (Object.keys(filteredEvents).indexOf(year) == -1) {
-			filteredEvents[year] = {
-				January: {},
-				February: {},
-				March: {},
-				April: {},
-				May: {},
-				June: {},
-				July: {},
-				August: {},
-				September: {},
-				October: {},
-				November: {},
-				December: {},
-			};
+			currentCursor.setDate(currentCursor.getDate() + 1);
 		}
+	});
+	return parsedEvents;
+};
 
-		if (events[i]['summary'] != undefined) {
-			if (month == endMonth && year >= currentYear) {
-				// If Event Is In Same Month
-				const { type, title, description, ID } = getEventInfo(events[i]);
+// Parse events to identify duplicates for card generation
+const parseDuplicates = (events) => {
+	const parsedEvents = {};
 
-				for (let j = parseInt(day); j < parseInt(endDay); j++) {
-					filteredEvents[year][Object.keys(filteredEvents[year])[month - 1]][j] = {
-						Type: type,
-						Title: title,
-						Description: description,
-						ID: ID,
-					};
-				}
-			} else if (year >= currentYear) {
-				// If Event Is In Different Month
-				const { type, title, description, ID } = getEventInfo(events[i]);
+	Object.values(events).forEach((monthEvents) => {
+		Object.values(monthEvents).forEach((event) => {
+			if (!(event.type === 'Event' || event.type === 'Boomgaardcafé')) return; // Only group duplicates for 'Event' and 'Boomgaardcafé' types
+			const hasDuplicates = Object.values(events).filter((month) => Object.values(month).some((e) => e.title === event.title)).length > 1;
 
-				for (let j = month; j <= endMonth; j++) {
-					if (j == month) {
-						for (let k = day; k <= new Date(year, month - 1, 0).getDate(); k++) {
-							filteredEvents[year][Object.keys(filteredEvents[year])[j - 1]][k] = {
-								Type: type,
-								Title: title,
-								Description: description,
-								ID: ID,
-							};
-						}
-					} else if (j == endMonth) {
-						for (let k = 1; k < endDay; k++) {
-							filteredEvents[year][Object.keys(filteredEvents[year])[j - 1]][k] = {
-								Type: type,
-								Title: title,
-								Description: description,
-								ID: ID,
-							};
-						}
-					}
-				}
+			if (hasDuplicates) {
+				parsedEvents[event.title] ??= {
+					...event,
+					Dates: [],
+				};
+
+				parsedEvents[event.title].Dates.push({
+					startMonth: event.startMonth,
+					startDay: event.startDay,
+					endMonth: event.endMonth,
+					endDay: event.endDay,
+					startDateObject: event.startDateObject,
+					endDateObject: event.endDateObject,
+					isSingleDay: event.isSingleDay,
+				});
+			} else {
+				parsedEvents[event.title] = event;
+				parsedEvents[event.title].Dates = [
+					{
+						startMonth: event.startMonth,
+						startDay: event.startDay,
+						endMonth: event.endMonth,
+						endDay: event.endDay,
+						startDateObject: event.startDateObject,
+						endDateObject: event.endDateObject,
+						isSingleDay: event.isSingleDay,
+					},
+				];
 			}
-		}
-	}
-}
+		});
+	});
+
+	return parsedEvents;
+};
 
 // Hover On Calendar Dates
-function tooltip() {
+const tooltip = () => {
 	const tooltips = document.querySelectorAll('.calendar-tooltip');
 	tooltips.forEach(function (tooltip, index) {
-		tooltip.addEventListener('mouseover', positionTooltip); // On hover, launch the function below
+		tooltip.addEventListener('mouseover', () => positionTooltip(tooltip)); // On hover, launch the function below
 	});
 
 	tooltips.forEach(function (tooltip, index) {
@@ -366,15 +155,14 @@ function tooltip() {
 			this.childNodes[1].classList.remove('calendar-tooltip-show');
 		});
 	});
-}
+};
 
 // Position Tooltip
-function positionTooltip() {
-	// Get .ktooltiptext sibling
-	const tooltip = this.childNodes[1];
+const positionTooltip = (parent) => {
+	const tooltip = parent.childNodes[1];
 
 	// Get calculated ktooltip coordinates and size
-	const tooltip_rect = this.getBoundingClientRect();
+	const tooltip_rect = parent.getBoundingClientRect();
 	const tooltip_width = tooltip_rect.width;
 	const tooltip_pos_right = tooltip_rect.right;
 	const tooltip_pos_y = tooltip_rect.y;
@@ -388,86 +176,171 @@ function positionTooltip() {
 	}
 
 	tooltip.classList.add('calendar-tooltip-show');
-}
+};
 
-// Init Calendar
-fetchCalendar().then((calendar) => {
-	const allEvents = calendar.items || [];
-	let events = [];
+// Initialize calendar
+const initializeCalendarMonth = (year, month, events) => {
+	const currentMonth = new Date().getMonth() + 1; // Months are 0-indexed in JS Date
+	const amountOfDays = new Date(year, month, 0).getDate();
+	const monthIndex = month - 1; // Adjust for 0-indexed months in JS Date
+	const monthName =
+		new Date(year, monthIndex).toLocaleString('nl-NL', { month: 'long' }).charAt(0).toUpperCase() +
+		new Date(year, monthIndex).toLocaleString('nl-NL', { month: 'long' }).slice(1);
+	const monthEvents = events[month] || {};
+	const startDayOfWeek = new Date(year, monthIndex, 1).getDay();
+	let monthContent = '';
 
-	for (let i = 0; i < allEvents.length; i++) {
-		let startTime = allEvents[i]['start']['dateTime'];
+	// Set header
+	calendarHeader.textContent = `${monthName} ${year}`;
+	calendarHeaderSkeleton.style.display = 'none';
+	calendarHeader.style.display = 'block';
 
-		if (startTime == undefined) {
-			startTime = allEvents[i]['start']['date'];
-		}
+	// Set previous and next month buttons
+	if (monthIndex == currentMonth - 1 && year == currentActiveYear) {
+		calendarPrevMonth.style.color = '#F5F5F5';
+		calendarPrevMonth.style.cursor = 'default';
+	} else {
+		calendarPrevMonth.style.color = '#FCC000';
+		calendarPrevMonth.setAttribute('data-month', month == 'January' ? 12 : month - 1);
+		calendarPrevMonth.setAttribute('data-year', month == 'January' ? parseInt(year) - 1 : year);
+		calendarPrevMonth.style.cursor = 'pointer';
+	}
 
-		let date = startTime.split('T')[0];
-		let year = date.split('-')[0];
+	calendarNextMonth.style.color = '#FCC000';
+	calendarNextMonth.setAttribute('data-month', month == 'December' ? 1 : month + 1);
+	calendarNextMonth.setAttribute('data-year', month == 'December' ? parseInt(year) + 1 : year);
+	calendarNextMonth.style.cursor = 'pointer';
 
-		if (year >= currentYear) {
-			events.push(allEvents.slice(i));
-			break;
+	// Generate calendar grid
+	for (let i = 0; i < startDayOfWeek - 1; i++) {
+		monthContent += "<div class='calendar-day'><p></p></div>";
+	}
+
+	for (let day = 1; day <= amountOfDays; day++) {
+		if (monthEvents[day]) {
+			if (monthEvents[day].type == 'Event') {
+				monthContent += eventDayElementTemplate.replace(/1/g, day).replace(/<p>Evenement<\/p>/, `<p>${monthEvents[day].title}</p>`);
+			} else if (monthEvents[day].type == 'Reservation') {
+				monthContent += reservationDayElementTemplate.replace(/1/g, day);
+			} else if (monthEvents[day].type == 'Option') {
+				monthContent += optionDayElementTemplate.replace(/1/g, day);
+			} else if (monthEvents[day].type == 'Boomgaardcafé') {
+				monthContent += boomgaardcafeDayElementTemplate.replace(/1/g, day);
+			}
+		} else {
+			// If Day Has No Event
+			monthContent += "<div class='calendar-day'><p>" + day + '</p></div>';
 		}
 	}
 
-	events = events.flat();
-	parseEvents(events);
-	showMonth(Object.keys(filteredEvents[currentDate.getFullYear()])[currentDate.getMonth()], currentDate.getFullYear());
-	showEvents();
-	tooltip();
-});
-
-// Get Previous Month
-calendarPrevMonth.addEventListener('click', function () {
-	calendar.innerHTML = '';
-	showMonth(this.getAttribute('data-month'), this.getAttribute('data-year'));
+	calendar.innerHTML = monthContent;
 
 	tooltip();
-});
+};
 
-// Get Next Month
-calendarNextMonth.addEventListener('click', function () {
-	const year = this.getAttribute('data-year');
+// Initialize event cards
+const initializeEventCards = (events) => {
+	const cardsContainer = document.querySelector('.calendar-cards .cards');
+	const parsedGroupedEvents = parseDuplicates(events);
+	let cardsContent = '';
 
-	if (Object.keys(filteredEvents).indexOf(year) == -1) {
-		filteredEvents[year] = {
-			January: {},
-			February: {},
-			March: {},
-			April: {},
-			May: {},
-			June: {},
-			July: {},
-			August: {},
-			September: {},
-			October: {},
-			November: {},
-			December: {},
-		};
-	}
+	Object.values(parsedGroupedEvents).forEach((eventData) => {
+		const hasDuplicates = eventData.Dates.length > 1;
+		const year = eventData.Dates[0].startDateObject.getFullYear();
 
-	calendar.innerHTML = '';
-	showMonth(this.getAttribute('data-month'), this.getAttribute('data-year'));
+		if (eventData.type === 'Boomgaardcafé') {
+			let dates = '';
 
-	tooltip();
-});
+			Object.keys(eventData.Dates).forEach((month) => {
+				const days = eventData.Dates[month];
+				const dutchMonth = new Date(year, month - 1).toLocaleString('nl-NL', { month: 'long' });
 
-// Get New Month (Input)
-calendarHeader.addEventListener('click', function () {
-	const inputMonth = document.querySelector('.calendar-input-month');
-	inputMonth.showPicker();
+				dates += `<p class='calendar-boomgaardcafe-dates' data-month='${month}'>${days.join(' / ')} ${dutchMonth.charAt(0).toUpperCase()}${dutchMonth.slice(1)}</p>`;
+			});
 
-	inputMonth.addEventListener('change', function () {
-		if (inputMonth.value != '') {
-			const monthIndex = inputMonth.value.split('-')[1];
-			const year = calendarHeader.getAttribute('data-year');
-			const month = Object.keys(filteredEvents[year])[monthIndex - 1];
+			cardsContent += `<div class='calendar-card'><h3>Boomgaardcafé</h3><div class='card-content'><p>${eventData.description || ''}</p>${dates}</div></div>`;
+			return; // Skip further processing for Boomgaardcafé events
+		}
 
-			calendar.innerHTML = '';
-			showMonth(month, year);
-
-			tooltip();
+		if (hasDuplicates) {
+			cardsContent += `<div class="calendar-card"><h3>${eventData.title}</h3><p class="status" data-month="${eventData.Dates[0].startMonth + 1}">${eventData.Dates.map(
+				(date) => `${date.startDay} ${new Date(year, date.startMonth).toLocaleString('nl-NL', { month: 'short' })}`,
+			).join(' / ')} ${year}</p><p>${eventData.description || ''}</p></div>`;
+		} else {
+			cardsContent += `<div class="calendar-card"><h3>${eventData.title}</h3><p class="status" data-month="${eventData.Dates[0].startMonth + 1}">${eventData.Dates[0].startDay} ${new Date(year, eventData.Dates[0].startMonth).toLocaleString('nl-NL', { month: 'short' })} - ${eventData.Dates[0].endDay} ${
+				eventData.Dates[0].startMonth == eventData.Dates[0].endMonth ? '' : new Date(year, eventData.Dates[0].endMonth).toLocaleString('nl-NL', { month: 'short' })
+			} ${year}</p><p>${eventData.description || ''}</p></div>`;
 		}
 	});
+
+	cardsContainer.innerHTML = cardsContent;
+	document.querySelectorAll('.calendar-cards .cards .calendar-card').forEach((card) => {
+		card.addEventListener('click', () => {
+			const month = card.querySelector('.status').getAttribute('data-month');
+			loadCalendarView(currentActiveYear, parseInt(month));
+		});
+	});
+};
+
+// Load calendar view for a specific month and year
+const loadCalendarView = async (targetYear, targetMonth) => {
+	// Show loading skeleton while setting up views
+	calendarHeaderSkeleton.style.display = 'block';
+	calendarHeader.style.display = 'none';
+
+	// Load dynamic runtime entries from memory maps if previously compiled
+	if (!cachedYearsData.has(targetYear)) {
+		const rawPayload = await fetchCalendar(targetYear);
+		if (!rawPayload || !rawPayload.items) {
+			calendar.innerHTML = '<p class="error">Er is een fout opgetreden bij het laden van de kalender.</p>';
+			return;
+		}
+		const compiledEvents = parseEvents(rawPayload.items);
+		cachedYearsData.set(targetYear, compiledEvents);
+	}
+
+	// Update mutable values
+	currentActiveYear = targetYear;
+	currentActiveMonth = targetMonth;
+
+	const targetYearEvents = cachedYearsData.get(targetYear);
+	initializeCalendarMonth(targetYear, targetMonth, targetYearEvents);
+	initializeEventCards(targetYearEvents);
+};
+
+// Safe Navigational Events Hooks
+calendarPrevMonth.addEventListener('click', () => {
+	const actualDate = new Date();
+	const constraintIndex = actualDate.getMonth();
+	const constraintYear = actualDate.getFullYear();
+
+	// Block click tracking backward steps if lower bounds are crossed
+	if (currentActiveYear < constraintYear || (currentActiveYear === constraintYear && currentActiveMonth - 1 <= constraintIndex)) {
+		return;
+	}
+
+	let previousMonth = currentActiveMonth - 1;
+	let previousYear = currentActiveYear;
+
+	if (previousMonth < 1) {
+		previousMonth = 12;
+		previousYear -= 1;
+	}
+
+	loadCalendarView(previousYear, previousMonth);
 });
+
+calendarNextMonth.addEventListener('click', () => {
+	let nextMonth = currentActiveMonth + 1;
+	let nextYear = currentActiveYear;
+
+	if (nextMonth > 12) {
+		nextMonth = 1;
+		nextYear += 1;
+	}
+
+	loadCalendarView(nextYear, nextMonth);
+});
+
+// Primary Entry Initialization Call
+loadCalendarView(currentActiveYear, currentActiveMonth);
