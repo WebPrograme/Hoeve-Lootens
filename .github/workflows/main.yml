@@ -33,6 +33,12 @@ jobs:
             - name: 🚚 Get latest code
               uses: actions/checkout@v6
 
+            # ---- DIAGNOSTIC STEP (important) ----
+            - name: 🔎 Test FTP port connectivity
+              run: |
+                  echo "Testing connection to FTP server..."
+                  nc -vz www.it4pro-server3.be 21 || true
+
             - name: 📂 Sync files
               uses: SamKirkland/FTP-Deploy-Action@v4.4.0
               with:
