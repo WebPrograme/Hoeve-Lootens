@@ -67,6 +67,7 @@ const loadPhotos = () => {
             `;
 
 			photoElement.addEventListener('click', (event) => {
+				document.querySelectorAll('.photo-item').forEach((item) => item.classList.remove('clicked'));
 				photoElement.classList.toggle('clicked');
 			});
 

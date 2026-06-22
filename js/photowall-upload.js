@@ -4,6 +4,7 @@ import Upload from '../../modules/Upload.js';
 const imageInput = document.getElementById('file-input');
 const uploadBtn = document.getElementById('upload-btn');
 const previewImage = document.getElementById('preview-image');
+const successMessage = document.getElementById('setup-success-message');
 
 const reset = () => {
 	uploadBtn.dataset.state = 'upload';
@@ -12,6 +13,7 @@ const reset = () => {
 	previewImage.src = '';
 	previewImage.style.display = 'none';
 	imageInput.value = '';
+	successMessage.style.display = 'none';
 };
 
 uploadBtn.addEventListener('click', (e) => {
@@ -37,7 +39,7 @@ uploadBtn.addEventListener('click', (e) => {
 			.then((response) => {
 				if (response.status === 200) {
 					uploadBtn.innerHTML = '<i class="fas fa-check"></i> Uploaded!';
-
+					successMessage.style.display = 'flex';
 					setTimeout(() => {
 						reset();
 					}, 2000);

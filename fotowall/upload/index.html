@@ -27,9 +27,12 @@
 				<h1 class="setup-title">Fotowall</h1>
 				<p class="setup-sub">Upload een foto voor de fotowall</p>
 
-				<input type="file" id="file-input" accept="image/*" style="display: none" />
+				<input type="file" id="file-input" accept="image/*" />
 
-				<img class="setup-preview" id="preview-image" src="" alt="Preview" style="display: none" />
+				<img class="setup-preview" id="preview-image" src="" alt="Preview" />
+				<div id="setup-success-message" class="setup-success-message">
+					<p><i class="fas fa-check-circle"></i> Foto succesvol geüpload!</p>
+				</div>
 
 				<button type="button" id="upload-btn" class="setup-btn" data-state="upload"><i class="fas fa-camera"></i> Open Camera</button>
 			</div>
