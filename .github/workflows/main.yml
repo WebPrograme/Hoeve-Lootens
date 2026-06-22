@@ -33,7 +33,6 @@ jobs:
             - name: 🚚 Get latest code
               uses: actions/checkout@v6
 
-            # ---- DIAGNOSTIC STEP (important) ----
             - name: 🔎 Test FTP port connectivity
               run: |
                   echo "Testing connection to FTP server..."
