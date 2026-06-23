@@ -13,12 +13,33 @@ stars.forEach((star) => {
 	});
 });
 
+const validateReview = () => {
+	const selectedStars = Array.from(stars).filter((star) => star.classList.contains('fa-solid'));
+	const feedback = document.querySelector('.review textarea').value;
+
+	if (selectedStars.length === 0) {
+		document.getElementById('review-rating-error').style.display = 'block';
+		return false;
+	}
+
+	if (feedback.trim() === '') {
+		document.getElementById('review-feedback-error').style.display = 'block';
+		return false;
+	}
+
+	return true;
+};
+
 document.querySelector('.review-submit').addEventListener('click', () => {
 	const selectedStars = Array.from(stars).filter((star) => star.classList.contains('fa-solid'));
 	const rating = selectedStars.length;
 	const feedback = document.querySelector('.review textarea').value;
 	const userCode = new URLSearchParams(window.location.search).get('usercode');
 	const event = new URLSearchParams(window.location.search).get('event');
+
+	if (!validateReview()) {
+		return;
+	}
 
 	postRequest('/api/feedback/submit', {
 		Rating: rating,
