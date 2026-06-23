@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: 
+Disallow: /success/
+Disallow: /admin/
+Disallow: /WELKOM.html

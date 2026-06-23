@@ -1,6 +1,12 @@
 import { postRequest } from '../modules/Requests.js';
 
+const userCode = new URLSearchParams(window.location.search).get('usercode');
+const event = new URLSearchParams(window.location.search).get('event');
 const stars = document.querySelectorAll('.review-stars i');
+
+if (!userCode || !event) {
+	window.location.href = '/';
+}
 
 stars.forEach((star) => {
 	star.addEventListener('click', () => {
@@ -34,8 +40,6 @@ document.querySelector('.review-submit').addEventListener('click', () => {
 	const selectedStars = Array.from(stars).filter((star) => star.classList.contains('fa-solid'));
 	const rating = selectedStars.length;
 	const feedback = document.querySelector('.review textarea').value;
-	const userCode = new URLSearchParams(window.location.search).get('usercode');
-	const event = new URLSearchParams(window.location.search).get('event');
 
 	if (!validateReview()) {
 		return;

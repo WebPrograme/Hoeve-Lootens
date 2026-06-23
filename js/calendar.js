@@ -267,9 +267,11 @@ const initializeEventCards = (events) => {
 				(date) => `${date.startDay} ${new Date(year, date.startMonth).toLocaleString('nl-NL', { month: 'short' })}`,
 			).join(' / ')} ${year}</p><p>${eventData.description || ''}</p></div>`;
 		} else {
-			cardsContent += `<div class="calendar-card"><h3>${eventData.title}</h3><p class="status" data-month="${eventData.Dates[0].startMonth + 1}">${eventData.Dates[0].startDay} ${new Date(year, eventData.Dates[0].startMonth).toLocaleString('nl-NL', { month: 'short' })} - ${eventData.Dates[0].endDay} ${
+			cardsContent += `<div class="calendar-card"><h3>${eventData.title}</h3><p class="status" data-month="${eventData.Dates[0].startMonth + 1}">${eventData.Dates[0].startDay} ${
 				eventData.Dates[0].startMonth == eventData.Dates[0].endMonth ? '' : new Date(year, eventData.Dates[0].endMonth).toLocaleString('nl-NL', { month: 'short' })
-			} ${year}</p><p>${eventData.description || ''}</p></div>`;
+			} - ${eventData.Dates[0].endDay} ${new Date(year, eventData.Dates[0].startMonth).toLocaleString('nl-NL', {
+				month: 'short',
+			})} ${year}</p><p>${eventData.description || ''}</p></div>`;
 		}
 	});
 
