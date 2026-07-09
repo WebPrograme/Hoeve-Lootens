@@ -16,7 +16,7 @@ function AddArticles(articles, container) {
 
 	sortedArticles.forEach((article) => {
 		const title = article.Title;
-		const image = article.Image;
+		const image = article.Images?.[0];
 		const text = article.Content;
 		const button = article.Button;
 
