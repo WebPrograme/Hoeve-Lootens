@@ -2,13 +2,14 @@ import { getRequest } from '../modules/Requests.js';
 
 getRequest('/api/website/home/articles')
 	.then((response) => {
-		AddArticles(response.data, document.querySelector('.news'));
+		addArticles(response.data, document.querySelector('.news'));
+		initCarousels();
 	})
 	.catch((error) => {
 		console.error('Error loading home content:', error);
 	});
 
-function AddArticles(articles, container) {
+function addArticles(articles, container) {
 	let type = 'left';
 	container.innerHTML = '';
 
@@ -16,7 +17,7 @@ function AddArticles(articles, container) {
 
 	sortedArticles.forEach((article) => {
 		const title = article.Title;
-		const image = article.Images?.[0];
+		const images = article.Images;
 		const text = article.Content;
 		const button = article.Button;
 
@@ -27,7 +28,18 @@ function AddArticles(articles, container) {
 
 		let imageContainer = document.createElement('div');
 		imageContainer.classList.add('col-6');
-		imageContainer.innerHTML = `<img src="${image.startsWith('http') ? image : '../images/' + image}" alt="${title}" class="news-img">`;
+
+		if (images.length === 1) {
+			const image = images[0];
+			imageContainer.innerHTML = `<img src="${image.startsWith('http') ? image : '../images/' + image}" alt="${title}" class="news-img">`;
+		} else if (images.length > 1) {
+			let carouselId = `carousel-${article.ID || article.Title}`;
+			imageContainer.innerHTML = `<div id="${carouselId}" class="images-fade">
+				${images.map((image, index) => `<img src="${image.startsWith('http') ? image : '../images/' + image}" alt="${title} - Image ${index + 1}" class="news-img ${index === 0 ? 'active' : ''}">`).join('')}
+			</div>`;
+
+			imageContainer.querySelector('.news-img').classList.add('active');
+		}
 
 		let contentContainer = document.createElement('div');
 		contentContainer.classList.add('col-6');
@@ -52,4 +64,19 @@ function AddArticles(articles, container) {
 		type = type === 'left' ? 'right' : 'left';
 		container.appendChild(section);
 	});
+}
+
+function initCarousels() {
+	const carousels = document.querySelectorAll('.images-fade');
+
+	for (const carousel of carousels) {
+		const images = carousel.querySelectorAll('.news-img');
+		let currentIndex = 0;
+
+		setInterval(() => {
+			images[currentIndex].classList.remove('active');
+			currentIndex = (currentIndex + 1) % images.length;
+			images[currentIndex].classList.add('active');
+		}, 3000);
+	}
 }
