@@ -1,13 +1,28 @@
 import { getRequest } from '../modules/Requests.js';
+import Cache from '../modules/Cache.js';
 
-getRequest('/api/website/home/articles')
-	.then((response) => {
-		addArticles(response.data, document.querySelector('.news'));
-		initCarousels();
-	})
-	.catch((error) => {
-		console.error('Error loading home content:', error);
-	});
+const cache = new Cache('home-images-v1');
+const cachedArticles = localStorage.getItem('cachedArticles');
+const cachedArticlesTimestamp = localStorage.getItem('cachedArticlesTimestamp');
+const cacheDuration = 15 * 60 * 1000; // 15 minutes in milliseconds
+const isCacheValid = cachedArticles && cachedArticlesTimestamp && Date.now() - cachedArticlesTimestamp < cacheDuration;
+
+if (cachedArticles && isCacheValid) {
+	addArticles(JSON.parse(cachedArticles), document.querySelector('.news'));
+	initCarousels();
+} else {
+	getRequest('/api/website/home/articles')
+		.then((response) => {
+			addArticles(response.data, document.querySelector('.news'));
+			initCarousels();
+
+			localStorage.setItem('cachedArticles', JSON.stringify(response.data));
+			localStorage.setItem('cachedArticlesTimestamp', Date.now());
+		})
+		.catch((error) => {
+			console.error('Error loading home content:', error);
+		});
+}
 
 function addArticles(articles, container) {
 	let type = 'left';
@@ -15,11 +30,14 @@ function addArticles(articles, container) {
 
 	const sortedArticles = Object.values(articles).sort((a, b) => a.Order - b.Order);
 
-	sortedArticles.forEach((article) => {
+	sortedArticles.forEach(async (article) => {
 		const title = article.Title;
 		const images = article.Images;
 		const text = article.Content;
 		const button = article.Button;
+
+		// Cache images
+		await cache.cacheImages(images);
 
 		let section = document.createElement('section');
 		section.classList.add('container', 'm-auto');
@@ -31,11 +49,21 @@ function addArticles(articles, container) {
 
 		if (images.length === 1) {
 			const image = images[0];
-			imageContainer.innerHTML = `<img src="${image.startsWith('http') ? image : '../images/' + image}" alt="${title}" class="news-img">`;
+			const cachedImageUrl = await cache.getCachedImage(image);
+			const imageElement = document.createElement('img');
+			imageElement.src = cachedImageUrl;
+			imageElement.alt = title;
+			imageElement.classList.add('news-img');
+			imageContainer.appendChild(imageElement);
 		} else if (images.length > 1) {
 			let carouselId = `carousel-${article.ID || article.Title}`;
 			imageContainer.innerHTML = `<div id="${carouselId}" class="images-fade">
-				${images.map((image, index) => `<img src="${image.startsWith('http') ? image : '../images/' + image}" alt="${title} - Image ${index + 1}" class="news-img ${index === 0 ? 'active' : ''}">`).join('')}
+				${images
+					.map(async (image, index) => {
+						const cachedImageUrl = await cache.getCachedImage(image);
+						return `<img src="${cachedImageUrl}" alt="${title} - Image ${index + 1}" class="news-img ${index === 0 ? 'active' : ''}">`;
+					})
+					.join('')}
 			</div>`;
 
 			imageContainer.querySelector('.news-img').classList.add('active');
