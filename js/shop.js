@@ -15,6 +15,10 @@ ws.onerror = (error) => {
 	console.error('WebSocket error:', error);
 };
 
+ws.onclose = (event) => {
+	console.log('WebSocket connection closed:', event);
+};
+
 // Show Articles
 function AddArticles(articles, container) {
 	let type = 'left';
@@ -112,6 +116,9 @@ function getAvailableEvents() {
 
 // Show Additional Info
 function showAdditionalInfo(options, type, event) {
+	// Scroll To Top
+	window.scrollTo({ top: 0, behavior: 'smooth' });
+
 	const container = document.querySelector('.shop-additional-list');
 	const group = document.createElement('div');
 	group.dataset.event = event;
@@ -197,6 +204,9 @@ function checkAdditionalInfo() {
 
 // Show Summary
 function showSummary(data, type) {
+	// Scroll To Top
+	window.scrollTo({ top: 0, behavior: 'smooth' });
+
 	data = data['Participant'];
 	// Show Personal Data
 	document.querySelector('.shop-summary-name').innerHTML = data['FirstName'] + ' ' + data['LastName'];
@@ -232,7 +242,9 @@ function showSummary(data, type) {
 
 // Show Payment
 function showPayment(requestBody) {
-	console.log(requestBody);
+	// Scroll To Top
+	window.scrollTo({ top: 0, behavior: 'smooth' });
+
 	// Show Payment Info
 	document.querySelector('.shop-payment-total').innerHTML = '€' + requestBody['Participant']['Amount'];
 	document.querySelector('.shop-payment-ref').innerHTML = requestBody['Participant']['UserCode'] + ' - ' + requestBody['Participant']['Event'];
@@ -251,7 +263,7 @@ function showPayment(requestBody) {
 			document.querySelector('.shop-payment-mobile').href = links['deeplink'];
 
 			// Open WebSocket Connection
-			ws.send(JSON.stringify({ type: 'register', id: requestBody['Participant']['UserCode'] + ' - ' + requestBody['Participant']['Event'] }));
+			ws.send(JSON.stringify({ type: 'register', id: requestBody['Participant']['UserCode'] }));
 		}
 	});
 }
@@ -520,6 +532,9 @@ if (window.location.pathname == '/shop/' || window.location.pathname == '/shop/i
 
 			// Ticket Next
 			document.querySelector('.shop-tickets-next').addEventListener('click', (e) => {
+				// Scroll To Top
+				window.scrollTo({ top: 0, behavior: 'smooth' });
+
 				const choosenTicket = document.querySelector('.shop-ticket-amount-active');
 				const eventName = choosenTicket.querySelector('h3').innerHTML;
 				const amount = choosenTicket.querySelector('.shop-ticket-amount h3').innerHTML;
