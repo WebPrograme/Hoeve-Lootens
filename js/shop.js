@@ -11,6 +11,10 @@ ws.onmessage = (event) => {
 	}
 };
 
+ws.onerror = (error) => {
+	console.error('WebSocket error:', error);
+};
+
 // Show Articles
 function AddArticles(articles, container) {
 	let type = 'left';
@@ -247,10 +251,7 @@ function showPayment(requestBody) {
 			document.querySelector('.shop-payment-mobile').href = links['deeplink'];
 
 			// Open WebSocket Connection
-			ws.onopen = () => {
-				// Register this client with a unique ID
-				ws.send(JSON.stringify({ type: 'register', id: requestBody['Participant']['UserCode'] + ' - ' + requestBody['Participant']['Event'] }));
-			};
+			ws.send(JSON.stringify({ type: 'register', id: requestBody['Participant']['UserCode'] + ' - ' + requestBody['Participant']['Event'] }));
 		}
 	});
 }
