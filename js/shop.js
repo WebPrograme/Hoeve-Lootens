@@ -7,7 +7,7 @@ const ws = new WebSocket('wss://hoeve-lootens.onrender.com');
 ws.onmessage = (event) => {
 	const data = JSON.parse(event.data);
 	if (data.type === 'payment') {
-		window.location.href = '/success/?usercode=' + data.usercode + '&event=' + data.event;
+		window.location.href = '/success/?usercode=' + data.ref + '&event=' + data.event;
 	}
 };
 
