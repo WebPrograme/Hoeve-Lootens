@@ -37,7 +37,7 @@ uploadBtn.addEventListener('click', (e) => {
 			Filename: result.filename,
 		})
 			.then((response) => {
-				if (response.status === 200) {
+				if (response.status === 201) {
 					uploadBtn.innerHTML = '<i class="fas fa-check"></i> Uploaded!';
 					successMessage.style.display = 'flex';
 					setTimeout(() => {

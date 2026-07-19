@@ -28,19 +28,24 @@ intervalInput.addEventListener('input', () => {
 
 async function fetchNext() {
 	try {
-		const res = await getRequest('/api/photowall/order/next');
+		const res = await getRequest('/api/photowall/order/next', {}, false);
 		if (res.status === 200) return res.data;
 	} catch (e) {
-		console.error(e);
+		return null;
 	}
 	return null;
 }
 
+// Now resolves to true/false instead of throwing on load errors (e.g. 404s).
 async function preload(url) {
-	const img = new Image();
-	img.src = url;
-	await img.decode();
-	return url;
+	try {
+		const img = new Image();
+		img.src = url;
+		await img.decode();
+		return true;
+	} catch (e) {
+		return false;
+	}
 }
 
 function startProgress(ms) {
@@ -60,10 +65,27 @@ function resetProgress() {
 	progressBar.style.width = '0%';
 }
 
+function showUnavailable() {
+	startBtn.disabled = true;
+	startBtn.textContent = "Geen foto's beschikbaar";
+
+	setTimeout(() => {
+		startBtn.disabled = false;
+		startBtn.innerHTML = '<i class="fas fa-play"></i> Starten';
+	}, 3000);
+}
+
 async function showPhoto(photo) {
 	if (!photo || !running) return;
 
-	await preload(photo.URL);
+	const ok = await preload(photo.URL);
+	if (!ok) {
+		// Broken/404 image: skip it and try to advance again shortly,
+		// instead of silently freezing the slideshow.
+		timer = setTimeout(advance, 100);
+		return;
+	}
+
 	imgNext.src = photo.URL;
 
 	captionText.textContent = photo.Caption || '';
@@ -106,12 +128,17 @@ startBtn.addEventListener('click', async () => {
 	};
 
 	const first = await fetchNext();
+	console.log('First photo:', first);
 	if (!first) {
-		alert("Geen foto's gevonden.");
+		showUnavailable();
 		return;
 	}
 
-	await preload(first.URL);
+	const ok = await preload(first.URL);
+	if (!ok) {
+		showUnavailable();
+		return;
+	}
 
 	running = true;
 

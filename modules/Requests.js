@@ -30,6 +30,39 @@ async function postRequest(path, data, headers = { 'Content-Type': 'application/
 	});
 }
 
+async function deleteRequest(path, data = {}, headers = { 'Content-Type': 'application/json' }, retry = false, trigger = null) {
+	return new Promise((resolve, reject) => {
+		fetch(baseUrl + path, {
+			method: 'DELETE',
+			body: JSON.stringify(data),
+			headers: headers,
+		})
+			.then(async (response) => {
+				if (200 <= response.status && response.status < 300) {
+					let data;
+
+					if (response.headers.get('Content-Type').includes('application/json')) {
+						data = await response.json();
+					} else {
+						data = response.text();
+					}
+
+					resolve({ status: response.status, data: data });
+				} else if (retry) {
+					deleteRequest(path, data, headers, false);
+				} else {
+					reject({ status: response.status, data: response });
+				}
+			})
+			.catch((error) => {
+				reject(error);
+			})
+			.finally(() => {
+				if (trigger) trigger.classList.remove('disabled');
+			});
+	});
+}
+
 async function getRequest(path, headers = { 'Content-Type': 'application/json' }, retry = true) {
 	return new Promise((resolve, reject) => {
 		fetch(baseUrl + path, {
@@ -59,4 +92,4 @@ async function getRequest(path, headers = { 'Content-Type': 'application/json' }
 	});
 }
 
-export { postRequest, getRequest };
+export { postRequest, getRequest, deleteRequest };

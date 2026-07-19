@@ -1,4 +1,4 @@
-import { getRequest, postRequest } from '../modules/Requests.js';
+import { getRequest, postRequest, deleteRequest } from '../modules/Requests.js';
 
 const loadingText = document.getElementById('loading-message');
 const errorText = document.getElementById('error-message');
@@ -12,7 +12,7 @@ let photosData = [];
 const deletePhoto = async (photoId) => {
 	const photoElement = document.querySelector(`.delete-button[data-id="${photoId}"]`).closest('.photo-item');
 	if (photoElement) {
-		const response = await postRequest(`/api/photowall/delete`, { photoId: photoId });
+		const response = await deleteRequest(`/api/photowall/remove/${photoId}`);
 		if (!(response.status >= 200 && response.status < 300)) {
 			alert('Er is een fout opgetreden bij het verwijderen van de foto.');
 			return;
@@ -115,7 +115,7 @@ emptyButton.addEventListener('click', async () => {
 		emptyButton.innerHTML = '<i class="fas fa-question-circle"></i> Ben je zeker? Klik nogmaals om te bevestigen.';
 		emptyButton.setAttribute('data-action', 'confirm');
 	} else if (action === 'confirm') {
-		const response = await getRequest('/api/photowall/empty');
+		const response = await postRequest('/api/photowall/empty', {});
 		if (!(response.status >= 200 && response.status < 300)) {
 			alert("Er is een fout opgetreden bij het verwijderen van alle foto's.");
 			return;
