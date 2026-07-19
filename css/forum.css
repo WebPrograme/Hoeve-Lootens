@@ -277,53 +277,6 @@ input[type='tel'] {
 	margin: 0 !important;
 }
 
-.loader {
-	width: 100px;
-	margin-top: -30px;
-}
-
-.loader-path {
-	fill: none;
-	stroke: #4a7d44;
-	stroke-width: 0.3em;
-	stroke-linecap: round;
-}
-
-.loader-path {
-	stroke-dasharray: 10, 10;
-}
-
-.loader-path {
-	animation: animate-stroke 1.5s ease-in-out infinite;
-}
-
-.circular-loader {
-	animation: rotate 2s linear infinite;
-}
-
-@keyframes animate-stroke {
-	0% {
-		stroke-dasharray: 1, 200;
-		stroke-dashoffset: 0;
-	}
-
-	50% {
-		stroke-dasharray: 89, 200;
-		stroke-dashoffset: -35;
-	}
-
-	100% {
-		stroke-dasharray: 89, 200;
-		stroke-dashoffset: -124;
-	}
-}
-
-@keyframes rotate {
-	100% {
-		transform: rotate(360deg);
-	}
-}
-
 .payconiq-img img {
 	width: 200px;
 	border-radius: 0;
@@ -431,7 +384,7 @@ input[type='tel'] {
 	display: flex;
 	flex-direction: column;
 	margin-block: 1rem 2rem;
-	margin-inline: 1rem;
+	margin-inline: auto;
 	align-items: center;
 }
 

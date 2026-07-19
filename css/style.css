@@ -1840,3 +1840,135 @@ footer p {
 .image-modal-content .image-modal-body {
 	max-width: min(725px, 95vw);
 }
+
+.form > div {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 1rem;
+}
+
+.form label {
+	font-weight: 500;
+	font-size: 1rem;
+	margin-bottom: 0.25rem;
+}
+
+.form .input {
+	background-color: #f8f9fa;
+	border: 1px solid #ced4da;
+	width: 100%;
+}
+
+.form .input:focus {
+	background-color: #fff;
+	border: 1px solid #4a7d44;
+}
+
+.form .input.error {
+	border: 1px solid #dc3545;
+}
+
+.form textarea {
+	background-color: #f8f9fa;
+	border: 1px solid #ced4da;
+	width: 100%;
+	min-height: 100px;
+}
+
+.form textarea:focus {
+	background-color: #fff;
+	border: 1px solid #4a7d44;
+}
+
+.form textarea.error {
+	border: 1px solid #dc3545;
+}
+
+.form .btn.btn-lg {
+	background-color: #4a7d44;
+	color: #fff;
+	border: none;
+	padding: 0.75rem 1rem;
+	border-radius: 0.25rem;
+	font-size: 1rem;
+	text-transform: uppercase;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.form .btn.btn-lg:hover {
+	background-color: #3a6d34;
+}
+
+.form .btn.btn-lg:focus,
+.form .btn.btn-lg:active {
+	background-color: #3a6d34;
+	box-shadow: 0 0 0 0.2rem rgba(74, 125, 68, 0.5);
+	outline: none;
+}
+
+.form .btn.more-info {
+	display: flex;
+	justify-content: center;
+	margin: auto;
+	margin-bottom: 1rem;
+}
+
+.form-success {
+	font-weight: 500;
+	font-size: 1rem;
+	margin-bottom: 1rem;
+	text-align: center;
+}
+
+.form-success i {
+	color: #4a7d44;
+	font-size: 4rem;
+	margin-bottom: 0.75rem;
+}
+
+.loader {
+	position: absolute;
+	top: 25%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 1000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.loader.close,
+.small-loader.close {
+	pointer-events: none;
+	opacity: 0;
+	display: none;
+	transition: all 0.2s ease-in-out;
+}
+
+.loader svg,
+.small-loader svg {
+	font-size: 3rem;
+	width: 3rem;
+	height: 3rem;
+	color: #4a7d44;
+	animation: spin 1s linear infinite;
+}
+
+.loader svg {
+	translate: 0 -5rem;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.hidden {
+	display: none;
+}

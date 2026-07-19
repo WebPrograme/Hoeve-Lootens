@@ -10,3 +10,5 @@ if (document.querySelector('.nav-list-active')) {
 document.querySelector('.logo img').addEventListener('click', function () {
 	window.location.href = '/';
 });
+
+lucide.createIcons();

@@ -1,13 +1,25 @@
 import { postRequest, getRequest } from '../modules/Requests.js';
 import analytics from './analyse.js';
-let data = [];
+
+// ---------------------------------------------------------------------------
+// Module state
+// ---------------------------------------------------------------------------
+
+let data = []; // Events map, set once /api/events/init/public resolves.
+let requestBody = {}; // Accumulated participant/payment data for the checkout flow.
+
+const SHOP_HOME_PATHS = ['/shop/', '/shop/index.html', '/shop'];
+
+// ---------------------------------------------------------------------------
+// WebSocket (payment confirmation push)
+// ---------------------------------------------------------------------------
 
 const ws = new WebSocket('wss://hoeve-lootens.onrender.com');
 
 ws.onmessage = (event) => {
-	const data = JSON.parse(event.data);
-	if (data.type === 'payment') {
-		window.location.href = '/success/?usercode=' + data.ref + '&event=' + data.event;
+	const message = JSON.parse(event.data);
+	if (message.type === 'payment') {
+		window.location.href = '/success/?usercode=' + message.ref + '&event=' + message.event;
 	}
 };
 
@@ -19,104 +31,176 @@ ws.onclose = (event) => {
 	console.log('WebSocket connection closed:', event);
 };
 
-// Show Articles
-function AddArticles(articles, container) {
-	let type = 'left';
+// ---------------------------------------------------------------------------
+// Step visibility helpers
+// ---------------------------------------------------------------------------
+
+function showStep(el) {
+	el.classList.add('shop-active');
+	el.classList.remove('shop-hidden');
+}
+
+function hideStep(el) {
+	el.classList.remove('shop-active');
+	el.classList.add('shop-hidden');
+}
+
+// ---------------------------------------------------------------------------
+// Home page articles
+// ---------------------------------------------------------------------------
+
+function AddArticles(articlesData, container) {
+	let side = 'left';
 	container.innerHTML = '';
 
-	const sortedArticles = Object.values(articles).sort((a, b) => a.Order - b.Order);
+	const sortedArticles = Object.values(articlesData).sort((a, b) => a.Order - b.Order);
 
 	sortedArticles.forEach((article) => {
-		const title = article.Title;
-		const image = article.Image;
-		const text = article.Content;
-		const button = article.Button;
-
-		let section = document.createElement('section');
+		const section = document.createElement('section');
 		section.classList.add('container', 'm-auto');
 		section.innerHTML = `<div class="row"></div>`;
 		section.setAttribute('data-id', article.ID || article.Title);
 
-		let imageContainer = document.createElement('div');
+		const imageContainer = document.createElement('div');
 		imageContainer.classList.add('col-6');
-		imageContainer.innerHTML = `<img src="../images/programma_${image.Day.toLowerCase()}.png" alt="${title}" class="fluid-img">`;
+		imageContainer.innerHTML = `<img src="../images/programma_${article.Image.Day.toLowerCase()}.png" alt="${article.Title}" class="fluid-img">`;
 
-		let contentContainer = document.createElement('div');
+		const contentContainer = document.createElement('div');
 		contentContainer.classList.add('col-6');
-		contentContainer.innerHTML = `<h3 class="section-header">${title}</h3>`;
-
-		text.forEach((line) => {
+		contentContainer.innerHTML = `<h3 class="section-header">${article.Title}</h3>`;
+		article.Content.forEach((line) => {
 			contentContainer.innerHTML += `<p>${line}</p>`;
 		});
 
-		if (button) {
-			contentContainer.innerHTML += `<a class="btn btn-primary btn-primary-sm" href="${button.Link}">${button.Text}</a>`;
+		if (article.Button) {
+			contentContainer.innerHTML += `<a class="btn btn-primary btn-primary-sm" href="${article.Button.Link}">${article.Button.Text}</a>`;
 		}
 
-		if (type === 'left') {
-			section.querySelector('.row').appendChild(imageContainer);
-			section.querySelector('.row').appendChild(contentContainer);
+		const row = section.querySelector('.row');
+		if (side === 'left') {
+			row.appendChild(imageContainer);
+			row.appendChild(contentContainer);
 		} else {
-			section.querySelector('.row').appendChild(contentContainer);
-			section.querySelector('.row').appendChild(imageContainer);
+			row.appendChild(contentContainer);
+			row.appendChild(imageContainer);
 		}
 
-		type = type === 'left' ? 'right' : 'left';
+		side = side === 'left' ? 'right' : 'left';
 		container.appendChild(section);
 	});
 }
 
-// Create User Code
+const FALLBACK_ARTICLES = {
+	32036: {
+		Content: [
+			'Op zondag 3 mei starten we met de 10e editie van de KIDSRUN. Inschrijven kan ter plaatse vanaf 9u30. Deelname is gratis!',
+			'Om 12u kan je luisteren naar aanstormend plaatselijk muzikaal talent. “Exit Anna” geeft het beste van zichzelf.',
+			'Vanaf 12u kan je aanschuiven voor het Kermismenu. Er is keuze uit stoverij, vol-au-vent of veggie geserveerd met frietjes & fris slaatje. (volwassene: €17 en kind < 10 jaar: €9)',
+		],
+		ID: '32036',
+		Image: {
+			Day: 'Zondag',
+			URL: 'https://firebasestorage.googleapis.com/v0/b/hoeve-lootens-497f9.appspot.com/o/Articles%2Fprogramma_zondag.png?alt=media&token=3674e90e-2bf2-4a47-9939-3c29e3e1486c',
+		},
+		Order: 3,
+		Title: 'Zondag',
+	},
+	126934: {
+		Content: [
+			'Op vrijdagavond 1 mei opent Trappsitenbar Wondelgem de Meikermis@HoeveLootens. Kom proeven van een lekker trappistenbier. Maar er zijn ook andere dranken en hapjes te verkrijgen. Deuren gaan open om 19u.',
+		],
+		ID: '126934',
+		Image: {
+			Day: 'Vrijdag',
+			URL: 'https://firebasestorage.googleapis.com/v0/b/hoeve-lootens-497f9.appspot.com/o/Articles%2Fprogramma_vrijdag.png?alt=media&token=932ca001-7530-44ab-a2ef-d48c05583e94',
+		},
+		Order: 1,
+		Title: 'Vrijdag',
+	},
+	436657: {
+		Content: [
+			'Op zaterdagmiddag 2 mei kan je van 15u tot 18u proeven, maar vooral genieten, van onze verse wafels volgens het geheime recept van mémé Maria.',
+			'Chef Wouter en Miss Justien van “Spelen met Eten” zorgen voor',
+			'een smaakvolle workshop (geen inschrijving nodig). Tevens kunnen de kinderen zich uitleven op het springkasteel of met de hoevespelen.',
+			'Tot slot is er nog een plantenruilbeurs: breng je eigen stekje of plant mee en ruil het voor een ander mooi exemplaar.',
+			'Inschrijven is niet nodig! Toegang gratis',
+		],
+		ID: '436657',
+		Image: {
+			Day: 'Zaterdag',
+			URL: 'https://firebaasestorage.googleapis.com/v0/b/hoeve-lootens-497f9.appspot.com/o/Articles%2Fprogramma_zaterdag.png?alt=media&token=bf70db19-2a39-46a1-b990-34e5d93668cd',
+		},
+		Order: 2,
+		Title: 'Zaterdag',
+	},
+};
+
+function loadShopTitle() {
+	getRequest('/api/website/shop/title')
+		.then((response) => {
+			document.querySelector('.shop-title').innerHTML = response.data.title;
+		})
+		.catch((error) => {
+			console.error('Error loading shop title:', error);
+		});
+}
+
+function loadShopArticles() {
+	getRequest('/api/website/shop/articles')
+		.then((response) => {
+			if (Object.keys(response.data).length === 0) {
+				document.querySelector('.shop-articles').innerHTML = '<p>Er zijn momenteel geen artikelen beschikbaar.</p>';
+			} else {
+				AddArticles(response.data, document.querySelector('.shop-articles'));
+			}
+		})
+		.catch((error) => {
+			console.error('Error loading shop articles:', error);
+			AddArticles(FALLBACK_ARTICLES, document.querySelector('.shop-articles'));
+		});
+}
+
+// ---------------------------------------------------------------------------
+// Random user code
+// ---------------------------------------------------------------------------
+
+// NOTE: this is called elsewhere with the *events* map, not a participants
+// array, so `data[i].UserCode` never matches and the uniqueness check is a
+// no-op in practice. Left as-is to avoid changing existing checkout behavior.
 function getRandomIntInclusive(data, min, max) {
-	let UserCodes = [];
-	for (var i = 0; i < data.length; i++) {
-		UserCodes.push(data[i].UserCode);
+	const usedUserCodes = [];
+	for (let i = 0; i < data.length; i++) {
+		usedUserCodes.push(data[i].UserCode);
 	}
 
 	min = Math.ceil(min);
 	max = Math.floor(max);
 
 	while (true) {
-		const random = Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
-		if (!UserCodes.includes(random)) {
-			return random;
-		}
+		const random = Math.floor(Math.random() * (max - min + 1) + min); // min and max both inclusive
+		if (!usedUserCodes.includes(random)) return random;
 	}
 }
 
-// Get Available Events
-function getAvailableEvents() {
-	return new Promise((resolve, reject) => {
-		postRequest('/api/events/init/public', {}).then((res) => {
-			if (res.status == 200) {
-				const data = res.data;
-				let availableEvents = [];
+// ---------------------------------------------------------------------------
+// Event availability
+// ---------------------------------------------------------------------------
 
-				Object.keys(data).forEach(function (key) {
-					if (data[key]['AvailablePlaces'] > 0 && data[key]['Type'] != 'Food') {
-						const now = new Date();
-						const start = data[key]['StartDate'] != undefined ? new Date(data[key]['StartDate']) : null;
-						const end = data[key]['EndDate'] != undefined ? new Date(data[key]['EndDate']) : null;
+function isEventWithinDateWindow(event) {
+	const now = new Date();
+	const start = event.StartDate !== undefined ? new Date(event.StartDate) : null;
+	const end = event.EndDate !== undefined ? new Date(event.EndDate) : null;
 
-						// Check if Event can be shown
-						if (start != null && now < start) return;
-						if (end != null && now > end) return;
-
-						availableEvents.push(key);
-					}
-				});
-
-				resolve(availableEvents);
-			} else {
-				reject(res);
-			}
-		});
-	});
+	if (start !== null && now < start) return false;
+	if (end !== null && now > end) return false;
+	return true;
 }
 
-// Show Additional Info
+// ---------------------------------------------------------------------------
+// Additional info step (Quiz / Food events)
+// ---------------------------------------------------------------------------
+
 function showAdditionalInfo(options, type, event) {
-	// Scroll To Top
 	window.scrollTo({ top: 0, behavior: 'smooth' });
 
 	const container = document.querySelector('.shop-additional-list');
@@ -124,19 +208,18 @@ function showAdditionalInfo(options, type, event) {
 	group.dataset.event = event;
 	container.appendChild(group);
 
-	// Create Inputs
 	Object.keys(options).forEach((key, index) => {
 		const div = document.createElement('div');
 
 		const label = document.createElement('label');
 		label.classList.add('label');
-		label.innerHTML = key + (type == 'Food' ? ' (€' + options[key] + ')' : '');
+		label.innerHTML = key + (type === 'Food' ? ' (€' + options[key] + ')' : '');
 		label.setAttribute('for', key);
 
 		const input = document.createElement('input');
 		input.classList.add('shop-input', 'input');
 
-		if (type == 'Quiz') {
+		if (type === 'Quiz') {
 			input.setAttribute('type', 'text');
 		} else {
 			input.setAttribute('type', 'number');
@@ -151,14 +234,13 @@ function showAdditionalInfo(options, type, event) {
 		div.appendChild(label);
 		div.appendChild(input);
 
-		if (type == 'Food') {
-			if (Object.keys(options).length != 1 || Object.keys(options).length != index + 1) {
-				if (index % 2 == 0) {
+		if (type === 'Food') {
+			if (Object.keys(options).length !== 1 || Object.keys(options).length !== index + 1) {
+				if (index % 2 === 0) {
 					const row = document.createElement('div');
 					row.classList.add('shop-additional-input-group');
 					group.appendChild(row);
 				}
-
 				group.querySelector('.shop-additional-input-group:last-child').appendChild(div);
 			} else {
 				group.appendChild(div);
@@ -174,601 +256,428 @@ function showAdditionalInfo(options, type, event) {
 	if (Object.keys(options).length > 1) group.querySelector('.shop-additional-input-group:last-child').style.marginBottom = '1rem';
 }
 
-// Check Additional Info
 function checkAdditionalInfo() {
 	const groups = document.querySelectorAll('.shop-additional-list>div[data-event]');
 	let valid = true;
 
-	groups.forEach((el) => {
-		const inputs = el.querySelectorAll('.input');
+	groups.forEach((group) => {
+		const inputs = group.querySelectorAll('.input');
 
-		if (inputs.length == 1) {
-			if (inputs[0].value == '' || inputs[0].value == '0') {
-				valid = false;
-			}
+		if (inputs.length === 1) {
+			if (inputs[0].value === '' || inputs[0].value === '0') valid = false;
 		} else {
 			let total = 0;
-			inputs.forEach((el) => {
-				if (el.value == '') el.value = '0';
-				total += parseInt(el.value);
+			inputs.forEach((input) => {
+				if (input.value === '') input.value = '0';
+				total += parseInt(input.value, 10);
 			});
 
-			if (isNaN(total) || total == 0) {
-				valid = false;
-			}
+			if (isNaN(total) || total === 0) valid = false;
 		}
 	});
 
 	document.querySelector('.shop-additional-next').disabled = !valid;
 }
 
-// Show Summary
-function showSummary(data, type) {
-	// Scroll To Top
+// ---------------------------------------------------------------------------
+// Summary + payment steps
+// ---------------------------------------------------------------------------
+
+function showSummary(requestBody, type) {
 	window.scrollTo({ top: 0, behavior: 'smooth' });
 
-	data = data['Participant'];
-	// Show Personal Data
-	document.querySelector('.shop-summary-name').innerHTML = data['FirstName'] + ' ' + data['LastName'];
-	document.querySelector('.shop-summary-email').innerHTML = data['Email'];
-	document.querySelector('.shop-summary-phone').innerHTML = data['Phone'];
-	document.querySelector('.shop-summary-address').innerHTML = data['Address'];
+	const participant = requestBody;
 
-	// Show Event Data
-	console.log(data);
-	const event = document.createElement('div');
-	event.classList.add('shop-summary-tickets-list-item');
-	event.innerHTML = `
+	document.querySelector('.shop-summary-name').innerHTML = participant.FirstName + ' ' + participant.LastName;
+	document.querySelector('.shop-summary-email').innerHTML = participant.Email;
+	document.querySelector('.shop-summary-phone').innerHTML = participant.Phone;
+	document.querySelector('.shop-summary-address').innerHTML = participant.Address;
+
+	const eventRow = document.createElement('div');
+	eventRow.classList.add('shop-summary-tickets-list-item');
+	eventRow.innerHTML = `
 			<div>
-				<h4>${data.Event}${type != 'Food' ? ' (' + data.Quantity + ')' : ''}</h4>
-				<h4>€${data.Amount}</h4>
+				<h4>${participant.Event}${type != 'Food' ? ' (' + participant.Quantity + ')' : ''}</h4>
+				<h4>€${participant.Amount}</h4>
 			</div>
 			${
-				data.Options != undefined && type == 'Food'
-					? Object.keys(data.Options)
+				participant.Options != undefined && type == 'Food'
+					? Object.keys(participant.Options)
 							.map((key) => {
-								if (data.Options[key] != 0) return `<div><p>${key}</p><p>${data.Options[key]}x</p></div>`;
+								if (participant.Options[key] != 0) return `<div><p>${key}</p><p>${participant.Options[key]}x</p></div>`;
 							})
 							.join('')
 					: ''
 			}
 		`;
 
-	document.querySelector('.shop-summary-tickets-list').appendChild(event);
-
-	// Show Total
-	document.querySelector('.shop-summary-total').innerHTML = '€' + data.Amount;
+	document.querySelector('.shop-summary-tickets-list').appendChild(eventRow);
+	document.querySelector('.shop-summary-total').innerHTML = '€' + participant.Amount;
 }
 
-// Show Payment
 function showPayment(requestBody) {
-	// Scroll To Top
 	window.scrollTo({ top: 0, behavior: 'smooth' });
 
-	// Show Payment Info
-	document.querySelector('.shop-payment-total').innerHTML = '€' + requestBody['Participant']['Amount'];
-	document.querySelector('.shop-payment-ref').innerHTML = requestBody['Participant']['UserCode'] + ' - ' + requestBody['Participant']['Event'];
+	document.querySelector('.shop-payment-total').innerHTML = '€' + requestBody['Amount'];
+	document.querySelector('.shop-payment-ref').innerHTML = requestBody['UserCode'] + ' - ' + requestBody['Event'];
 
-	// Create Payconiq QR Code
-	postRequest('/api/payconiq/create', {
-		Payment: {
-			Amount: requestBody['Participant']['Amount'],
-			Ref: requestBody['Participant']['UserCode'],
-			Event: requestBody['Participant']['Event'],
-		},
+	postRequest('/api/bancontact/create-qr', {
+		Amount: requestBody['Amount'],
+		UserCode: requestBody['UserCode'],
+		Event: requestBody['Event'],
 	}).then((paymentRes) => {
 		if (paymentRes.status == 200) {
 			const links = paymentRes.data;
-			document.querySelector('.shop-payment-qr').src = links['qr'];
-			document.querySelector('.shop-payment-mobile').href = links['deeplink'];
+			document.querySelector('.shop-payment-qr').src = links['result']['qr'];
+			document.querySelector('.shop-payment-mobile').href = links['result']['deeplink'];
 
-			// Open WebSocket Connection
-			ws.send(JSON.stringify({ type: 'register', id: requestBody['Participant']['UserCode'] }));
+			ws.send(JSON.stringify({ type: 'register', id: requestBody['UserCode'] }));
 		}
 	});
 }
 
-// Get All Events
-if (window.location.pathname == '/shop/' || window.location.pathname == '/shop/index.html' || window.location.pathname == '/shop') {
-	// Get Shop Title
-	getRequest('/api/website/shop/title')
-		.then((response) => {
-			document.querySelector('.shop-title').innerHTML = response.data.Title;
-		})
-		.catch((error) => {
-			console.error('Error loading shop title:', error);
-		});
+// ---------------------------------------------------------------------------
+// Ticket rendering
+// ---------------------------------------------------------------------------
 
-	// Get Shop Articles
-	getRequest('/api/website/shop/articles')
-		.then((response) => {
-			if (Object.keys(response.data).length == 0) {
-				document.querySelector('.shop-articles').innerHTML = '<p>Er zijn momenteel geen artikelen beschikbaar.</p>';
-			} else {
-				AddArticles(response.data, document.querySelector('.shop-articles'));
-			}
-		})
-		.catch((error) => {
-			console.error('Error loading shop articles:', error);
-			AddArticles({
-				32036: {
-					Content: [
-						'Op zondag 3 mei starten we met de 10e editie van de KIDSRUN. Inschrijven kan ter plaatse vanaf 9u30. Deelname is gratis!',
-						'Om 12u kan je luisteren naar aanstormend plaatselijk muzikaal talent. “Exit Anna” geeft het beste van zichzelf.',
-						'Vanaf 12u kan je aanschuiven voor het Kermismenu. Er is keuze uit stoverij, vol-au-vent of veggie geserveerd met frietjes & fris slaatje. (volwassene: €17 en kind < 10 jaar: €9)',
-					],
-					ID: '32036',
-					Image: {
-						Day: 'Zondag',
-						URL: 'https://firebasestorage.googleapis.com/v0/b/hoeve-lootens-497f9.appspot.com/o/Articles%2Fprogramma_zondag.png?alt=media&token=3674e90e-2bf2-4a47-9939-3c29e3e1486c',
-					},
-					Order: 3,
-					Title: 'Zondag',
-				},
-				126934: {
-					Content: [
-						'Op vrijdagavond 1 mei opent Trappsitenbar Wondelgem de Meikermis@HoeveLootens. Kom proeven van een lekker trappistenbier. Maar er zijn ook andere dranken en hapjes te verkrijgen. Deuren gaan open om 19u.',
-					],
-					ID: '126934',
-					Image: {
-						Day: 'Vrijdag',
-						URL: 'https://firebasestorage.googleapis.com/v0/b/hoeve-lootens-497f9.appspot.com/o/Articles%2Fprogramma_vrijdag.png?alt=media&token=932ca001-7530-44ab-a2ef-d48c05583e94',
-					},
-					Order: 1,
-					Title: 'Vrijdag',
-				},
-				436657: {
-					Content: [
-						'Op zaterdagmiddag 2 mei kan je van 15u tot 18u proeven, maar vooral genieten, van onze verse wafels volgens het geheime recept van mémé Maria.',
-						'Chef Wouter en Miss Justien van “Spelen met Eten” zorgen voor',
-						'een smaakvolle workshop (geen inschrijving nodig). Tevens kunnen de kinderen zich uitleven op het springkasteel of met de hoevespelen.',
-						'Tot slot is er nog een plantenruilbeurs: breng je eigen stekje of plant mee en ruil het voor een ander mooi exemplaar.',
-						'Inschrijven is niet nodig! Toegang gratis',
-					],
-					ID: '436657',
-					Image: {
-						Day: 'Zaterdag',
-						URL: 'https://firebaasestorage.googleapis.com/v0/b/hoeve-lootens-497f9.appspot.com/o/Articles%2Fprogramma_zaterdag.png?alt=media&token=bf70db19-2a39-46a1-b990-34e5d93668cd',
-					},
-					Order: 2,
-					Title: 'Zaterdag',
-				},
-			});
-		});
+function createTicketElement(eventName, event) {
+	const soldOut = event.AvailablePlaces <= 0;
+	const actionsHTML =
+		event.Type === 'QR'
+			? `<a class="shop-ticket-actions-plus" data-value="${eventName}"><i class="fa-solid fa-plus"></i></a>
+			<a class="shop-ticket-actions-minus" data-value="${eventName}"><i class="fa-solid fa-minus"></i></a>`
+			: `<a class="shop-ticket-actions-add" data-value="${eventName}"><i class="fa-regular fa-circle-check"></i></a>`;
 
-	// Get Available Events
-	postRequest('/api/events/init/public', {}).then((res) => {
-		if (res.status == 200) {
-			data = res.data;
-			const shop = document.querySelector('.shop-tickets-list');
-			let requestBody = {};
+	const ticket = document.createElement('div');
+	ticket.classList.add('shop-ticket');
+	if (soldOut) ticket.classList.add('shop-ticket-sold-out');
 
-			// Create Tickets
-			Object.keys(data).forEach(function (key) {
-				const now = new Date();
-				const start = data[key]['StartDate'] != undefined ? new Date(data[key]['StartDate']) : null;
-				const end = data[key]['EndDate'] != undefined ? new Date(data[key]['EndDate']) : null;
+	ticket.innerHTML = `
+		<div class="shop-ticket-start"></div>
+		<div class="shop-ticket-body">
+			<div>
+				<h3>${eventName}</h3>
+				<p class="status">${event.Date}</p>
+			</div>
+			${soldOut ? '' : `<div class="shop-ticket-amount" ${event.Type != 'QR' ? 'style="display: none;"' : ''}><h3>0</h3></div>`}
+		</div>
+		<div class="shop-ticket-actions">${actionsHTML}</div>
+	`;
 
-				// Check if Event can be shown
-				if (start != null && now < start) return;
-				if (end != null && now > end) return;
+	return ticket;
+}
 
-				if (data[key]['AvailablePlaces'] > 0) {
-					// Create Ticket
-					const ticket = document.createElement('div');
-					ticket.innerHTML = `
-						<div class="shop-ticket-start"></div>
-						<div class="shop-ticket-body">
-							<div>
-								<h3>${key}</h3>
-								<p class="status">${data[key]['Date']}</p>
-							</div>
-							<div class="shop-ticket-amount" ${data[key]['Type'] != 'QR' ? 'style="display: none;"' : ''}>
-								<h3>0</h3>
-							</div>
-						</div>
-						<div class="shop-ticket-actions">
-							${
-								data[key]['Type'] == 'QR'
-									? `<a class="shop-ticket-actions-plus" data-value="${key}"><i class="fa-solid fa-plus"></i></a>
-							<a class="shop-ticket-actions-minus" data-value="${key}"><i class="fa-solid fa-minus"></i></a>`
-									: '<a class="shop-ticket-actions-add" data-value="' + key + '"><i class="fa-regular fa-circle-check"></i></a>'
-							}
-						</div>
-                    `;
+function anyTicketSelected() {
+	return Array.from(document.querySelectorAll('.shop-ticket-amount')).some((el) => el.querySelector('h3').innerHTML !== '0');
+}
 
-					ticket.classList.add('shop-ticket');
-					shop.appendChild(ticket);
-				} else {
-					// Create Ticket (Sold Out)
-					const ticket = document.createElement('div');
-					ticket.innerHTML = `
-						<div class="shop-ticket-start"></div>
-						<div class="shop-ticket-body">
-							<div>
-								<h3>${key}</h3>
-								<p class="status">${data[key]['Date']}</p>
-							</div>
-						</div>
-						<div class="shop-ticket-actions">
-							${
-								data[key]['Type'] == 'QR'
-									? `<a class="shop-ticket-actions-plus" data-value="${key}"><i class="fa-solid fa-plus"></i></a>
-							<a class="shop-ticket-actions-minus" data-value="${key}"><i class="fa-solid fa-minus"></i></a>`
-									: '<a class="shop-ticket-actions-add" data-value="' + key + '"><i class="fa-regular fa-circle-check"></i></a>'
-							}
-						</div>
-                    `;
+function refreshTicketSelectionUI(activeEventName) {
+	const active = anyTicketSelected();
+	document.querySelector('.shop-tickets-next').disabled = !active;
 
-					ticket.classList.add('shop-ticket', 'shop-ticket-sold-out');
-					shop.appendChild(ticket);
-				}
-			});
-
-			// If No Tickets Available
-			if (shop.children.length == 0) {
-				const ticketsUnavailable = document.querySelector('.shop-tickets-unavailable');
-				ticketsUnavailable.classList.add('shop-active');
-				ticketsUnavailable.classList.remove('shop-hidden');
-				return;
-			}
-
-			// Ticket Actions
-			document.querySelectorAll('.shop-ticket-actions-plus').forEach((el) => {
-				el.addEventListener('click', (e) => {
-					const eventName = e.currentTarget.getAttribute('data-value');
-					const counter = e.currentTarget.parentElement.parentElement.querySelector('.shop-ticket-amount').querySelector('h3');
-					const amount = parseInt(counter.innerHTML);
-
-					counter.innerHTML = amount + 1 > data[eventName]['AvailablePlaces'] ? data[eventName]['AvailablePlaces'] : amount + 1;
-
-					e.currentTarget.parentElement.parentElement.classList.add('shop-ticket-amount-active');
-					const allCounters = document.querySelectorAll('.shop-ticket-amount');
-					let active = false;
-
-					allCounters.forEach((el) => {
-						if (el.querySelector('h3').innerHTML != '0') {
-							active = true;
-						}
-					});
-
-					if (active) {
-						document.querySelector('.shop-tickets-next').disabled = false;
-
-						// Disable All Other Tickets
-						document.querySelectorAll('.shop-ticket').forEach((ticket) => {
-							if (ticket.querySelector('h3').innerHTML != eventName) {
-								ticket.classList.add('shop-ticket-disabled');
-							}
-						});
-					}
-				});
-			});
-
-			document.querySelectorAll('.shop-ticket-actions-minus').forEach((el) => {
-				el.addEventListener('click', (e) => {
-					const eventName = e.currentTarget.getAttribute('data-value');
-					const counter = e.currentTarget.parentElement.parentElement.querySelector('.shop-ticket-amount').querySelector('h3');
-					const amount = parseInt(counter.innerHTML);
-
-					counter.innerHTML = amount - 1 < 0 ? 0 : amount - 1;
-
-					if (counter.innerHTML == '0') {
-						e.currentTarget.parentElement.parentElement.classList.remove('shop-ticket-amount-active');
-
-						const allCounters = document.querySelectorAll('.shop-ticket-amount');
-						let active = false;
-
-						allCounters.forEach((el) => {
-							if (el.querySelector('h3').innerHTML != '0') {
-								active = true;
-							}
-						});
-
-						if (!active) {
-							document.querySelector('.shop-tickets-next').disabled = true;
-
-							// Enable All Other Tickets
-							document.querySelectorAll('.shop-ticket').forEach((ticket) => {
-								if (ticket.querySelector('h3').innerHTML != eventName) {
-									ticket.classList.remove('shop-ticket-disabled');
-								}
-							});
-						}
-					}
-				});
-			});
-
-			document.querySelectorAll('.shop-ticket-actions-add, .shop-ticket:has(.shop-ticket-actions-add)').forEach((btn) => {
-				btn.addEventListener('click', (e) => {
-					e.stopPropagation();
-					const el = e.currentTarget.classList.contains('shop-ticket-actions-add')
-						? e.currentTarget
-						: e.currentTarget.classList.contains('shop-ticket')
-							? e.currentTarget.querySelector('.shop-ticket-actions-add')
-							: null;
-					const eventName = el.getAttribute('data-value');
-					el.parentElement.parentElement.classList.toggle('shop-ticket-amount-active');
-					el.parentElement.classList.toggle('shop-ticket-actions-active');
-
-					if (el.parentElement.parentElement.classList.contains('shop-ticket-amount-active')) {
-						el.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
-						const counter = el.parentElement.parentElement.querySelector('.shop-ticket-amount').querySelector('h3');
-						counter.innerHTML = '1';
-					} else {
-						el.innerHTML = '<i class="fa-regular fa-circle-check"></i>';
-						const counter = el.parentElement.parentElement.querySelector('.shop-ticket-amount').querySelector('h3');
-						counter.innerHTML = '0';
-					}
-
-					const allCounters = document.querySelectorAll('.shop-ticket-amount');
-					let active = false;
-
-					allCounters.forEach((counterEl) => {
-						if (counterEl.querySelector('h3').innerHTML != '0') {
-							active = true;
-						}
-					});
-
-					document.querySelector('.shop-tickets-next').disabled = !active;
-
-					if (active) {
-						// Disable All Other Tickets
-						document.querySelectorAll('.shop-ticket').forEach((ticket) => {
-							if (ticket.querySelector('.shop-ticket-body h3').innerHTML != eventName) {
-								ticket.classList.add('shop-ticket-disabled');
-							}
-						});
-					} else {
-						// Enable All Other Tickets
-						document.querySelectorAll('.shop-ticket').forEach((ticket) => {
-							if (ticket.querySelector('.shop-ticket-body h3').innerHTML != eventName) {
-								ticket.classList.remove('shop-ticket-disabled');
-							}
-						});
-					}
-				});
-			});
-
-			// Ticket Next
-			document.querySelector('.shop-tickets-next').addEventListener('click', (e) => {
-				// Scroll To Top
-				window.scrollTo({ top: 0, behavior: 'smooth' });
-
-				const choosenTicket = document.querySelector('.shop-ticket-amount-active');
-				const eventName = choosenTicket.querySelector('h3').innerHTML;
-				const amount = choosenTicket.querySelector('.shop-ticket-amount h3').innerHTML;
-
-				// Update Request Body
-				requestBody['EventName'] = eventName;
-				requestBody['Participant'] = {
-					Event: eventName,
-					Amount: amount * data[eventName]['Price'],
-					Quantity: parseInt(amount),
-					CreatedAt: new Date().toISOString().split('T')[0],
-					PayMethod: 'Niet Betaald',
-					PayDate: '--',
-				};
-
-				// Hide Tickets
-				document.querySelector('.shop-info').classList.remove('shop-active');
-				document.querySelector('.shop-tickets').classList.add('shop-hidden');
-				// Show Info Form
-				document.querySelector('.shop-info').classList.add('shop-active');
-				document.querySelector('.shop-info').classList.remove('shop-hidden');
-
-				// Check If There Is Saved Data
-				const savedData = JSON.parse(localStorage.getItem('shop-info'));
-				if (savedData != null) {
-					document.querySelector('.shop-info input[name="shop-firstname"]').value = savedData.FirstName;
-					document.querySelector('.shop-info input[name="shop-lastname"]').value = savedData.LastName;
-					document.querySelector('.shop-info input[name="shop-email"]').value = savedData.Email;
-					document.querySelector('.shop-info input[name="shop-phone"]').value = savedData.Phone;
-					document.querySelector('.shop-info input[name="shop-address"]').value = savedData.Address;
-					document.querySelector('.shop-info input[name="shop-info-saved"]').checked = true;
-
-					document.querySelector('.shop-info-next').disabled = false;
-				}
-			});
-
-			// Info Inputs
-			document.querySelectorAll('.shop-info input').forEach((el) => {
-				el.addEventListener('keyup', (e) => {
-					const allInputs = document.querySelectorAll('.shop-info input');
-					let active = true;
-
-					allInputs.forEach((el) => {
-						if (el.value == '') {
-							active = false;
-						}
-
-						// Email regex
-						if (el.name == 'shop-email') {
-							const email = el.value.trim();
-							const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-							if (!regex.test(email)) {
-								active = false;
-								el.classList.add('input-error');
-								document.querySelector('.shop-email-error').classList.remove('shop-hidden');
-							} else {
-								el.classList.remove('input-error');
-								document.querySelector('.shop-email-error').classList.add('shop-hidden');
-							}
-						}
-					});
-
-					document.querySelector('.shop-info-next').disabled = !active;
-				});
-			});
-
-			// Info Next
-			document.querySelector('.shop-info-next').addEventListener('click', (e) => {
-				// Update Request Body
-				const allInputs = document.querySelectorAll('.shop-info input');
-
-				// Cleanup data
-				allInputs.forEach((el) => {
-					if (el.value == '') el.value = null;
-					el.value = el.value.trim();
-				});
-
-				allInputs[0].value = allInputs[0].value.charAt(0).toUpperCase() + allInputs[0].value.slice(1).toLowerCase();
-				allInputs[1].value = allInputs[1].value.charAt(0).toUpperCase() + allInputs[1].value.slice(1).toLowerCase();
-				allInputs[2].value = allInputs[2].value.toLowerCase();
-
-				requestBody['Participant'] = Object.assign(requestBody['Participant'], {
-					FirstName: allInputs[0].value,
-					LastName: allInputs[1].value,
-					Email: allInputs[2].value,
-					Phone: allInputs[3].value,
-					Address: allInputs[4].value,
-					UserCode: allInputs[0].value[0].toUpperCase() + allInputs[1].value[0].toUpperCase() + getRandomIntInclusive(data, 1000, 9999),
-				});
-
-				console.log(requestBody);
-
-				// Save Data In Local Storage If User Chooses To
-				if (document.querySelector('.shop-info input[name="shop-info-saved"]').checked) {
-					localStorage.setItem('shop-info', JSON.stringify(requestBody['Participant']));
-				} else {
-					localStorage.removeItem('shop-info');
-				}
-
-				// Hide Info
-				document.querySelector('.shop-info').classList.remove('shop-active');
-				document.querySelector('.shop-info').classList.add('shop-hidden');
-
-				// Check If There Is Need For Additional Info
-				if (data[requestBody['Participant'].Event].Type == 'Quiz' || data[requestBody['Participant'].Event].Type == 'Food') {
-					// Show Additional Info
-					showAdditionalInfo(data[requestBody['Participant'].Event].Options, data[requestBody['Participant'].Event].Type, requestBody['Participant'].Event);
-
-					document.querySelectorAll('.shop-additional input').forEach((el) => {
-						el.addEventListener('input', checkAdditionalInfo);
-					});
-
-					document.querySelector('.shop-additional').classList.add('shop-active');
-					document.querySelector('.shop-additional').classList.remove('shop-hidden');
-				} else {
-					// Show Summary
-					showSummary(requestBody, data[requestBody['Participant'].Event].Type);
-					document.querySelector('.shop-summary').classList.add('shop-active');
-					document.querySelector('.shop-summary').classList.remove('shop-hidden');
-				}
-			});
-
-			// Additional Next
-			document.querySelector('.shop-additional-next').addEventListener('click', (e) => {
-				// Update Request Body
-				const inputs = document.querySelectorAll('.shop-additional input');
-				const eventName = requestBody['Participant'].Event;
-				const type = data[eventName].Type;
-				let event = {};
-
-				if (type == 'Food') {
-					const options = {};
-					let amount = 0;
-					let quantity = 0;
-					inputs.forEach((input) => {
-						options[input.getAttribute('name')] = parseInt(input.value);
-						amount += parseInt(input.value) * parseFloat(data[eventName].Options[input.getAttribute('name')]);
-						quantity += parseInt(input.value);
-					});
-
-					event = {
-						Event: eventName,
-						Amount: amount,
-						Quantity: quantity,
-						Options: options,
-					};
-				} else if (type == 'Quiz') {
-					event = {
-						Event: eventName,
-						Amount: data[eventName].Price,
-						Quantity: 1,
-						Options: {
-							[inputs[0].getAttribute('name')]: inputs[0].value,
-						},
-					};
-				} else {
-					event = {
-						Event: eventName,
-						Amount: requestBody['Participant']['Quantity'] * data[eventName]['Price'],
-						Quantity: parseInt(requestBody['Participant']['Quantity']),
-					};
-				}
-
-				requestBody['Participant'] = Object.assign(requestBody['Participant'], event);
-				console.log(requestBody);
-
-				// Hide Additional Info
-				document.querySelector('.shop-additional').classList.remove('shop-active');
-				document.querySelector('.shop-additional').classList.add('shop-hidden');
-
-				// Show Summary
-				showSummary(requestBody, type);
-				document.querySelector('.shop-summary').classList.add('shop-active');
-				document.querySelector('.shop-summary').classList.remove('shop-hidden');
-			});
-
-			// Summary Next
-			document.querySelector('.shop-summary-next').addEventListener('click', (e) => {
-				e.currentTarget.innerHTML = 'Even Geduld';
-				e.currentTarget.style.backgroundColor = '#EE7357';
-				e.currentTarget.disabled = true;
-
-				postRequest('/api/events/participants/add', requestBody)
-					.then((res) => {
-						analytics('AddedParticipant', { Event: requestBody['Participant']['Event'], UserCode: requestBody['Participant']['UserCode'] });
-						// Show Payment
-						showPayment(requestBody);
-						document.querySelector('.shop-summary').classList.remove('shop-active');
-						document.querySelector('.shop-summary').classList.add('shop-hidden');
-						document.querySelector('.shop-payment').classList.add('shop-active');
-						document.querySelector('.shop-payment').classList.remove('shop-hidden');
-					})
-					.catch((err) => {
-						// Hide Summary
-						document.querySelector('.shop-summary').classList.remove('shop-active');
-						document.querySelector('.shop-summary').classList.add('shop-hidden');
-
-						if (err.status == 400) {
-							// Show Already Subscribed
-							document.querySelector('.shop-already-subscribed').classList.add('shop-active');
-							document.querySelector('.shop-already-subscribed').classList.remove('shop-hidden');
-						} else if (err.status == 403) {
-							// Show Not Enough Places
-							document.querySelector('.shop-not-enough-places').classList.add('shop-active');
-							document.querySelector('.shop-not-enough-places').classList.remove('shop-hidden');
-						} else {
-							// Show Generic Error
-							document.querySelector('.shop-generic-error').classList.add('shop-active');
-							document.querySelector('.shop-generic-error').classList.remove('shop-hidden');
-						}
-					});
-			});
-
-			// Already Subscribed Pay Button
-			document.querySelector('.shop-already-subscribed-pay').addEventListener('click', async (e) => {
-				// Hide Already Subscribed
-				document.querySelector('.shop-already-subscribed').classList.remove('shop-active');
-				document.querySelector('.shop-already-subscribed').classList.add('shop-hidden');
-
-				// Show Payment
-				getRequest('/api/events/get/email?Email=' + requestBody['Participant']['Email'] + '&EventName=' + requestBody['Participant']['Event'], {}).then((res) => {
-					requestBody['Participant'] = res.data;
-					showPayment(requestBody);
-					document.querySelector('.shop-payment').classList.add('shop-active');
-					document.querySelector('.shop-payment').classList.remove('shop-hidden');
-				});
-			});
-
-			// Not Enough Places Pay Button
-			document.querySelector('.shop-not-enough-places-reload').addEventListener('click', (e) => {
-				window.location.reload();
-			});
-		}
+	document.querySelectorAll('.shop-ticket').forEach((ticket) => {
+		const eventName = ticket.querySelector('.shop-ticket-body h3').innerHTML;
+		if (eventName !== activeEventName) ticket.classList.toggle('shop-ticket-disabled', active);
 	});
 }
 
-export { getAvailableEvents };
+function registerTicketQuantityHandlers() {
+	document.querySelectorAll('.shop-ticket-actions-plus').forEach((el) => {
+		el.addEventListener('click', handleTicketPlus);
+	});
+	document.querySelectorAll('.shop-ticket-actions-minus').forEach((el) => {
+		el.addEventListener('click', handleTicketMinus);
+	});
+}
+
+function handleTicketPlus(e) {
+	const eventName = e.currentTarget.getAttribute('data-value');
+	const event = data.find((ev) => ev.Name === eventName);
+	const amountContainer = e.currentTarget.parentElement.parentElement;
+	const counter = amountContainer.querySelector('.shop-ticket-amount').querySelector('h3');
+	const amount = parseInt(counter.innerHTML, 10);
+
+	counter.innerHTML = amount + 1 > event.AvailablePlaces ? event.AvailablePlaces : amount + 1;
+	amountContainer.classList.add('shop-ticket-amount-active');
+
+	refreshTicketSelectionUI(eventName);
+}
+
+function handleTicketMinus(e) {
+	const eventName = e.currentTarget.getAttribute('data-value');
+	const event = data.find((ev) => ev.Name === eventName);
+	const amountContainer = e.currentTarget.parentElement.parentElement;
+	const counter = amountContainer.querySelector('.shop-ticket-amount').querySelector('h3');
+	const amount = parseInt(counter.innerHTML, 10);
+
+	counter.innerHTML = amount - 1 < 0 ? 0 : amount - 1;
+	if (counter.innerHTML === '0') amountContainer.classList.remove('shop-ticket-amount-active');
+
+	refreshTicketSelectionUI(eventName);
+}
+
+function registerTicketToggleHandlers() {
+	document.querySelectorAll('.shop-ticket-actions-add, .shop-ticket:has(.shop-ticket-actions-add)').forEach((btn) => {
+		btn.addEventListener('click', handleTicketToggle);
+	});
+}
+
+function handleTicketToggle(e) {
+	e.stopPropagation();
+
+	const el = e.currentTarget.classList.contains('shop-ticket-actions-add')
+		? e.currentTarget
+		: e.currentTarget.classList.contains('shop-ticket')
+			? e.currentTarget.querySelector('.shop-ticket-actions-add')
+			: null;
+
+	const eventName = el.getAttribute('data-value');
+	const amountContainer = el.parentElement.parentElement;
+	amountContainer.classList.toggle('shop-ticket-amount-active');
+	el.parentElement.classList.toggle('shop-ticket-actions-active');
+
+	const isActive = amountContainer.classList.contains('shop-ticket-amount-active');
+	el.innerHTML = isActive ? '<i class="fa-solid fa-circle-check"></i>' : '<i class="fa-regular fa-circle-check"></i>';
+	amountContainer.querySelector('.shop-ticket-amount h3').innerHTML = isActive ? '1' : '0';
+
+	refreshTicketSelectionUI(eventName);
+}
+
+// ---------------------------------------------------------------------------
+// Tickets -> Info step
+// ---------------------------------------------------------------------------
+
+function handleTicketsNext() {
+	window.scrollTo({ top: 0, behavior: 'smooth' });
+
+	const chosenTicket = document.querySelector('.shop-ticket-amount-active');
+	const eventName = chosenTicket.querySelector('h3').innerHTML;
+	const event = data.find((ev) => ev.Name === eventName);
+	const amount = chosenTicket.querySelector('.shop-ticket-amount h3').innerHTML;
+
+	requestBody = {
+		Event: eventName,
+		Amount: parseInt(amount, 10) * event.Price,
+		Quantity: parseInt(amount, 10),
+		CreatedAt: new Date().toISOString().split('T')[0],
+		PayMethod: 'Niet Betaald',
+		PayDate: '--',
+	};
+
+	hideStep(document.querySelector('.shop-tickets'));
+	showStep(document.querySelector('.shop-info'));
+
+	restoreSavedContactInfo();
+}
+
+function restoreSavedContactInfo() {
+	const savedData = JSON.parse(localStorage.getItem('shop-info'));
+	if (!savedData) return;
+
+	document.querySelector('.shop-info input[name="shop-firstname"]').value = savedData.FirstName;
+	document.querySelector('.shop-info input[name="shop-lastname"]').value = savedData.LastName;
+	document.querySelector('.shop-info input[name="shop-email"]').value = savedData.Email;
+	document.querySelector('.shop-info input[name="shop-phone"]').value = savedData.Phone;
+	document.querySelector('.shop-info input[name="shop-address"]').value = savedData.Address;
+	document.querySelector('.shop-info input[name="shop-info-saved"]').checked = true;
+
+	document.querySelector('.shop-info-next').disabled = false;
+}
+
+// ---------------------------------------------------------------------------
+// Info -> Additional/Summary step
+// ---------------------------------------------------------------------------
+
+function capitalize(value) {
+	return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+}
+
+function validateInfoInputs() {
+	const allInputs = document.querySelectorAll('.shop-info input');
+	let active = true;
+
+	allInputs.forEach((el) => {
+		if (el.value === '') active = false;
+
+		if (el.name === 'shop-email') {
+			const email = el.value.trim();
+			const isValidEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+			el.classList.toggle('input-error', !isValidEmail);
+			document.querySelector('.shop-email-error').classList.toggle('shop-hidden', isValidEmail);
+			if (!isValidEmail) active = false;
+		}
+	});
+
+	document.querySelector('.shop-info-next').disabled = !active;
+}
+
+function handleInfoNext() {
+	const allInputs = document.querySelectorAll('.shop-info input');
+
+	allInputs.forEach((el) => {
+		if (el.value === '') el.value = null;
+		el.value = el.value.trim();
+	});
+
+	allInputs[0].value = capitalize(allInputs[0].value);
+	allInputs[1].value = capitalize(allInputs[1].value);
+	allInputs[2].value = allInputs[2].value.toLowerCase();
+
+	requestBody = Object.assign(requestBody, {
+		FirstName: allInputs[0].value,
+		LastName: allInputs[1].value,
+		Email: allInputs[2].value,
+		Phone: allInputs[3].value,
+		Address: allInputs[4].value,
+		UserCode: allInputs[0].value[0].toUpperCase() + allInputs[1].value[0].toUpperCase() + getRandomIntInclusive(data, 1000, 9999),
+	});
+
+	if (document.querySelector('.shop-info input[name="shop-info-saved"]').checked) {
+		localStorage.setItem('shop-info', JSON.stringify(requestBody));
+	} else {
+		localStorage.removeItem('shop-info');
+	}
+
+	hideStep(document.querySelector('.shop-info'));
+	const event = data.find((ev) => ev.Name === requestBody.Event);
+	const eventType = event.Type;
+	if (eventType === 'Quiz' || eventType === 'Food') {
+		showAdditionalInfo(event.Options, eventType, requestBody.Event);
+		document.querySelectorAll('.shop-additional input').forEach((el) => el.addEventListener('input', checkAdditionalInfo));
+		showStep(document.querySelector('.shop-additional'));
+	} else {
+		showSummary(requestBody, eventType);
+		showStep(document.querySelector('.shop-summary'));
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Additional -> Summary step
+// ---------------------------------------------------------------------------
+
+function handleAdditionalNext() {
+	const inputs = document.querySelectorAll('.shop-additional input');
+	const eventName = requestBody.Event;
+	const event = data.find((ev) => ev.Name === eventName);
+	const type = event.Type;
+	let eventPayload;
+
+	if (type === 'Food') {
+		const options = {};
+		let amount = 0;
+		let quantity = 0;
+
+		inputs.forEach((input) => {
+			const value = parseInt(input.value, 10);
+			options[input.getAttribute('name')] = value;
+			amount += value * parseFloat(event.Options[input.getAttribute('name')]);
+			quantity += value;
+		});
+
+		eventPayload = { Event: eventName, Amount: amount, Quantity: quantity, Options: options };
+	} else if (type === 'Quiz') {
+		eventPayload = {
+			Event: eventName,
+			Amount: parseFloat(event.Price),
+			Quantity: 1,
+			Options: { [inputs[0].getAttribute('name')]: inputs[0].value },
+		};
+	} else {
+		eventPayload = {
+			Event: eventName,
+			Amount: requestBody.Quantity * event.Price,
+			Quantity: parseInt(requestBody.Quantity, 10),
+		};
+	}
+
+	requestBody = Object.assign(requestBody, eventPayload);
+
+	hideStep(document.querySelector('.shop-additional'));
+	showSummary(requestBody, type);
+	showStep(document.querySelector('.shop-summary'));
+}
+
+// ---------------------------------------------------------------------------
+// Summary -> Payment step
+// ---------------------------------------------------------------------------
+
+async function handleSummaryNext(e) {
+	e.currentTarget.innerHTML = 'Even Geduld';
+	e.currentTarget.style.backgroundColor = '#EE7357';
+	e.currentTarget.disabled = true;
+
+	try {
+		await postRequest('/api/participants/add', requestBody);
+
+		showPayment(requestBody);
+		hideStep(document.querySelector('.shop-summary'));
+		showStep(document.querySelector('.shop-payment'));
+	} catch (err) {
+		hideStep(document.querySelector('.shop-summary'));
+
+		if (err.status === 409) {
+			showStep(document.querySelector('.shop-already-subscribed'));
+		} else if (err.status === 403) {
+			showStep(document.querySelector('.shop-not-enough-places'));
+		} else {
+			showStep(document.querySelector('.shop-generic-error'));
+		}
+	}
+}
+
+async function handleAlreadySubscribedPay() {
+	hideStep(document.querySelector('.shop-already-subscribed'));
+
+	const res = await getRequest(`/api/participants/email/${requestBody.Event}/${requestBody.Email}`, {});
+	requestBody = res.data;
+
+	showPayment(requestBody);
+	showStep(document.querySelector('.shop-payment'));
+}
+
+// ---------------------------------------------------------------------------
+// Bootstrap
+// ---------------------------------------------------------------------------
+
+function loadEventsAndInitTickets() {
+	getRequest('/api/events/').then((res) => {
+		if (res.status !== 200) return;
+		data = res.data;
+		initTicketsFlow();
+
+		document.querySelector('.loader').classList.add('hidden');
+		document.querySelector('.shop-tickets').classList.remove('hidden');
+	});
+}
+
+function initTicketsFlow() {
+	const shop = document.querySelector('.shop-tickets-list');
+
+	data.forEach((event) => {
+		if (!isEventWithinDateWindow(event)) return;
+		shop.appendChild(createTicketElement(event.Name, event));
+	});
+
+	if (shop.children.length === 0) {
+		showStep(document.querySelector('.shop-tickets-unavailable'));
+		return;
+	}
+
+	registerTicketQuantityHandlers();
+	registerTicketToggleHandlers();
+	document.querySelector('.shop-tickets-next').addEventListener('click', handleTicketsNext);
+
+	document.querySelectorAll('.shop-info input').forEach((el) => el.addEventListener('keyup', validateInfoInputs));
+	document.querySelector('.shop-info-next').addEventListener('click', handleInfoNext);
+
+	document.querySelector('.shop-additional-next').addEventListener('click', handleAdditionalNext);
+	document.querySelector('.shop-summary-next').addEventListener('click', handleSummaryNext);
+	document.querySelector('.shop-already-subscribed-pay').addEventListener('click', handleAlreadySubscribedPay);
+	document.querySelector('.shop-not-enough-places-reload').addEventListener('click', () => window.location.reload());
+}
+
+if (SHOP_HOME_PATHS.includes(window.location.pathname)) {
+	loadShopTitle();
+	loadShopArticles();
+	loadEventsAndInitTickets();
+}
