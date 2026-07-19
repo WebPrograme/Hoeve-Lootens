@@ -11,7 +11,6 @@ export default class Cache {
 	}
 
 	async cacheImage(url) {
-		console.log(`Caching image: ${url}`);
 		const existing = await this.cache().then((c) => c.match(url));
 
 		if (existing) {

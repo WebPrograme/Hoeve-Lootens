@@ -13,10 +13,12 @@ if (cachedArticles && isCacheValid) {
 } else {
 	getRequest('/api/website/home/articles')
 		.then((response) => {
-			addArticles(response.data, document.querySelector('.news'));
+			const articles = response.data;
+			const sortedArticles = Object.values(articles).sort((a, b) => a.Order - b.Order);
+			addArticles(sortedArticles, document.querySelector('.news'));
 			initCarousels();
 
-			localStorage.setItem('cachedArticles', JSON.stringify(response.data));
+			localStorage.setItem('cachedArticles', JSON.stringify(sortedArticles));
 			localStorage.setItem('cachedArticlesTimestamp', Date.now());
 		})
 		.catch((error) => {
@@ -24,13 +26,13 @@ if (cachedArticles && isCacheValid) {
 		});
 }
 
-function addArticles(articles, container) {
+async function addArticles(articles, container) {
 	let type = 'left';
 	container.innerHTML = '';
 
 	const sortedArticles = Object.values(articles).sort((a, b) => a.Order - b.Order);
 
-	sortedArticles.forEach(async (article) => {
+	for (const article of sortedArticles) {
 		const title = article.Title;
 		const images = article.Images;
 		const text = article.Content;
@@ -91,7 +93,7 @@ function addArticles(articles, container) {
 
 		type = type === 'left' ? 'right' : 'left';
 		container.appendChild(section);
-	});
+	}
 }
 
 function initCarousels() {
