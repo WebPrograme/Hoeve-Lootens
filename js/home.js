@@ -4,7 +4,7 @@ import Cache from '../modules/Cache.js';
 const cache = new Cache('home-images-v1');
 const cachedArticles = localStorage.getItem('cachedArticles');
 const cachedArticlesTimestamp = localStorage.getItem('cachedArticlesTimestamp');
-const cacheDuration = 15 * 60 * 1000; // 15 minutes in milliseconds
+const cacheDuration = 5 * 60 * 1000; // 15 minutes in milliseconds
 const isCacheValid = cachedArticles && cachedArticlesTimestamp && Date.now() - cachedArticlesTimestamp < cacheDuration;
 
 if (cachedArticles && isCacheValid) {
