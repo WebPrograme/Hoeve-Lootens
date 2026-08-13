@@ -226,6 +226,8 @@ const initializeCalendarMonth = (year, month, events) => {
 				monthContent += optionDayElementTemplate.replace(/1/g, day);
 			} else if (monthEvents[day].type == 'Boomgaardcafé') {
 				monthContent += boomgaardcafeDayElementTemplate.replace(/1/g, day);
+			} else {
+				monthContent += "<div class='calendar-day'><p>" + day + '</p></div>';
 			}
 		} else {
 			// If Day Has No Event
