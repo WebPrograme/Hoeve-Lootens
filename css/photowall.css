@@ -199,6 +199,7 @@
 	transform: translateX(20px);
 }
 
+#camera-input,
 #file-input {
 	display: none;
 }

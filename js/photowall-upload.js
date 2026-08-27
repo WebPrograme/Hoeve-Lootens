@@ -1,11 +1,13 @@
 import { postRequest } from '../modules/Requests.js';
 import Upload from '../../modules/Upload.js';
 
+const cameraInput = document.getElementById('camera-input');
 const imageInput = document.getElementById('file-input');
 const uploadBtn = document.getElementById('upload-btn');
 const submitBtn = document.getElementById('submit-btn');
 const previewImage = document.getElementById('preview-image');
 const successMessage = document.getElementById('setup-success-message');
+let selectedFile;
 
 const reset = () => {
 	uploadBtn.dataset.state = 'upload';
@@ -14,12 +16,14 @@ const reset = () => {
 	uploadBtn.disabled = false;
 	previewImage.src = '';
 	previewImage.style.display = 'none';
+	cameraInput.value = '';
 	imageInput.value = '';
+	selectedFile = undefined;
 	successMessage.style.display = 'none';
 };
 
 const postImage = () => {
-	const file = imageInput.files[0];
+	const file = selectedFile;
 	if (!file) {
 		alert('Kies een foto om te uploaden.');
 		return;
@@ -60,8 +64,7 @@ const postImage = () => {
 
 uploadBtn.addEventListener('click', () => {
 	if (uploadBtn.dataset.state === 'upload') {
-		imageInput.setAttribute('capture', 'environment');
-		imageInput.click();
+		cameraInput.click();
 		return;
 	}
 
@@ -69,14 +72,14 @@ uploadBtn.addEventListener('click', () => {
 });
 
 submitBtn.addEventListener('click', () => {
-	imageInput.removeAttribute('capture');
 	imageInput.click();
 });
 
-imageInput.addEventListener('change', (e) => {
+const handleImageSelected = (e) => {
 	uploadBtn.dataset.state = 'post';
 	const file = e.target.files[0];
 	if (!file) return;
+	selectedFile = file;
 
 	const reader = new FileReader();
 	reader.onload = (e) => {
@@ -85,4 +88,7 @@ imageInput.addEventListener('change', (e) => {
 	};
 	reader.readAsDataURL(file);
 	uploadBtn.innerHTML = '<i class="fas fa-check"></i> Post';
-});
+};
+
+cameraInput.addEventListener('change', handleImageSelected);
+imageInput.addEventListener('change', handleImageSelected);
