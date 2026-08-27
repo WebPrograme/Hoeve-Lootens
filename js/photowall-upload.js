@@ -3,12 +3,14 @@ import Upload from '../../modules/Upload.js';
 
 const imageInput = document.getElementById('file-input');
 const uploadBtn = document.getElementById('upload-btn');
+const submitBtn = document.getElementById('submit-btn');
 const previewImage = document.getElementById('preview-image');
 const successMessage = document.getElementById('setup-success-message');
 
 const reset = () => {
 	uploadBtn.dataset.state = 'upload';
 	uploadBtn.innerHTML = '<i class="fas fa-camera"></i> Open Camera';
+	submitBtn.disabled = false;
 	uploadBtn.disabled = false;
 	previewImage.src = '';
 	previewImage.style.display = 'none';
@@ -16,12 +18,7 @@ const reset = () => {
 	successMessage.style.display = 'none';
 };
 
-uploadBtn.addEventListener('click', (e) => {
-	if (uploadBtn.dataset.state === 'upload') {
-		imageInput.click();
-		return;
-	}
-
+const postImage = () => {
 	const file = imageInput.files[0];
 	if (!file) {
 		alert('Kies een foto om te uploaden.');
@@ -29,6 +26,7 @@ uploadBtn.addEventListener('click', (e) => {
 	}
 
 	uploadBtn.disabled = true;
+	submitBtn.disabled = true;
 	uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
 
 	Upload.UploadImage('PhotoWall', file, uploadBtn).then((result) => {
@@ -58,6 +56,21 @@ uploadBtn.addEventListener('click', (e) => {
 				});
 			});
 	});
+};
+
+uploadBtn.addEventListener('click', () => {
+	if (uploadBtn.dataset.state === 'upload') {
+		imageInput.setAttribute('capture', 'environment');
+		imageInput.click();
+		return;
+	}
+
+	postImage();
+});
+
+submitBtn.addEventListener('click', () => {
+	imageInput.removeAttribute('capture');
+	imageInput.click();
 });
 
 imageInput.addEventListener('change', (e) => {
