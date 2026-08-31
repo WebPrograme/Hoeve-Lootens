@@ -492,3 +492,111 @@ input[type='file'] {
 .error-message {
 	display: none;
 }
+
+.authentication {
+	display: flex;
+	flex-direction: column;
+	margin: 3rem auto;
+	background: #4a7d44;
+	color: #faf8ec;
+	border-radius: 24px;
+	padding: 3rem 2.5rem 2.5rem;
+	width: 100%;
+	max-width: 440px;
+	backdrop-filter: blur(18px);
+	box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
+	min-height: auto;
+}
+
+.authentication h1 {
+	font-family: 'PT Serif', Georgia, serif;
+	font-size: 2rem;
+	font-weight: 700;
+	color: #faf8ec;
+	text-align: center;
+	letter-spacing: 0.02em;
+	margin: 0 0 2rem;
+}
+
+.authentication p {
+	font-size: 1rem;
+	text-align: center;
+	width: 100%;
+	margin: 0 0 2.2rem;
+}
+
+.authentication-fields {
+	display: flex;
+	flex-direction: column;
+	gap: 1.4rem;
+	margin-bottom: 1rem;
+}
+
+.authentication-field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.45rem;
+}
+
+.authentication-field label {
+	font-size: 0.8rem;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #faf8ec;
+}
+
+.authentication input {
+	width: 100%;
+	background: rgba(250, 248, 236, 0.08);
+	border: 1px solid rgba(250, 248, 236, 0.15);
+	border-radius: 10px;
+	color: #faf8ec;
+	font-size: 0.95rem;
+	padding: 0.65rem 1rem;
+	outline: none;
+	transition:
+		border-color 0.2s,
+		background 0.2s;
+}
+
+.authentication input::placeholder {
+	color: rgba(250, 248, 236, 0.4);
+}
+
+.authentication input:focus {
+	background: rgba(74, 125, 68, 0.2);
+	border-color: rgba(250, 248, 236, 0.3);
+}
+
+.authentication button {
+	width: 100%;
+	padding: 0.9rem 1rem;
+	background: #faf8ec;
+	border: none;
+	border-radius: 12px;
+	color: #4a7d44;
+	font-family: 'PT Serif', Georgia, serif;
+	font-size: 1.1rem;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	cursor: pointer;
+	transition:
+		background 0.2s,
+		transform 0.15s,
+		box-shadow 0.2s;
+	box-shadow: 0 4px 20px rgba(74, 125, 68, 0.4);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.6rem;
+}
+
+.authentication button:hover {
+	box-shadow: 0 6px 28px rgba(74, 125, 68, 0.55);
+	transform: translateY(-1px);
+}
+
+.authentication button:active {
+	transform: translateY(0);
+}

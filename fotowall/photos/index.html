@@ -20,7 +20,19 @@
 
 	<body class="photowall-body">
 		<main>
-			<div class="photos-management">
+			<div class="authentication" id="authentication-section">
+				<h1>Beheer van de fotowall</h1>
+
+				<div class="authentication-fields">
+					<div class="authentication-field">
+						<label for="pin-input">Voer de PIN in:</label>
+						<input type="password" id="pin-input" name="pin" required placeholder="Voer de PIN in..." />
+					</div>
+				</div>
+				<button type="submit" class="login-button"><i class="fas fa-sign-in-alt"></i> Inloggen</button>
+			</div>
+
+			<div class="photos-management hidden" id="management-section">
 				<h1>Overzicht van de foto's</h1>
 				<p>Hieronder vind je een overzicht van alle foto's die zijn geüpload naar de fotowall. Je kan ze ook downloaden of verwijderen.</p>
 				<div class="photos-management-buttons">

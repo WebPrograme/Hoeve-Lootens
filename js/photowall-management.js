@@ -1,11 +1,15 @@
 import { getRequest, postRequest } from '../modules/Requests.js';
 
+const authenticationSection = document.getElementById('authentication-section');
+const managementSection = document.getElementById('management-section');
 const loadingText = document.getElementById('loading-message');
 const errorText = document.getElementById('error-message');
 const noPhotosText = document.getElementById('no-photos-message');
 const photosGrid = document.getElementById('photos-grid');
 const emptyButton = document.getElementById('empty-button');
 const downloadAllButton = document.getElementById('download-all-button');
+const loginButton = document.querySelector('.login-button');
+const pinInput = document.getElementById('pin-input');
 
 let photosData = [];
 
@@ -107,7 +111,26 @@ const loadPhotos = () => {
 	});
 };
 
-loadPhotos();
+loginButton.addEventListener('click', async () => {
+	const pin = pinInput.value.trim();
+
+	try {
+		const response = await postRequest('/api/photowall/authorize', { pin: pin });
+
+		if (!(response.status >= 200 && response.status < 300)) {
+			alert('Ongeldige pincode. Probeer het opnieuw.');
+			return;
+		}
+
+		authenticationSection.classList.add('hidden');
+		managementSection.classList.remove('hidden');
+		loadPhotos();
+	} catch (error) {
+		console.error('Error during authorization:', error);
+		alert('Ongeldige pincode. Probeer het opnieuw.');
+		return;
+	}
+});
 
 emptyButton.addEventListener('click', async () => {
 	const action = emptyButton.getAttribute('data-action');
