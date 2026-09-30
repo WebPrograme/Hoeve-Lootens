@@ -8,14 +8,14 @@ const cacheDuration = 15 * 60 * 1000; // 15 minutes in milliseconds
 const isCacheValid = cachedArticles && cachedArticlesTimestamp && Date.now() - cachedArticlesTimestamp < cacheDuration;
 
 if (cachedArticles && isCacheValid) {
-	addArticles(JSON.parse(cachedArticles), document.querySelector('.news'));
+	await addArticles(JSON.parse(cachedArticles), document.querySelector('.news'));
 	initCarousels();
 } else {
 	getRequest('/api/website/home/articles')
-		.then((response) => {
+		.then(async (response) => {
 			const articles = response.data;
 			const sortedArticles = Object.values(articles).sort((a, b) => a.Order - b.Order);
-			addArticles(sortedArticles, document.querySelector('.news'));
+			await addArticles(sortedArticles, document.querySelector('.news'));
 			initCarousels();
 
 			localStorage.setItem('cachedArticles', JSON.stringify(sortedArticles));
@@ -58,12 +58,12 @@ async function addArticles(articles, container) {
 			imageElement.classList.add('news-img');
 			imageContainer.appendChild(imageElement);
 		} else if (images.length > 1) {
+			const cachedImageUrls = await Promise.all(images.map(async (image) => await cache.getCachedImage(image)));
 			let carouselId = `carousel-${article.ID || article.Title}`;
 			imageContainer.innerHTML = `<div id="${carouselId}" class="images-fade">
-				${images
-					.map(async (image, index) => {
-						const cachedImageUrl = await cache.getCachedImage(image);
-						return `<img src="${cachedImageUrl}" alt="${title} - Image ${index + 1}" class="news-img ${index === 0 ? 'active' : ''}">`;
+				${cachedImageUrls
+					.map((image, index) => {
+						return `<img src="${image}" alt="${title} - Image ${index + 1}" class="news-img ${index === 0 ? 'active' : ''}">`;
 					})
 					.join('')}
 			</div>`;
@@ -103,7 +103,7 @@ function initCarousels() {
 		const images = carousel.querySelectorAll('.news-img');
 		let currentIndex = 0;
 
-		setInterval(() => {
+		setInterval(async () => {
 			images[currentIndex].classList.remove('active');
 			currentIndex = (currentIndex + 1) % images.length;
 			images[currentIndex].classList.add('active');
