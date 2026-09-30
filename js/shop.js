@@ -163,10 +163,6 @@ function loadShopArticles() {
 // ---------------------------------------------------------------------------
 // Random user code
 // ---------------------------------------------------------------------------
-
-// NOTE: this is called elsewhere with the *events* map, not a participants
-// array, so `data[i].UserCode` never matches and the uniqueness check is a
-// no-op in practice. Left as-is to avoid changing existing checkout behavior.
 function getRandomIntInclusive(data, min, max) {
 	const usedUserCodes = [];
 	for (let i = 0; i < data.length; i++) {
